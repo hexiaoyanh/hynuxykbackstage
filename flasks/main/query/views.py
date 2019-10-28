@@ -6,19 +6,23 @@ from ..hynuxykSpider.api import api
 
 @query.route('/kb', methods=['POST'])
 def kb():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    date = request.form.get('date')
-    cookies = request.form.get('cookies')
-    week = request.form.get('week')
+    # 解析传来的数据
+    data = request.get_json()
+    date = data['date']
+    week = data['week']
     if date is None:
         return "You must input date!"
-    if (username is None and password is None) and cookies is None:
-        return "You must input username and password or input cookies"
-    if cookies is None:
-        kb = api(username, password)
-    else:
+    try:
+        # 如果是cookie
+        cookies = data['cookies']
         kb = api(cookies)
+    except:
+        try:
+            username = data['username']
+            password = data['password']
+            kb = api(username, password)
+        except:
+            return "error"
     jsons = {
         "kb": kb.querykb(date, week),
         'cookie': kb.getcookie()
@@ -28,18 +32,22 @@ def kb():
 
 @query.route('/cj', methods=['POST'])
 def cj():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    date = request.form.get('date')
-    cookies = request.form.get('cookies')
+    data = request.get_json()
+    date = data['date']
+    week = data['week']
     if date is None:
         return "You must input date!"
-    if (username is None and password is None) and cookies is None:
-        return "You must input username and password or input cookies"
-    if cookies is None:
-        cj = api(username, password)
-    else:
+    try:
+        # 如果是cookie
+        cookies = data['cookies']
         cj = api(cookies)
+    except:
+        try:
+            username = data['username']
+            password = data['password']
+            cj = api(username, password)
+        except:
+            return "error"
     jsons = {
         'cj': cj.querycj(date),
         'cookie': cj.getcookie()
