@@ -34,7 +34,6 @@ def kb():
 def cj():
     data = request.get_json()
     date = data['date']
-    week = data['week']
     if date is None:
         return "You must input date!"
     try:
