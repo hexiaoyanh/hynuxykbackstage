@@ -8,6 +8,7 @@ from ..hynuxykSpider.api import api
 def kb():
     # 解析传来的数据
     data = request.get_json()
+    print(data)
     date = data['date']
     week = data['week']
     if date is None:
@@ -52,3 +53,12 @@ def cj():
         'cookie': cj.getcookie()
     }
     return jsonify(jsons)
+
+
+@query.route('/pscj', methods=['POST'])
+def pscj():
+    data = request.get_json()
+    url = data['url']
+    cookie = data['cookie']
+    pscj = api(cookie)
+    return pscj.querypscj(url)
