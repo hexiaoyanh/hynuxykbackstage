@@ -4,11 +4,26 @@ from . import query
 from ..hynuxykSpider.api import api
 
 
+@query.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    if username != None and password != None:
+        try:
+            logins = api(username, password)
+            jsons = {
+                "cookie": login.getcookie()
+            }
+            return jsonify(jsons)
+        except:
+            return jsonify({"Msg": "Error"})
+
+
 @query.route('/kb', methods=['POST'])
 def kb():
     # 解析传来的数据
     data = request.get_json()
-    print(data)
     date = data['date']
     week = data['week']
     if date is None:
