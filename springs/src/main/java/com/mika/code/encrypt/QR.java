@@ -3,7 +3,6 @@ package com.mika.code.encrypt;
 import com.google.zxing.common.StringUtils;
 
 import org.springframework.web.bind.annotation.*;
-import com.google.zxing.common.StringUtils;
 import java.io.UnsupportedEncodingException;
 
 
@@ -32,6 +31,7 @@ public class QR {
         }
         return new String(bArr, StringUtils.GB2312);
     }
+
     @RequestMapping(value = "/qr",method = RequestMethod.POST)
     public String qr(@RequestBody Data item) throws UnsupportedEncodingException {
 //        System.out.println(item.getAgentID());

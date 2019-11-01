@@ -14,6 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 /* renamed from: com.hzsun.f.f */
+
 public class encrypt {
 
     /* renamed from: a */
