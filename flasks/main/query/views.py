@@ -12,8 +12,12 @@ def login():
     if username != None and password != None:
         try:
             logins = api(username, password)
+            Msg = logins.getmsg()
+            if Msg != "OK":
+                return jsonify({"Msg": "Error"})
             jsons = {
-                "cookie": login.getcookie()
+                "Msg": "OK",
+                "cookie": logins.getcookie()
             }
             return jsonify(jsons)
         except:
