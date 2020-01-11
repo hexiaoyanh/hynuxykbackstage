@@ -105,6 +105,6 @@ def setMsg():
     psw = os.environ.get("psw")
     if data['psw'] != psw:
         return "您没资格改"
-    os.environ['msg'] = data['msg']
-    print(os.environ.get('msg'))
+    os.environ["msg"] = data['msg']
+    print(os.environ["msg"])
     return "修改成功"
