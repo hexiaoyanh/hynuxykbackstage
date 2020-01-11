@@ -82,3 +82,29 @@ def pscj():
     pscj = api(cookie)
     return pscj.querypscj(url)
 
+
+@query.route('/getMsg', methods=['POST'])
+def getMsg():
+    import os
+    msg = os.environ.get("msg")
+    if msg is not None:
+        return jsonify({
+            "code": 1,
+            "msg": msg
+        })
+    else:
+        return jsonify({
+            "code": 0
+        })
+
+
+@query.route('/setMsg', methods=['GET', 'POST'])
+def setMsg():
+    import os
+    data = request.get_json()
+    psw = os.environ.get("psw")
+    if data['psw'] != psw:
+        return "您没资格改"
+    os.environ['msg'] = data['msg']
+    print(os.environ.get('msg'))
+    return "修改成功"
