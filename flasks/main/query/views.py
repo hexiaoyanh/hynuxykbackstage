@@ -71,7 +71,7 @@ def cj():
     cj = querycj(cookies, nanyue)
 
     jsons = {
-        'cj': cj.queryallcj(date),
+        'cj': json.dumps(cj.queryallcj(date), ensure_ascii=False),
         'cookie': cj.cookie
     }
     return jsonify(jsons)
