@@ -15,8 +15,8 @@ def login():
         nanyue = data['nanyue']
     if username != None and password != None:
         try:
-            from ..hynuxykSpider.api.login import login
-            logins = login(username, password, nanyue)
+            from ..hynuxykSpider.api.jwlogin import jwlogin
+            logins = jwlogin(username, password, nanyue)
             Msg = logins.Msg
             if Msg != "OK":
                 return jsonify({"Msg": Msg})
