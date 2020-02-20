@@ -1,7 +1,6 @@
 from flask import request, json, jsonify
 
 from . import query
-from ..hynuxykSpider.api import api
 
 
 @query.route('/login', methods=['POST'])
@@ -9,19 +8,25 @@ def login():
     data = request.get_json()
     username = data['username']
     password = data['password']
+    nanyue = None
+    if data.get("nanyue") is None:
+        nanyue = False
+    else:
+        nanyue = data['nanyue']
     if username != None and password != None:
         try:
-            logins = api(username, password)
-            Msg = logins.getmsg()
+            from ..hynuxykSpider.api.login import login
+            logins = login(username, password, nanyue)
+            Msg = logins.Msg
             if Msg != "OK":
-                return jsonify({"Msg": "Error"})
+                return jsonify({"Msg": Msg})
             jsons = {
                 "Msg": "OK",
-                "cookie": logins.getcookie()
+                "cookie": logins.cookie
             }
             return jsonify(jsons)
-        except:
-            return jsonify({"Msg": "Error"})
+        except EOFError:
+            return jsonify({"Msg": "服务器错误"})
 
 
 @query.route('/kb', methods=['POST'])
@@ -30,22 +35,21 @@ def kb():
     data = request.get_json()
     date = data['date']
     week = data['week']
+    if data.get("nanyue") is None:
+        nanyue = False
+    else:
+        nanyue = data['nanyue']
     if date is None:
         return "You must input date!"
-    try:
         # 如果是cookie
-        cookies = data['cookies']
-        kb = api(cookies)
-    except:
-        try:
-            username = data['username']
-            password = data['password']
-            kb = api(username, password)
-        except:
-            return "error"
+    cookies = data['cookies']
+
+    from main.hynuxykSpider.api.querykb import querykb
+    kb = querykb(cookies, nanyue)
+
     jsons = {
-        "kb": kb.querykb(date, week),
-        'cookie': kb.getcookie()
+        "kb": kb.queryallkb(date, week),
+        'cookie': kb.cookie
     }
     return jsonify(jsons)
 
@@ -56,20 +60,19 @@ def cj():
     date = data['date']
     if date is None:
         return "You must input date!"
-    try:
-        # 如果是cookie
-        cookies = data['cookies']
-        cj = api(cookies)
-    except:
-        try:
-            username = data['username']
-            password = data['password']
-            cj = api(username, password)
-        except:
-            return "error"
+
+    cookies = data['cookies']
+    if data.get("nanyue") is None:
+        nanyue = False
+    else:
+        nanyue = data['nanyue']
+
+    from main.hynuxykSpider.api.querycj import querycj
+    cj = querycj(cookies, nanyue)
+
     jsons = {
-        'cj': cj.querycj(date),
-        'cookie': cj.getcookie()
+        'cj': cj.queryallcj(date),
+        'cookie': cj.cookie
     }
     return jsonify(jsons)
 
@@ -79,8 +82,13 @@ def pscj():
     data = request.get_json()
     url = data['url']
     cookie = data['cookie']
-    pscj = api(cookie)
-    return pscj.querypscj(url)
+    if data.get("nanyue") is None:
+        nanyue = False
+    else:
+        nanyue = data['nanyue']
+    from ..hynuxykSpider.api.queryqxcj import querypscj
+    pscj = querypscj(url, cookie, nanyue)
+    return pscj
 
 
 @query.route('/getMsg', methods=['POST'])
@@ -96,15 +104,3 @@ def getMsg():
         return jsonify({
             "code": 0
         })
-
-
-@query.route('/setMsg', methods=['GET', 'POST'])
-def setMsg():
-    import os
-    data = request.get_json()
-    psw = os.environ.get("psw")
-    if data['psw'] != psw:
-        return "您没资格改"
-    os.environ["msg"] = data['msg']
-    print(os.environ["msg"])
-    return "修改成功"

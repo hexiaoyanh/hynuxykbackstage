@@ -63,7 +63,8 @@ public class encrypt {
         }
         return str.toUpperCase();
     }
-    public static String byteToHex(byte[] bytes){
+
+    public static String byteToHex(byte[] bytes) {
         String strHex = "";
         StringBuilder sb = new StringBuilder("");
         for (int n = 0; n < bytes.length; n++) {
@@ -72,6 +73,7 @@ public class encrypt {
         }
         return sb.toString().trim();
     }
+
     /* renamed from: a */
     public static String m2865a(byte[] bArr, byte[] bArr2) {
         try {

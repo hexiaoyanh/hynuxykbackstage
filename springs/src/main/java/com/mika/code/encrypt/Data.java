@@ -9,6 +9,8 @@ public class Data {
     private String PerCode;
     private String OrderNumb;
     private String RandomNum;
+    private String Height;
+    private String Width;
 
     public String getRandomNum() {
         return RandomNum;
@@ -72,5 +74,21 @@ public class Data {
 
     public void setAccName(String accName) {
         AccName = accName;
+    }
+
+    public String getHeight() {
+        return Height;
+    }
+
+    public void setHeight(String height) {
+        Height = height;
+    }
+
+    public String getWidth() {
+        return Width;
+    }
+
+    public void setWidth(String width) {
+        Width = width;
     }
 }
