@@ -112,7 +112,7 @@ def resetPassword():
     data = request.get_json()
     if data['username'] and data['idcardnum'] and data['nanyue'] is not None:
         findp = findpassword(data['username'], data['idcardnum'], data['nanyue'])
-        return jsonify(findp.findpassword())
+        return jsonify(findp.resetPasswd())
     else:
         return jsonify({
             "Code": "-1",
