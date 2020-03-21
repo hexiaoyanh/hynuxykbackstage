@@ -1,6 +1,5 @@
 from flask import request, json, jsonify
 
-from main.hynuxykSpider.api.findpassword import findpassword
 from . import query
 
 
@@ -110,6 +109,8 @@ def getMsg():
 @query.route('/resetPassword', methods=['POST', 'GET'])
 def resetPassword():
     data = request.get_json()
+    from ..hynuxykSpider.api.findpassword import findpassword
+
     if data['username'] and data['idcardnum'] and data['nanyue'] is not None:
         findp = findpassword(data['username'], data['idcardnum'], data['nanyue'])
         return jsonify(findp.resetPasswd())
