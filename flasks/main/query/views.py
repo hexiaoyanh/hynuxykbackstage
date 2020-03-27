@@ -119,3 +119,24 @@ def resetPassword():
             "Code": "-1",
             "Msg": "参数错误"
         })
+
+@query.route('/getxklb',methods=['POST','GET'])
+def getXklb():
+    data = request.get_json()
+    from ..hynuxykSpider.api.elective import elective
+    if data['cookie'] and data['nanyue'] is not None:
+        electives = elective(data['cookie'],data['nanyue'])
+        return jsonify(electives.getXklb())
+    else:
+        return jsonify({
+            "Code": "-1",
+            "Msg": "参数错误"
+        })
+
+@query.route('/getallcourse',methods=['GET','POST'])
+def getallcourse():
+    data = request.get_json()
+    from ..hynuxykSpider.api.elective import elective
+    print(data)
+    electives = elective(data['cookie'], data['nanyue'])
+    return jsonify(electives.getallcourse(data['date']))
