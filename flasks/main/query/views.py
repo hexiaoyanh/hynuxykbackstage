@@ -137,6 +137,15 @@ def getXklb():
 def getallcourse():
     data = request.get_json()
     from ..hynuxykSpider.api.elective import elective
-    print(data)
     electives = elective(data['cookie'], data['nanyue'])
     return jsonify(electives.getallcourse(data['date']))
+
+@query.route('/pickcourse',methods=['POST','GET'])
+def pickcourse():
+    data = request.get_json()
+    from ..hynuxykSpider.api.elective import elective
+    electives = elective(data['cookie'], data['nanyue'])
+    return jsonify({
+                "Code": "1",
+                "Msg": electives.pickcourse(data['url'])
+            })
