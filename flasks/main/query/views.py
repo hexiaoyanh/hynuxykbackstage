@@ -25,8 +25,8 @@ def login():
                 "cookie": logins.cookie
             }
             return jsonify(jsons)
-        except EOFError:
-            return jsonify({"Msg": "服务器错误"})
+        except:
+            return jsonify({"Msg": "服务器错误，也许是教务系统访问人数过多，请晚点再试。"})
 
 
 @query.route('/kb', methods=['POST'])
@@ -120,12 +120,13 @@ def resetPassword():
             "Msg": "参数错误"
         })
 
-@query.route('/getxklb',methods=['POST','GET'])
+
+@query.route('/getxklb', methods=['POST', 'GET'])
 def getXklb():
     data = request.get_json()
     from ..hynuxykSpider.api.elective import elective
     if data['cookie'] and data['nanyue'] is not None:
-        electives = elective(data['cookie'],data['nanyue'])
+        electives = elective(data['cookie'], data['nanyue'])
         return jsonify(electives.getXklb())
     else:
         return jsonify({
@@ -133,19 +134,36 @@ def getXklb():
             "Msg": "参数错误"
         })
 
-@query.route('/getallcourse',methods=['GET','POST'])
+
+@query.route('/getallcourse', methods=['GET', 'POST'])
 def getallcourse():
     data = request.get_json()
     from ..hynuxykSpider.api.elective import elective
     electives = elective(data['cookie'], data['nanyue'])
     return jsonify(electives.getallcourse(data['date']))
 
-@query.route('/pickcourse',methods=['POST','GET'])
+
+@query.route('/pickcourse', methods=['POST', 'GET'])
 def pickcourse():
     data = request.get_json()
     from ..hynuxykSpider.api.elective import elective
     electives = elective(data['cookie'], data['nanyue'])
     return jsonify({
-                "Code": "1",
-                "Msg": electives.pickcourse(data['url'])
-            })
+        "Code": "1",
+        "Msg": electives.pickcourse(data['url'])
+    })
+
+
+@query.route('/getcetimg', methods=['GET', 'POST'])
+def getcetimg():
+    data = request.get_json()
+    from ..hynuxykSpider.api.cet import cet
+    cets = cet(data['id_num'], data['name'])
+    return jsonify(cets.get_img())
+
+@query.route('/getscore',methods=['GET','POST'])
+def getscore():
+    data = request.get_json()
+    from ..hynuxykSpider.api.cet import cet
+    cets = cet(data['id_num'], data['name'])
+    return jsonify(cets.get_score(data['capcha'],data['cookies']))
