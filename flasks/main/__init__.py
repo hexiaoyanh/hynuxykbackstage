@@ -12,7 +12,7 @@ def create_app():
     app.register_blueprint(query_blueprint, url_prefix='/query')
 
     from .publicexam import publicexam as publicexam_blueprint
-    app.register_blueprint(publicexam_blueprint, url_prefix='/submsg')
+    app.register_blueprint(publicexam_blueprint, url_prefix='/publicexam')
 
     from .submsg import submsg as submsg_blueprint
     app.register_blueprint(submsg_blueprint, url_prefix='/submsg')
