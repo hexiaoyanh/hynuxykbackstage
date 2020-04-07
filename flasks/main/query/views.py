@@ -25,7 +25,7 @@ def login():
                 "cookie": logins.cookie
             }
             return jsonify(jsons)
-        except:
+        except Exception:
             return jsonify({"Msg": "服务器错误，也许是教务系统访问人数过多，请晚点再试。"})
 
 
@@ -161,9 +161,11 @@ def getcetimg():
     cets = cet(data['id_num'], data['name'])
     return jsonify(cets.get_img())
 
-@query.route('/getscore',methods=['GET','POST'])
+
+@query.route('/getscore', methods=['GET', 'POST'])
 def getscore():
     data = request.get_json()
     from ..hynuxykSpider.api.cet import cet
     cets = cet(data['id_num'], data['name'])
-    return jsonify(cets.get_score(data['capcha'],data['cookies']))
+    return jsonify(cets.get_score(data['capcha'], data['cookies']))
+
