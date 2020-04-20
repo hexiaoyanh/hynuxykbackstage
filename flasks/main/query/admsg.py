@@ -33,7 +33,7 @@ def viewadd():
                 res[data['userid']] = sss
                 f.write(json.dumps(res, ensure_ascii=False))
         return "ok"
-    except json.decoder.JSONDecodeError:
+    except FileNotFoundError:
         with open(nowtime, 'w', encoding='utf-8') as f:
             res = {}
             sss = {
