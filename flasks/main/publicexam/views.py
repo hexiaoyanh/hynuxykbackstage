@@ -17,7 +17,7 @@ def cetgetverify():
         cets = cet(data['id_num'], data['name'])
         return jsonify(cets.get_img())
     except Exception:
-        return jsonify({"Code": "-1", "Msg": "服务器出现错误"})
+        return jsonify({"code": "-1", "Msg": "服务器出现错误"})
 
 
 @publicexam.route('/cetgetscore', methods=['GET', 'POST'])
@@ -28,4 +28,14 @@ def cetgetscore():
         cets = cet(data['id_num'], data['name'])
         return jsonify(cets.get_score(data['capcha'], data['cookie']))
     except Exception:
-        return jsonify({"Code": "-1", "Msg": "服务器出现错误"})
+        return jsonify({"code": "-1", "Msg": "服务器出现错误"})
+
+@publicexam.route('/ntcegetverify',methods=['GET','POST'])
+def ntcegetverify():
+    from  ..hynuxykSpider.api.ntce import ntce
+    try:
+        ntces = ntce("","")
+        return jsonify(ntces.get_img())
+
+    except Exception:
+        return jsonify({"code": "-1", "Msg": "服务器出现错误"})

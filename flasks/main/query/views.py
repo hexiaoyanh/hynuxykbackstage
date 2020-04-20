@@ -169,3 +169,17 @@ def getscore():
     cets = cet(data['id_num'], data['name'])
     return jsonify(cets.get_score(data['capcha'], data['cookies']))
 
+
+@query.route('/getaboutus', methods=['GET'])
+def getaboutus():
+    import os
+    msg = os.environ.get("aboutus")
+    if msg is not None:
+        return jsonify({
+            "code": 1,
+            "msg": msg
+        })
+    else:
+        return jsonify({
+            "code": 0
+        })
