@@ -49,5 +49,8 @@ def viewadd():
 def getviewad():
     nowtime = str(datetime.datetime.now().year) + str(datetime.datetime.now().month) + str(
         datetime.datetime.now().day) + ".json"
-    with open(nowtime, 'r', encoding='utf-8') as f:
-        return f.read()
+    try:
+        with open(nowtime, 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        return json.dumps("",ensure_ascii=False)
