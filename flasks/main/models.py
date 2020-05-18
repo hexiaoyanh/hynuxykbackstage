@@ -23,42 +23,42 @@ class User(db.Model):
     nj = Column(db.String(64))  # 年级
     qq = Column(db.String(64))
     zymc = Column(db.String(64))  # 专业名称
-
-    dayi_shang_num = Column(db.String(64))  # 大一上总分
-    dayi_xia_num = Column(db.String(64))  # 大一下总分
-    daer_shang_num = Column(db.String(64))
-    daer_xia_num = Column(db.String(64))
-    dasan_shang_num = Column(db.String(64))
-    dasan_xia_num = Column(db.String(64))
-    dasi_shang_num = Column(db.String(64))
-    dasi_xia_num = Column(db.String(64))
-
-    dayi_shang_ave = Column(db.String(64))  # 大上一平均分
-    dayi_xia_ave = Column(db.String(64))  # 大一下平均分
-    daer_shang_ave = Column(db.String(64))
-    daer_xia_ave = Column(db.String(64))
-    dasan_shang_ave = Column(db.String(64))
-    dasan_xia_ave = Column(db.String(64))
-    dasi_shang_ave = Column(db.String(64))
-    dasi_xia_ave = Column(db.String(64))
-
-    dayi_shang_gpa = Column(db.String(64))  # 大一上gpa
-    daer_shang_gpa = Column(db.String(64))
-    dasan_shang_gpa = Column(db.String(64))
-    dasi_shang_gpa = Column(db.String(64))
-    dayi_xia_gpa = Column(db.String(64))
-    daer_xia_gpa = Column(db.String(64))
-    dasan_xia_gpa = Column(db.String(64))
-    dasi_xia_gpa = Column(db.String(64))
-
-    dayi_shang_xf = Column(db.String(64))  # 大一上学分
-    dayi_xia_xf = Column(db.String(64))
-    daer_shang_xf = Column(db.String(64))
-    daer_xia_xf = Column(db.String(64))
-    dasan_shang_xf = Column(db.String(64))
-    dasan_xia_xf = Column(db.String(64))
-    dasi_shang_xf = Column(db.String(64))
-    dasi_xia_xf = Column(db.String(64))
+    #
+    # dayi_shang_num = Column(db.String(64))  # 大一上总分
+    # dayi_xia_num = Column(db.String(64))  # 大一下总分
+    # daer_shang_num = Column(db.String(64))
+    # daer_xia_num = Column(db.String(64))
+    # dasan_shang_num = Column(db.String(64))
+    # dasan_xia_num = Column(db.String(64))
+    # dasi_shang_num = Column(db.String(64))
+    # dasi_xia_num = Column(db.String(64))
+    #
+    # dayi_shang_ave = Column(db.String(64))  # 大上一平均分
+    # dayi_xia_ave = Column(db.String(64))  # 大一下平均分
+    # daer_shang_ave = Column(db.String(64))
+    # daer_xia_ave = Column(db.String(64))
+    # dasan_shang_ave = Column(db.String(64))
+    # dasan_xia_ave = Column(db.String(64))
+    # dasi_shang_ave = Column(db.String(64))
+    # dasi_xia_ave = Column(db.String(64))
+    #
+    # dayi_shang_gpa = Column(db.String(64))  # 大一上gpa
+    # daer_shang_gpa = Column(db.String(64))
+    # dasan_shang_gpa = Column(db.String(64))
+    # dasi_shang_gpa = Column(db.String(64))
+    # dayi_xia_gpa = Column(db.String(64))
+    # daer_xia_gpa = Column(db.String(64))
+    # dasan_xia_gpa = Column(db.String(64))
+    # dasi_xia_gpa = Column(db.String(64))
+    #
+    # dayi_shang_xf = Column(db.String(64))  # 大一上学分
+    # dayi_xia_xf = Column(db.String(64))
+    # daer_shang_xf = Column(db.String(64))
+    # daer_xia_xf = Column(db.String(64))
+    # dasan_shang_xf = Column(db.String(64))
+    # dasan_xia_xf = Column(db.String(64))
+    # dasi_shang_xf = Column(db.String(64))
+    # dasi_xia_xf = Column(db.String(64))
 
     # grade = relationship('grade', secondary=user_grade, backref=backref('grade'))
     def __repr__(self):
