@@ -40,7 +40,6 @@ def deal(i, j, rx):
     xq = "20" + str(j) + "-20" + str(j + 1)
     print(xq)
     grade1 = getgrade(i.xh, xq + "-1")
-    grade2 = getgrade(i.xh, xq + "-2")
     shang = 0
     xia = 0
     gpa1 = 0
@@ -64,6 +63,7 @@ def deal(i, j, rx):
     i = setavevalue(i, rx, j, 1, shang / shanglen)
     session.add(i)
 
+    grade2 = getgrade(i.xh, xq + "-2")
     xialen = len(grade2)
     if xialen == 0: return
     for k in grade2:
@@ -91,27 +91,51 @@ def cal_num(s):
         rx = int(i.xh[:2])
         print(i.xh, i.xm, rx)
         for j in range(rx, 20):
-            # deal(i, j, rx)
+            deal(i, j, rx)
             # p = Process(target=deal, args=(i, j, rx,))
-            thread = threading.Thread(target=deal, args=(i, j, rx,))
-            thread.start()
-            thread.join()
+            # thread = threading.Thread(target=deal, args=(i, j, rx,))
+            # thread.start()
+            # thread.join()
         session.commit()
 
 
 from multiprocessing import Process
 
+
+def is_alive(p):
+    for i in p:
+        if i.is_alive():
+            return 0
+    return 1
+
+
 if __name__ == '__main__':
     process_list = []
+    flag = 1
+    flag1 = True
+    flag2 = True
+    for x in range(16, 20):
+        while True:
+            for i in range(flag, flag + 10):
+                if flag1 == False: break
+                if i <= 9:
+                    zy = "0" + str(i)
+                else:
+                    zy = str(i)
+                p = Process(target=cal_num, args=(str(x) + zy + "%",))
+                p.start()
+                process_list.append(p)
 
-    for i in range(1, 80):
-        if i <= 9:
-            zy = "0" + str(i)
-        else:
-            zy = str(i)
-        p = Process(target=cal_num, args=("16" + zy + "%",))
-        p.start()
-        process_list.append(p)
+            flag1 = False
+            for i in process_list:
+                if flag2 == False: break
+                i.join()
+            flag2 = False
 
-    for i in process_list:
-        i.join()
+            if is_alive(process_list):
+                process_list = []
+                flag1 = True
+                flag2 = True
+                flag += 10
+
+            if flag >= 80: break
