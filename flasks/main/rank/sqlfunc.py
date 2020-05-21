@@ -7,8 +7,6 @@ mydb = mysql.connector.connect(
     database="grade"
 )
 
-mycursor = mydb.cursor()
-
 
 # 判断表是否存在，不存在则创建
 def create_table_is_not_exists(table_name):
@@ -39,8 +37,10 @@ def insert_data(table_name, data):
     mydb.commit()
 
 
-def select_data(table_name, userid, xqmc):
-    sql = "select * from grade_{} where userid=%s and xqmc=%s and (kclbmc='必修' or kclbmc='任选' or kclbmc='限选')".format(table_name)
+# 查询数据
+def select_data(mycursor, table_name, userid, xqmc):
+    sql = "select * from grade_{} where userid=%s and xqmc=%s and (kclbmc='必修' or kclbmc='任选' or kclbmc='限选')".format(
+        table_name)
     value = (userid, xqmc)
     mycursor.execute(sql, value)
     rows = mycursor.fetchall()

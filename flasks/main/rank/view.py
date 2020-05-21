@@ -1,7 +1,7 @@
 from . import rank
 from flask import request, jsonify
 from ..models import User, yiliu, yiqi, yiba, yijiu
-from .sqlfunc import select_data
+from .sqlfunc import select_data, mydb
 
 rank2grade = {
     "优": 95,
@@ -39,9 +39,10 @@ def getrankmsg():
     data = request.get_json()
     user = User.query.get(data['userid'])
     useres = User.query.filter_by(bj=user.bj).all()
+    mycursor = mydb.cursor()
     people = []
     for i in useres:
-        grade = select_data(i.xh[:4], i.xh, data['xqmc'])
+        grade = select_data(mycursor, i.xh[:4], i.xh, data['xqmc'])
         total_num = 0  # 总分
         total_credit = 0  # 总学分
         total_pku_gpa = 0  # 北大gpa
@@ -74,6 +75,7 @@ def getrankmsg():
             "average_num": round(total_num / len(grade) if len(grade) != 0 else 0, 2)
         }
         people.append(userdata)
+    mycursor.close()
 
     # 获取总分排名
     numrank = getrank(people, data['userid'], "total_num")

@@ -11,6 +11,7 @@ import requests
 from flask import request
 
 from . import query
+import requests
 
 
 @query.route('/viewadd', methods=['GET', 'POST'])
