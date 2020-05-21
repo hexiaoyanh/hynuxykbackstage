@@ -10,11 +10,13 @@ import json
 from flask import request
 
 from . import query
+import requests
 
 
 @query.route('/viewadd', methods=['GET', 'POST'])
 def viewadd():
     data = request.get_json()
+    requests.get("https://sc.ftqq.com/SCU77855T4c90b9b4eca19f5ca3e3f47d8277a33e5e201bee5d183.send?text="+ data['username']+"看广告了")
     nowtime = str(datetime.datetime.now().year) + str(datetime.datetime.now().month) + str(
         datetime.datetime.now().day) + ".json"
     try:
