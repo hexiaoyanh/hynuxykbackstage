@@ -34,7 +34,7 @@ def getrank(people, userid, obj):
     return rank
 
 
-@rank.route('/getrankmsg')
+@rank.route('/getrankmsg',methods=['GET','POST'])
 def getrankmsg():
     data = request.get_json()
     user = User.query.get(data['userid'])
