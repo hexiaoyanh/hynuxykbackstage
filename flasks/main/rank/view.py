@@ -97,3 +97,43 @@ def getrankmsg():
     userdata['pku_gpa_rank'] = pkurank
     userdata['avegpa_rank'] = avegpa_rank
     return jsonify(userdata)
+
+
+@rank.route('/findyou', methods=['GET', 'POST'])
+def findyou():
+    data = request.get_json()
+    if data['userid'] != "":
+        useres = User.query.get(data['userid'])
+        if useres is None:
+            return jsonify({
+                "code": -1,
+                "msg": "没有找到这个人哦。"
+            })
+        return jsonify({
+            "code": 1,
+            "msg":"查询成功",
+            "xh": useres.xh,
+            "xm": useres.xm,
+            "bj": useres.bj,
+            "xymc": useres.yxmc,
+            "nj": useres.nj
+        })
+    elif data['xm'] != "":
+        useres = User.query.filter_by(xm=data['xm']).all()
+        if len(useres) == 0:
+            return jsonify({
+                "code": -1,
+                "msg": "没有找到这个人哦。"
+            })
+        js = {}
+        js['code'] = 1
+        js['msg'] = "查询成功"
+        for i in useres:
+            js[i.xh] = {
+                "xh": i.xh,
+                "xm": i.xm,
+                "bj": i.bj,
+                "xymc": i.yxmc,
+                "nj": i.nj
+            }
+        return jsonify(js)
