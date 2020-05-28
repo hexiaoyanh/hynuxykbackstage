@@ -109,15 +109,17 @@ def findyou():
                 "code": -1,
                 "msg": "没有找到这个人哦。"
             })
-        return jsonify({
-            "code": 1,
-            "msg":"查询成功",
+        js = {}
+        js['code'] = 1
+        js['msg'] = "查询成功"
+        js[useres.xh] = {
             "xh": useres.xh,
             "xm": useres.xm,
             "bj": useres.bj,
             "xymc": useres.yxmc,
             "nj": useres.nj
-        })
+        }
+        return jsonify(js)
     elif data['xm'] != "":
         useres = User.query.filter_by(xm=data['xm']).all()
         if len(useres) == 0:
