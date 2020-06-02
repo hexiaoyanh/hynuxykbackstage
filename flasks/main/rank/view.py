@@ -1,6 +1,6 @@
 from . import rank
 from flask import request, jsonify
-from ..models import User, yiliu, yiqi, yiba, yijiu
+from ..models import User, Usern
 from .. import db
 
 rank2grade = {
@@ -12,8 +12,6 @@ rank2grade = {
     "不及格": 0,
     "通过": 60
 }
-
-import time, math
 
 
 # 判断是否含中文字符
@@ -46,11 +44,18 @@ def select_data(mycursor, table_name, userid, xqmc):
 @rank.route('/getrankmsg', methods=['GET', 'POST'])
 def getrankmsg():
     data = request.get_json()
-    user = User.query.get(data['userid'])
-    useres = User.query.filter_by(bj=user.bj).all()
+    if data['userid'][0] == 'N':
+        user = Usern.query.get(data['userid'])
+        useres = Usern.query.filter_by(bj=user.bj).all()
+    else:
+        user = User.query.get(data['userid'])
+        useres = User.query.filter_by(bj=user.bj).all()
     people = []
     for i in useres:
-        grade = select_data(db, i.xh[:4], i.xh, data['xqmc'])
+        if i.xh[0] == 'N':
+            grade = select_data(db, i.xh[:5], i.xh, data['xqmc'])
+        else:
+            grade = select_data(db, i.xh[:4], i.xh, data['xqmc'])
         total_num = 0  # 总分
         total_credit = 0  # 总学分
         total_pku_gpa = 0  # 北大gpa
@@ -103,7 +108,10 @@ def getrankmsg():
 def findyou():
     data = request.get_json()
     if data['userid'] != "":
-        useres = User.query.get(data['userid'])
+        if data['userid'][0] == 'N':
+            useres = Usern.query.get(data['userid'])
+        else:
+            useres = User.query.get(data['userid'])
         if useres is None:
             return jsonify({
                 "code": -1,
@@ -121,8 +129,9 @@ def findyou():
         }
         return jsonify(js)
     elif data['xm'] != "":
-        useres = User.query.filter_by(xm=data['xm']).all()
-        if len(useres) == 0:
+        useres1 = User.query.filter_by(xm=data['xm']).all()
+        useres2 = Usern.query.filter_by(xm=data['xm']).all()
+        if len(useres1) == 0 and len(useres2) == 0:
             return jsonify({
                 "code": -1,
                 "msg": "没有找到这个人哦。"
@@ -130,7 +139,15 @@ def findyou():
         js = {}
         js['code'] = 1
         js['msg'] = "查询成功"
-        for i in useres:
+        for i in useres1:
+            js[i.xh] = {
+                "xh": i.xh,
+                "xm": i.xm,
+                "bj": i.bj,
+                "xymc": i.yxmc,
+                "nj": i.nj
+            }
+        for i in useres2:
             js[i.xh] = {
                 "xh": i.xh,
                 "xm": i.xm,
