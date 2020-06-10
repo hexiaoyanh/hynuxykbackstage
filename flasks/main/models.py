@@ -52,3 +52,10 @@ class Usern(db.Model):
 
     def __repr__(self):
         return "<Usern " + self.xh + " " + self.xm + " " + self.yxmc + " " + self.zymc + ">"
+
+
+class SubUsers:
+    __tablename__ = 'subusers'
+    openid = Column(db.String(64), primary_key=True)
+    accesstoken = Column(db.String(64))
+
