@@ -11,7 +11,7 @@ def getinput():
     timestamp = request.args.get('timestamp')
     nonce = request.args.get('nonce')
     echostr = request.args.get('echostr')
-    token = "maluguang"
+    token = "mikahemikahe"
     list = [token, timestamp, nonce]
     list.sort()
     sha1 = hashlib.sha1()
