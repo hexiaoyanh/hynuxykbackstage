@@ -5,7 +5,7 @@ from main.query import query
 
 from flask_sqlalchemy import SQLAlchemy
 
-from flasks.main.wxfwh.access_token import get_access_token
+from .wxfwh.access_token import get_access_token
 
 db = SQLAlchemy()
 access_token = get_access_token()

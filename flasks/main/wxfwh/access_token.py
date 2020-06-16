@@ -3,7 +3,7 @@ import time
 
 import requests
 
-from flasks.config import Config
+from ...config import Config
 
 
 # 一个获取微信access_token的插件
