@@ -24,4 +24,10 @@ def create_app():
     from .rank import rank as rank_blueprint
     app.register_blueprint(rank_blueprint, url_prefix='/rank')
 
+    from .admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    from .wxfwh import wxfwh as wxfwh_blueprint
+    app.register_blueprint(wxfwh_blueprint, url_prefix='/wxfwh')
+
     return app
