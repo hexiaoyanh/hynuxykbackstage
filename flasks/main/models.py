@@ -57,5 +57,4 @@ class Usern(db.Model):
 class SubUsers:
     __tablename__ = 'subusers'
     openid = Column(db.String(64), primary_key=True)
-    accesstoken = Column(db.String(64))
 
