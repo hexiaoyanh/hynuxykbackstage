@@ -1,11 +1,11 @@
 from flask import Blueprint, Flask
 
-from config import Config
-from main.query import query
+from .query import query
 
 from flask_sqlalchemy import SQLAlchemy
 
 from .wxfwh.access_token import get_access_token
+from config import Config
 
 db = SQLAlchemy()
 access_token = get_access_token()

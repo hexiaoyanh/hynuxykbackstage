@@ -1,12 +1,13 @@
 import json
+import os
 import time
 
 import requests
 
-from ...config import Config
-
 
 # 一个获取微信access_token的插件
+
+
 class get_access_token:
     access_token = None
     time = None
@@ -21,8 +22,8 @@ class get_access_token:
     def _update_access_token(self):
         params = {
             "grant_type": "client_credential",
-            "appid": Config.appid,
-            "secret": Config.wx_appsecret
+            "appid": os.getenv('appid'),
+            "secret": os.getenv('wx_appsecret')
         }
         res = requests.get(url="https://api.weixin.qq.com/cgi-bin/token", params=params)
         res = json.loads(res.text)
