@@ -1,7 +1,8 @@
 import time
 
 import requests
-from flask import jsonify
+import xmltodict
+from flask import jsonify, request
 
 from . import wxfwh
 from flask_login import login_required
@@ -49,3 +50,11 @@ def createsubpay(openid):
                                  API_KEY)
 
     return jsonify(params)
+
+
+@wxfwh.route('/successpay', methods=['GET', 'POST'])
+def successpay():
+    print(request.data)
+    data = xmltodict.parse(request.data)
+    
+    return "ok"
