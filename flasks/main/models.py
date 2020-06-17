@@ -1,6 +1,14 @@
+import datetime
+
+from flask_login import UserMixin
 from sqlalchemy import Column
 
-from . import db
+from . import db, login_manager
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return WXUser.query.get(int(user_id))
 
 
 # 定义User对象:
@@ -54,7 +62,35 @@ class Usern(db.Model):
         return "<Usern " + self.xh + " " + self.xm + " " + self.yxmc + " " + self.zymc + ">"
 
 
-class SubUsers:
-    __tablename__ = 'subusers'
-    openid = Column(db.String(64), primary_key=True)
+class WXUser(db.Model, UserMixin):
+    __tablename__ = 'wxuser'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userid = db.Column(db.String(12), index=True)
+    password = db.Column(db.String(20))
+    openid = db.Column(db.String(128), index=True)
+    nicename = db.Column(db.String(64))
+    sex = db.Column(db.Integer)
+    province = db.Column(db.String(12))
+    city = db.Column(db.String(12))
+    country = db.Column(db.String(12))
+    headimgurl = db.Column(db.String(1024))
+    access_token = db.Column(db.String(128))
+    expires_in = db.Column(db.DateTime, default=datetime.datetime.now())
+    refresh_token = db.Column(db.String(128))
 
+
+
+
+class Curriculum(db.Model):
+    __tablename__ = 'curriculum'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userid = db.Column(db.String(12), index=True)
+    school_year = db.Column(db.String(10), index=True)
+    week = db.Column(db.Integer, index=True)
+    class_time = db.Column(db.String(8), index=True)
+    class_name = db.Column(db.String(16))
+    teacher = db.Column(db.String(32))
+    location = db.Column(db.String(32))
+    begintime = db.Column(db.String(16))
+    endtime = db.Column(db.String(16))
+    cycle = db.Column(db.String(16))
