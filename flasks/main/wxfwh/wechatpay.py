@@ -1,4 +1,7 @@
+import time
+
 import requests
+from flask import jsonify
 
 from . import wxfwh
 from flask_login import login_required
@@ -31,4 +34,18 @@ def createsubpay(openid):
     print(xml)
     response = requests.post(url="https://api.mch.weixin.qq.com/pay/unifiedorder", data=xml.encode("utf-8"))
     data_dict = trans_xml_to_dict(response.content)['xml']  # 将请求返回的数据转为字典
-    return data_dict
+    params = {}
+    params['appId'] = APP_ID
+    params['timeStamp'] = int(time.time())
+    params['nonceStr'] = random_str(16)
+    params['package'] = 'prepay_id=' + data_dict['prepay_id']
+    params['signType'] = 'MD5'
+    params['paySign'] = get_sign({'appId': APP_ID,
+                                  "timeStamp": params['timeStamp'],
+                                  'nonceStr': params['nonceStr'],
+                                  'package': 'prepay_id=' + data_dict['prepay_id'],
+                                  'signType': 'MD5',
+                                  },
+                                 API_KEY)
+
+    return jsonify(params)
