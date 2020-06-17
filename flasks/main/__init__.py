@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask
+from flask import Flask
 
 from .query import query
 
@@ -6,6 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
 from .nowdate import nowdate
+from .get_access_token import get_access_token
+
+access_token = get_access_token()
+
+from .settings import WechatSetting
+
+# wechatsettings = WechatSetting()
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -16,7 +23,11 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
+
     login_manager.init_app(app)
+
+    # wechatsettings.init_app(app)
+
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')
 
