@@ -103,3 +103,11 @@ def login(code):
 @login_required
 def getopenid():
     return current_user.openid
+
+
+@wxfwh.route('/islogin')
+def islogin():
+    if current_user.is_authenticated:
+        return jsonify({'code': 1})
+    else:
+        return jsonify({'code': -1})
