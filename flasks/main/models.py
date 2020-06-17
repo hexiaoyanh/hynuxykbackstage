@@ -77,8 +77,8 @@ class WXUser(db.Model, UserMixin):
     access_token = db.Column(db.String(128))
     expires_in = db.Column(db.DateTime, default=datetime.datetime.now())
     refresh_token = db.Column(db.String(128))
-
-
+    server_expire = db.Column(db.DateTime)
+    is_subnotice = db.Column(db.Boolean, default=False)
 
 
 class Curriculum(db.Model):

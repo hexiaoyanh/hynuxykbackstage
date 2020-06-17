@@ -1,4 +1,4 @@
-from main import create_app, db
+from .main import create_app, db
 from flask_script import Manager, Command, Shell
 
 app = create_app()
