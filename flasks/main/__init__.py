@@ -3,19 +3,20 @@ from flask import Blueprint, Flask
 from .query import query
 
 from flask_sqlalchemy import SQLAlchemy
-
-from .wxfwh.access_token import get_access_token
-from config import Config
+from flask_login import LoginManager
+from ..config import Config
+from .nowdate import nowdate
 
 db = SQLAlchemy()
-access_token = get_access_token()
+login_manager = LoginManager()
+nowdates = nowdate(2020, 2, 17)
 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
-    access_token.init_app(app)
+    login_manager.init_app(app)
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')
 
