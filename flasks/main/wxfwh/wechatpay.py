@@ -9,6 +9,7 @@ from flask_login import login_required
 
 from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API_KEY, get_sign, trans_dict_to_xml, \
     trans_xml_to_dict
+from .sendnotification import send_success_sub
 
 
 @wxfwh.route('/createsubpay/<string:openid>')
@@ -56,5 +57,5 @@ def createsubpay(openid):
 def successpay():
     print(request.data)
     data = xmltodict.parse(request.data)
-    
-    return "ok"
+    send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
+    return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"

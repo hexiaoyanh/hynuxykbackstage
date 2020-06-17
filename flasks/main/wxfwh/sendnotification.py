@@ -9,7 +9,7 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
     # 发生成功订阅通知
     data = {
         "touser": openid,
-        "template_id": "oY4cP55QkDeSHiUUV9oGt-_A3oTRnUkSHRjguU1SnxE	",
+        "template_id": "oY4cP55QkDeSHiUUV9oGt-_A3oTRnUkSHRjguU1SnxE",
         "data": {
             "first": {
                 "value": "上课提醒订阅成功！",
@@ -40,4 +40,5 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
     res = requests.post(
         url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
         data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
     return res
