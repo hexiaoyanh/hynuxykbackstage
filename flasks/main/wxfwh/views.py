@@ -1,19 +1,15 @@
 import hashlib
 import json
-import os
 import time
 
 import requests
 import xmltodict as xmltodict
 from flask import request, make_response, jsonify
-from flask_login import login_user, current_user, login_required
-
+from flask_login import login_user, login_required, current_user
 from . import wxfwh
-from .get_access_token import get_access_token
-from .. import db
+from main import db
+from .. import access_token
 from ..models import WXUser
-
-access_token = get_access_token()
 
 
 # 微信服务号的token验证
@@ -101,3 +97,9 @@ def login(code):
         "code": 1,
         "msg": "登录成功"
     })
+
+
+@wxfwh.route('/getopenid')
+@login_required
+def getopenid():
+    return current_user.openid

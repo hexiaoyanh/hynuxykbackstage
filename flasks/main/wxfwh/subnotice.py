@@ -25,3 +25,16 @@ def bindjw():
         })
 
 
+@wxfwh.route('/isbindjw')
+@login_required
+def isbindjw():
+    if current_user.userid is None:
+        return jsonify({
+            "code": -1,
+            "msg": "没有绑定教务系统"
+        })
+    else:
+        return jsonify({
+            "code": 1,
+            "msg": "已经绑定了教务系统"
+        })
