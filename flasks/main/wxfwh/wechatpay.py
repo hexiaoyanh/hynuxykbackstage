@@ -31,11 +31,9 @@ def createsubpay():
         'trade_type': 'JSAPI',  # jsapi支付类型
         'openid': current_user.openid
     }
-    print(params)
     sign = get_sign(params, API_KEY)  # 获取签名
     params['sign'] = sign  # 添加签名到参数字典
     xml = trans_dict_to_xml(params)  # 转换字典为XML
-    print(xml)
     response = requests.post(url="https://api.mch.weixin.qq.com/pay/unifiedorder", data=xml.encode("utf-8"))
     data_dict = trans_xml_to_dict(response.content)['xml']  # 将请求返回的数据转为字典
     params = {}
