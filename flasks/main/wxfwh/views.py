@@ -92,7 +92,7 @@ def getinput():
 
 
 # 获取用户信息
-def getopenidmsg(user, openid, access_token):
+def get_open_id_msg(user, openid, access_token):
     res = requests.get(
         url="https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN")
     res = json.loads(str(res.content, 'utf-8'))
@@ -116,7 +116,7 @@ def login(code):
     user = WXUser.query.filter(WXUser.openid == res['openid']).first()
     if user is None:
         user = WXUser(openid=res['openid'], access_token=res['access_token'], refresh_token=res['refresh_token'])
-        user = getopenidmsg(user, res['openid'], res['access_token'])
+        user = get_open_id_msg(user, res['openid'], res['access_token'])
         db.session.add(user)
         db.session.commit()
 
