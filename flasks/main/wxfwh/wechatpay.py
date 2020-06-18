@@ -57,8 +57,6 @@ def createsubpay():
     return jsonify(params)
 
 
-# [('appid', 'wx3f45ab7ab0b12aed'), ('body', '衡师小助手'), ('detail', '订阅上课通知'), ('mch_id', '1600291052'), ('nonce_str', 'pEoiC4nb'),('notify_url', 'https://www.hynuxyk.club/wxfwh/successpay'), ('openid', 'ovtKGs1iMFFTTClFSQtRmfqsIkt0'), ('out_trade_no', '1m0EqJpO'), ('spbill_create_ip', '106.15.249.85'),('total_fee', 1), ('trade_type', 'JSAPI')]
-
 @wxfwh.route('/successpay', methods=['GET', 'POST'])
 def successpay():
     data = xmltodict.parse(request.data)['xml']

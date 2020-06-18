@@ -38,3 +38,22 @@ def isbindjw():
             "code": 1,
             "msg": "已经绑定了教务系统"
         })
+
+
+@wxfwh.route('/cancel_bind_jw')
+@login_required
+def cancel_bind_jw():
+    if current_user.userid is None:
+        return jsonify({
+            "code": 1,
+            "msg": "已取消绑定教务网"
+        })
+    else:
+        current_user.userid = None
+        current_user.password = None
+        db.session.add(current_user)
+        db.session.commit()
+        return jsonify({
+            "code": 1,
+            "msg": "已取消绑定教务网"
+        })
