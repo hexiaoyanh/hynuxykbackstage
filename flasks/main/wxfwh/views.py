@@ -13,6 +13,26 @@ from ..models import WXUser
 
 
 # 微信服务号的token验证
+def dealtextmsg(fromusername, tousername):
+    return {
+        "ToUserName": fromusername,
+        "FromUserName": tousername,
+        "CreateTime": int(time.time()),
+        "MsgType": "text",
+        "Content": u"我只是一只小白兔，还在进化当中^_^",
+    }
+
+
+def dealsubscrible(fromusername, tousername):
+    return {
+        "ToUserName": fromusername,
+        "FromUserName": tousername,
+        "CreateTime": int(time.time()),
+        "MsgType": "text",
+        "Content": u"欢迎关注衡师小助手的微信服务号，功能还在开发当中呢。",
+    }
+
+
 @wxfwh.route('/wx', methods=['GET', 'POST'])
 def getinput():
     signature = request.args.get('signature')
@@ -36,21 +56,30 @@ def getinput():
             resp_dict = xmltodict.parse(resp_data).get('xml')
             print(resp_dict)
             # 如果是文本消息
-            if 'text' == resp_dict.get('MsgType'):
-                response = {
-                    "ToUserName": resp_dict.get('FromUserName'),
-                    "FromUserName": resp_dict.get('ToUserName'),
-                    "CreateTime": int(time.time()),
-                    "MsgType": "text",
-                    "Content": resp_dict.get('Content'),
-                }
+            msgtype = resp_dict.get('MsgType')
+            fromusername = resp_dict('FromUserName')
+            tousername = resp_dict('ToUserName')
+            if 'text' == msgtype:
+                response = dealtextmsg(fromusername, tousername)
+            elif msgtype == 'event':
+                event = resp_dict.get('Event')
+                if event == 'subscribe':
+                    response = dealsubscrible(fromusername, tousername)
+                else:
+                    response = {
+                        "ToUserName": resp_dict.get('FromUserName'),
+                        "FromUserName": resp_dict.get('ToUserName'),
+                        "CreateTime": int(time.time()),
+                        "MsgType": "text",
+                        "Content": u"暂不支持的消息",
+                    }
             else:
                 response = {
                     "ToUserName": resp_dict.get('FromUserName'),
                     "FromUserName": resp_dict.get('ToUserName'),
                     "CreateTime": int(time.time()),
                     "MsgType": "text",
-                    "Content": u"暂时只支持文字呢",
+                    "Content": u"暂不支持的消息",
                 }
             if response:
                 response = {"xml": response}

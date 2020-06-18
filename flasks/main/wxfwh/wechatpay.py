@@ -27,7 +27,7 @@ def createsubpay(openid):
         'notify_url': NOTIFY_URL,  # 回调地址，微信支付成功后会回调这个url，告知商户支付结果
         'body': '衡师小助手',  # 商品描述
         'detail': '订阅上课通知',  # 商品描述
-        'trade_type': 'JSAPI',  # 扫码支付类型
+        'trade_type': 'JSAPI',  # jsapi支付类型
         'openid': openid
     }
     sign = get_sign(params, API_KEY)  # 获取签名
@@ -57,5 +57,6 @@ def createsubpay(openid):
 def successpay():
     print(request.data)
     data = xmltodict.parse(request.data)
-    send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
+    if data['result_code'] == 'SUCCESS':
+        send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
