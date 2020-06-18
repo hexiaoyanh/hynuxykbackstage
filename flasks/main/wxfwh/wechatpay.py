@@ -65,8 +65,9 @@ def successpay():
     if data['result_code'] == 'SUCCESS':
         send_success_sub(data['openid'], data['transaction_id'], data['total_fee'], data['time_end'])
         user = WXUser.query.filter_by(openid=data['openid']).first()
-        bill = Bill(data['transaction_id'], data['out_trade_no'], data['total_fee'], data['result_code'],
-                    data['openid'])
+        bill = Bill(transaction_id=data['transaction_id'], out_trade_no=data['out_trade_no'],
+                    total_fee=data['total_fee'], result_code=data['result_code'],
+                    openid=['openid'])
         db.session.add(bill)
         nowtime = datetime.datetime.now()
         if nowtime.month < 7:
