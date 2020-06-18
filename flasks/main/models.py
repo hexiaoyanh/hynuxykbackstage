@@ -93,7 +93,7 @@ class Curriculum(db.Model):
     location = db.Column(db.String(32))
     begintime = db.Column(db.String(16))
     endtime = db.Column(db.String(16))
-    cycle = db.Column(db.String(16))
+    cycle = db.Column(db.String(64))
 
 
 class Bill(db.Model):

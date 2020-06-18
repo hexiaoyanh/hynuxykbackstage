@@ -60,6 +60,7 @@ def createsubpay():
 
 @wxfwh.route('/successpay', methods=['GET', 'POST'])
 def successpay():
+    print(request.data)
     data = xmltodict.parse(request.data)['xml']
     print(data)
     if data['result_code'] == 'SUCCESS':
@@ -74,9 +75,12 @@ def successpay():
             nowtime = datetime.datetime(nowtime.year, nowtime.month + 6, nowtime.day)
         else:
             nowtime = datetime.datetime(nowtime.year + 1, nowtime.month + 6 - 12, nowtime.day)
+
+        if user.is_subnotice:
+            GetClass(user.userid, user.password)
+
         user.server_expire = nowtime
         user.is_subnotice = True
-        GetClass(user.userid, user.password)
         db.session.add(user)
         db.session.commit()
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
@@ -103,4 +107,4 @@ def getclass(app, userid, password):
                     db.session.add(curriculum)
             db.session.commit()
         except Exception as e:
-            print(e)
+            print("错误:", e)
