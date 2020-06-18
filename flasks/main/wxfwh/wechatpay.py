@@ -5,16 +5,17 @@ import xmltodict
 from flask import jsonify, request
 
 from . import wxfwh
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API_KEY, get_sign, trans_dict_to_xml, \
     trans_xml_to_dict
 from .sendnotification import send_success_sub
+from ..models import WXUser
 
 
-@wxfwh.route('/createsubpay/<string:openid>')
+@wxfwh.route('/createsubpay')
 @login_required
-def createsubpay(openid):
+def createsubpay():
     nonce_str = random_str()  # 拼接出随机的字符串即可，我这里是用 时间+随机数字+5个随机字母
     total_fee = 1  # 付款金额，单位是分，必须是整数
     params = {
@@ -28,7 +29,7 @@ def createsubpay(openid):
         'body': '衡师小助手',  # 商品描述
         'detail': '订阅上课通知',  # 商品描述
         'trade_type': 'JSAPI',  # jsapi支付类型
-        'openid': openid
+        'openid': current_user.openid
     }
     print(params)
     sign = get_sign(params, API_KEY)  # 获取签名
@@ -56,8 +57,10 @@ def createsubpay(openid):
 
 @wxfwh.route('/successpay', methods=['GET', 'POST'])
 def successpay():
-    print(request.data)
-    data = xmltodict.parse(request.data)
+    data = xmltodict.parse(request.data)['xml']
+    print(data)
     if data['result_code'] == 'SUCCESS':
         send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
+        user = WXUser.query.filter_by(openid=data['openid']).first()
+
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"

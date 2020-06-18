@@ -12,7 +12,7 @@ access_token = get_access_token()
 
 from .settings import WechatSetting
 
-# wechatsettings = WechatSetting()
+wechatsettings = WechatSetting()
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -26,7 +26,7 @@ def create_app():
 
     login_manager.init_app(app)
 
-    # wechatsettings.init_app(app)
+    wechatsettings.init_app(app)
 
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')
