@@ -28,6 +28,8 @@ def create_app():
 
     login_manager.init_app(app)
     scheduler.init_app(app)
+    scheduler.start()
+
     # wechatsettings.init_app(app)
 
     from .query import query as query_blueprint
@@ -47,5 +49,7 @@ def create_app():
 
     from .wxfwh import wxfwh as wxfwh_blueprint
     app.register_blueprint(wxfwh_blueprint, url_prefix='/wxfwh')
+
+    from . import apsheduler
 
     return app
