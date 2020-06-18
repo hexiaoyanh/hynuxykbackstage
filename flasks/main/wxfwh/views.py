@@ -57,8 +57,8 @@ def getinput():
             print(resp_dict)
             # 如果是文本消息
             msgtype = resp_dict.get('MsgType')
-            fromusername = resp_dict('FromUserName')
-            tousername = resp_dict('ToUserName')
+            fromusername = resp_dict.get('FromUserName')
+            tousername = resp_dict.get('ToUserName')
             if 'text' == msgtype:
                 response = dealtextmsg(fromusername, tousername)
             elif msgtype == 'event':
