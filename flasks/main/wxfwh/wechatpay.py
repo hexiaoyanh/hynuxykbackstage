@@ -1,3 +1,5 @@
+import datetime
+import threading
 import time
 
 import requests
@@ -10,7 +12,9 @@ from flask_login import login_required, current_user
 from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API_KEY, get_sign, trans_dict_to_xml, \
     trans_xml_to_dict
 from .sendnotification import send_success_sub
-from ..models import WXUser
+from .verifyjw import verifyjw
+from .. import db, nowdates
+from ..models import WXUser, Curriculum
 
 
 @wxfwh.route('/createsubpay')
@@ -54,6 +58,8 @@ def createsubpay():
     return jsonify(params)
 
 
+# [('appid', 'wx3f45ab7ab0b12aed'), ('body', '衡师小助手'), ('detail', '订阅上课通知'), ('mch_id', '1600291052'), ('nonce_str', 'pEoiC4nb'),('notify_url', 'https://www.hynuxyk.club/wxfwh/successpay'), ('openid', 'ovtKGs1iMFFTTClFSQtRmfqsIkt0'), ('out_trade_no', '1m0EqJpO'), ('spbill_create_ip', '106.15.249.85'),('total_fee', 1), ('trade_type', 'JSAPI')]
+
 @wxfwh.route('/successpay', methods=['GET', 'POST'])
 def successpay():
     data = xmltodict.parse(request.data)['xml']
@@ -61,5 +67,38 @@ def successpay():
     if data['result_code'] == 'SUCCESS':
         send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
         user = WXUser.query.filter_by(openid=data['openid']).first()
-
+        nowtime = datetime.datetime.now()
+        if nowtime.month < 7:
+            nowtime = datetime.datetime(nowtime.year, nowtime.month + 6, nowtime.day)
+        else:
+            nowtime = datetime.datetime(nowtime.year + 1, nowtime.month + 6 - 12, nowtime.day)
+        user.server_expire = nowtime
+        user.is_subnotice = True
+        GetClass(user.userid, user.password)
+        db.session.add(user)
+        db.session.commit()
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
+
+
+def GetClass(userid, password):
+    from manage import app
+    thr = threading.Thread(target=getclass, args=[app, userid, password, ])  # 创建线程
+    thr.start()
+
+
+def getclass(app, userid, password):
+    with app.app_context():
+        try:
+            token = verifyjw.login(userid, password)
+            nowtime = nowdates.get()
+            for i in range(25):
+                kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
+                for j in kecheng:
+                    if j is None: continue
+                    curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=i, class_time=j['kssj'],
+                                            class_name=j['kcmc'], teacher=j['jsxm'], location=j['jsmc'],
+                                            begintime=j['kssj'], endtime=j['jssj'], cycle=j['kkzc'])
+                    db.session.add(curriculum)
+            db.session.commit()
+        except Exception as e:
+            print(e)

@@ -85,9 +85,9 @@ class Curriculum(db.Model):
     __tablename__ = 'curriculum'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     userid = db.Column(db.String(12), index=True)
-    school_year = db.Column(db.String(10), index=True)
+    school_year = db.Column(db.String(32), index=True)
     week = db.Column(db.Integer, index=True)
-    class_time = db.Column(db.String(8), index=True)
+    class_time = db.Column(db.String(16), index=True)
     class_name = db.Column(db.String(16))
     teacher = db.Column(db.String(32))
     location = db.Column(db.String(32))

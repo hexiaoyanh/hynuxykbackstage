@@ -12,7 +12,6 @@ from .. import access_token
 from ..models import WXUser
 
 
-# 微信服务号的token验证
 def dealtextmsg(fromusername, tousername):
     return {
         "ToUserName": fromusername,
@@ -33,6 +32,7 @@ def dealsubscrible(fromusername, tousername):
     }
 
 
+# 微信服务号的token验证
 @wxfwh.route('/wx', methods=['GET', 'POST'])
 def getinput():
     signature = request.args.get('signature')
@@ -126,12 +126,6 @@ def login(code):
         "code": 1,
         "msg": "登录成功"
     })
-
-
-@wxfwh.route('/getopenid')
-@login_required
-def getopenid():
-    return current_user.openid
 
 
 @wxfwh.route('/islogin')
