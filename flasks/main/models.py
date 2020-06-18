@@ -94,3 +94,12 @@ class Curriculum(db.Model):
     begintime = db.Column(db.String(16))
     endtime = db.Column(db.String(16))
     cycle = db.Column(db.String(16))
+
+
+class Bill(db.Model):
+    __tablename__ = 'bill'
+    transaction_id = db.Column(db.String(32), primary_key=True, index=True)  # 微信支付单号
+    out_trade_no = db.Column(db.String(32), index=True)  # 商户订单号
+    total_fee = db.Column(db.Integer)
+    result_code = db.Column(db.String(16))
+    openid = db.Column(db.String(128))

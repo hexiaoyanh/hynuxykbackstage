@@ -14,7 +14,7 @@ from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API
 from .sendnotification import send_success_sub
 from .verifyjw import verifyjw
 from .. import db, nowdates
-from ..models import WXUser, Curriculum
+from ..models import WXUser, Curriculum, Bill
 
 
 @wxfwh.route('/createsubpay')
@@ -62,8 +62,11 @@ def successpay():
     data = xmltodict.parse(request.data)['xml']
     print(data)
     if data['result_code'] == 'SUCCESS':
-        send_success_sub(data['openid'], data['out_trade_no'], data['total_fee'], data['time_end'])
+        send_success_sub(data['openid'], data['transaction_id'], data['total_fee'], data['time_end'])
         user = WXUser.query.filter_by(openid=data['openid']).first()
+        bill = Bill(data['transaction_id'], data['out_trade_no'], data['total_fee'], data['result_code'],
+                    data['openid'])
+        db.session.add(bill)
         nowtime = datetime.datetime.now()
         if nowtime.month < 7:
             nowtime = datetime.datetime(nowtime.year, nowtime.month + 6, nowtime.day)

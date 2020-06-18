@@ -20,7 +20,7 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
                 "color": "#173177"
             },
             "keyword2": {
-                "value": total_fee,
+                "value": str(int(total_fee) * 0.01),
                 "color": "#173177"
             },
             "keyword3": {
@@ -29,6 +29,44 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
             },
             "keyword4": {
                 "value": time_end,
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res
+
+
+def send_class_notification(classname, location, teacher=None, time=None):
+    data = {
+        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "template_id": "fyxZENvUVm7b2elEY3kplBg0Pn5Q4rFQeYM3VIp5xpM",
+        "data": {
+            "first": {
+                "value": "您有一节课将在30分钟后开始",
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": classname,
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": location,
+                "color": "#173177"
+            },
+            "keyword3": {
+                "value": teacher,
+                "color": "#173177"
+            },
+            "keyword4": {
+                "value": time,
                 "color": "#173177"
             }
         }
