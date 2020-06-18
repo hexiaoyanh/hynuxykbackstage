@@ -30,6 +30,7 @@ def createsubpay(openid):
         'trade_type': 'JSAPI',  # jsapi支付类型
         'openid': openid
     }
+    print(params)
     sign = get_sign(params, API_KEY)  # 获取签名
     params['sign'] = sign  # 添加签名到参数字典
     xml = trans_dict_to_xml(params)  # 转换字典为XML
