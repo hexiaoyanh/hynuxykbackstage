@@ -38,3 +38,4 @@ class verifyjw:
                 url="http://59.51.24.46/hysf/app.do?method=getKbcxAzc&xh=" + userid + "&xnxqid=" + xn + "&zc=" + week,
                 headers=headers).json()
         return res
+

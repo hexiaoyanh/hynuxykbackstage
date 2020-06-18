@@ -23,7 +23,7 @@ class WechatSetting:
                         {
                             "type": "view",
                             "name": "订阅上课通知",
-                            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+                            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
                         }
                     ]
                 },
@@ -59,7 +59,7 @@ class WechatSetting:
         res = requests.post(url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + access_tokens,
                             headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8')
                             ).json()
-        print("自定义菜单:",res['errmsg'])
+        print("自定义菜单:", res['errmsg'])
 
     def __init__(self):
         pass
