@@ -79,6 +79,7 @@ class WXUser(db.Model, UserMixin):
     refresh_token = db.Column(db.String(128))
     server_expire = db.Column(db.DateTime)
     is_subnotice = db.Column(db.Boolean, default=False)
+    notification_status = db.Column(db.Boolean, default=True)
 
 
 class Curriculum(db.Model):
@@ -91,7 +92,7 @@ class Curriculum(db.Model):
     class_name = db.Column(db.String(16))
     teacher = db.Column(db.String(32))
     location = db.Column(db.String(32))
-    begintime = db.Column(db.String(16),index=True)
+    begintime = db.Column(db.String(16), index=True)
     endtime = db.Column(db.String(16))
     cycle = db.Column(db.String(64))
 

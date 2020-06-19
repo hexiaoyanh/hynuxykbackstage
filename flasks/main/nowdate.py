@@ -13,6 +13,9 @@ class nowdate:
         self.month = month
         self.day = day
 
+    def init_app(self, app):
+        self.app = app
+
     def get(self):
         a = datetime.date(self.year, self.month, self.day).isocalendar()
         b = datetime.datetime.now().isocalendar()

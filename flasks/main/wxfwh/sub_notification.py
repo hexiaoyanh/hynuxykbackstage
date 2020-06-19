@@ -86,13 +86,13 @@ def successpay():
 
 
 def GetClass(userid, password):
-    from manage import app
-    thr = threading.Thread(target=getclass, args=[app, userid, password, ])  # 创建线程
+    thr = threading.Thread(target=getclass, args=[userid, password, ])  # 创建线程
     thr.start()
 
 
-def getclass(app, userid, password):
-    with app.app_context():
+def getclass(userid, password):
+    # 使用nowdates的app上下文防止导入两次manager导致定时任务重复运行
+    with nowdates.app.app_context():
         try:
             token = verifyjw.login(userid, password)
             nowtime = nowdates.get()
@@ -114,3 +114,38 @@ def getclass(app, userid, password):
             db.session.commit()
         except Exception as e:
             print("错误:", e)
+
+
+@wxfwh.route('/is_sub_class')
+@login_required
+def is_sub():
+    if current_user.is_subnotice:
+        return jsonify({
+            "code": 1,
+            "msg": "您已订阅上课通知"
+        })
+    else:
+        return jsonify({
+            "code": -1,
+            "msg": "您未订阅上课通知"
+        })
+
+
+@wxfwh.route('/close_class_notification')
+@login_required
+def close_class_notification():
+    current_user.notification_status = False
+    return jsonify({
+        "code": 1,
+        "msg": "您已关闭上课通知"
+    })
+
+
+@wxfwh.route('/open_class_notification')
+@login_required
+def open_class_notification():
+    current_user.notification_status = True
+    return jsonify({
+        "code": 1,
+        "msg": "您已开启上课通知"
+    })

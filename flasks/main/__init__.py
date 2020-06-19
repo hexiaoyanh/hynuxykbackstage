@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 
 from .query import query
@@ -23,13 +25,17 @@ nowdates = nowdate(2020, 2, 17)
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+
     db.init_app(app)
 
     login_manager.init_app(app)
-    scheduler.init_app(app)
-    scheduler.start()
-
+    nowdates.init_app(app)
     wechatsettings.init_app(app)
+
+    # 初始化备份数据库定时器
+    scheduler.init_app(app)
+    from . import apsheduler
+    scheduler.start()
 
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')
@@ -48,7 +54,5 @@ def create_app():
 
     from .wxfwh import wxfwh as wxfwh_blueprint
     app.register_blueprint(wxfwh_blueprint, url_prefix='/wxfwh')
-
-    from . import apsheduler
 
     return app
