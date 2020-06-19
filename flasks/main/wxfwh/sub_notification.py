@@ -13,7 +13,7 @@ from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API
     trans_xml_to_dict
 from .sendnotification import send_success_sub
 from .verifyjw import verifyjw
-from .. import db, nowdates
+from .. import db, nowdates, wechatsettings
 from ..models import WXUser, Curriculum, Bill
 
 
@@ -21,7 +21,7 @@ from ..models import WXUser, Curriculum, Bill
 @login_required
 def createsubpay():
     nonce_str = random_str()  # 拼接出随机的字符串即可，我这里是用 时间+随机数字+5个随机字母
-    total_fee = 1  # 付款金额，单位是分，必须是整数
+    total_fee = wechatsettings.get_total_fee()  # 付款金额，单位是分，必须是整数
     params = {
         'appid': APP_ID,  # APPID
         'mch_id': MCH_ID,  # 商户号
@@ -55,6 +55,15 @@ def createsubpay():
                                  API_KEY)
 
     return jsonify(params)
+
+
+@wxfwh.route('/get_total_fee')
+@login_required
+def get_total_fee():
+    return jsonify({
+        "code": 1,
+        "total_fee": wechatsettings.get_total_fee()
+    })
 
 
 @wxfwh.route('/successpay', methods=['GET', 'POST'])

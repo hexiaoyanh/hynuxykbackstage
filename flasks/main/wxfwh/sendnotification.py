@@ -44,9 +44,9 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
     return res
 
 
-def send_class_notification(classname, location, teacher=None, time=None):
+def send_class_notification(openid, classname, location, teacher=None, time=None):
     data = {
-        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "touser": openid,
         "template_id": "fyxZENvUVm7b2elEY3kplBg0Pn5Q4rFQeYM3VIp5xpM",
         "data": {
             "first": {

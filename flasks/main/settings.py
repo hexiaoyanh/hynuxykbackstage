@@ -7,6 +7,8 @@ from . import access_token
 
 class WechatSetting:
     # 设置微信菜单
+    total_fee = 1
+
     def _setmenu(self):
         data = {
             "button": [
@@ -65,6 +67,9 @@ class WechatSetting:
                             headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8')
                             ).json()
         print("自定义菜单:", res['errmsg'])
+
+    def get_total_fee(self):
+        return self.total_fee
 
     def __init__(self):
         pass
