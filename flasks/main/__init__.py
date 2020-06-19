@@ -1,11 +1,12 @@
 import os
+from functools import wraps
 
-from flask import Flask
+from flask import Flask, abort
 
 from .query import query
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from config import Config
 from .nowdate import nowdate
 from .get_access_token import get_access_token
@@ -22,6 +23,7 @@ login_manager = LoginManager()
 nowdates = nowdate(2020, 2, 17)
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -34,7 +36,7 @@ def create_app():
 
     # 初始化备份数据库定时器
     scheduler.init_app(app)
-    from . import apsheduler
+    from . import sheduler
     scheduler.start()
 
     from .query import query as query_blueprint
@@ -46,10 +48,21 @@ def create_app():
     from .rank import rank as rank_blueprint
     app.register_blueprint(rank_blueprint, url_prefix='/rank')
 
-    from .admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
-
     from .wxfwh import wxfwh as wxfwh_blueprint
     app.register_blueprint(wxfwh_blueprint, url_prefix='/wxfwh')
 
+    from .wxfwh.admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/wxfwh/admin')
+
     return app
+
+
+def admin_required(func):
+    @wraps
+    def decorated_view(*args, **kwargs):
+        if current_user.is_admin:
+            return func(*args, **kwargs)
+        else:
+            abort(401)
+
+    return decorated_view

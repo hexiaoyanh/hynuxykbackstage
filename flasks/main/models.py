@@ -1,14 +1,15 @@
 import datetime
+from functools import wraps
 
 from flask_login import UserMixin
 from sqlalchemy import Column
-
 from . import db, login_manager
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return WXUser.query.get(int(user_id))
+
 
 
 # 定义User对象:
@@ -80,6 +81,7 @@ class WXUser(db.Model, UserMixin):
     server_expire = db.Column(db.DateTime)
     is_subnotice = db.Column(db.Boolean, default=False)
     notification_status = db.Column(db.Boolean, default=True)
+    is_admin = db.Column(db.Boolean, default=False)
 
 
 class Curriculum(db.Model):

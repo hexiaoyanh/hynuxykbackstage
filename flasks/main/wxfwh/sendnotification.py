@@ -58,11 +58,11 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
                 "color": "#173177"
             },
             "keyword2": {
-                "value": location,
+                "value": location if location is not None else "无",
                 "color": "#173177"
             },
             "keyword3": {
-                "value": teacher,
+                "value": teacher if teacher is not None else "无",
                 "color": "#173177"
             },
             "keyword4": {
