@@ -91,7 +91,7 @@ class Curriculum(db.Model):
     class_name = db.Column(db.String(16))
     teacher = db.Column(db.String(32))
     location = db.Column(db.String(32))
-    begintime = db.Column(db.String(16))
+    begintime = db.Column(db.String(16),index=True)
     endtime = db.Column(db.String(16))
     cycle = db.Column(db.String(64))
 

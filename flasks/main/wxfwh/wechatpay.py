@@ -101,6 +101,13 @@ def getclass(app, userid, password):
                 kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
                 for j in kecheng:
                     if j is None: continue
+                    curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=i,
+                                                            class_time=j['kcsj'],
+                                                            class_name=j['kcmc'], teacher=j['jsxm'],
+                                                            location=j['jsmc'],
+                                                            begintime=j['kssj'], endtime=j['jssj'],
+                                                            cycle=j['kkzc']).first()
+                    if curriculum is not None: continue
                     curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=i, class_time=j['kcsj'],
                                             class_name=j['kcmc'], teacher=j['jsxm'], location=j['jsmc'],
                                             begintime=j['kssj'], endtime=j['jssj'], cycle=j['kkzc'])

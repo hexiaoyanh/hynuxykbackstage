@@ -14,7 +14,7 @@ access_token = get_access_token()
 from .settings import WechatSetting
 from flask_apscheduler import APScheduler
 
-# wechatsettings = WechatSetting()
+wechatsettings = WechatSetting()
 scheduler = APScheduler()
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -30,7 +30,7 @@ def create_app():
     scheduler.init_app(app)
     scheduler.start()
 
-    # wechatsettings.init_app(app)
+    wechatsettings.init_app(app)
 
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')

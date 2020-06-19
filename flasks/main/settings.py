@@ -12,7 +12,7 @@ class WechatSetting:
             "button": [
                 {
                     "type": "click",
-                    "name": "上课通知",
+                    "name": "订阅通知",
                     "key": "classinfo",
                     "sub_button": [
                         {
@@ -24,6 +24,11 @@ class WechatSetting:
                             "type": "view",
                             "name": "订阅上课通知",
                             "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
+                        },
+                        {
+                            "type": "click",
+                            "name": "订阅考试成绩通知",
+                            "key": "sub_exam_notification"
                         }
                     ]
                 },
@@ -32,7 +37,7 @@ class WechatSetting:
                     "name": "小程序",
                     "pagepath": "pages/index/index",
                     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-                    "appid": "wx87b2e9598df82c7d"
+                    "appid": "wx064b82571d2be21f"
                 },
                 {
                     "name": "课程表",
@@ -48,7 +53,7 @@ class WechatSetting:
                         {
                             "type": "click",
                             "name": "今日课表",
-                            "key": "todayclass"
+                            "key": "get_today_class"
                         }]
                 }]
         }

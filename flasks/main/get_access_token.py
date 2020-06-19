@@ -23,6 +23,8 @@ class get_access_token:
         }
         res = requests.get(url="https://api.weixin.qq.com/cgi-bin/token", params=params)
         res = json.loads(res.text)
+
+        if res.get('errcode') is not None: print(res['errmsg'])
         self.access_token = res['access_token']
         self.time = time.time()
 
