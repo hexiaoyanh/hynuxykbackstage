@@ -80,6 +80,7 @@ def successpay():
 
         user.server_expire = nowtime
         user.is_subnotice = True
+        user.notification_status = True
         db.session.add(user)
         db.session.commit()
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
@@ -135,6 +136,8 @@ def is_sub():
 @login_required
 def close_class_notification():
     current_user.notification_status = False
+    db.session.add(current_user)
+    db.session.commit()
     return jsonify({
         "code": 1,
         "msg": "您已关闭上课通知"
@@ -145,6 +148,8 @@ def close_class_notification():
 @login_required
 def open_class_notification():
     current_user.notification_status = True
+    db.session.add(current_user)
+    db.session.commit()
     return jsonify({
         "code": 1,
         "msg": "您已开启上课通知"
