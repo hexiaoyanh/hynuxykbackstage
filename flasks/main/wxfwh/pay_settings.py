@@ -23,6 +23,7 @@ def get_sign(data_dict, key):
     :return: 字符串
     """
     params_list = sorted(data_dict.items(), key=lambda e: e[0], reverse=False)  # 参数字典倒排序为列表
+    print(params_list)
     params_str = "&".join(u"{}={}".format(k, v) for k, v in params_list) + '&key=' + key
     # 组织参数字符串并在末尾添加商户交易密钥
     md5 = hashlib.md5()  # 使用MD5加密模式

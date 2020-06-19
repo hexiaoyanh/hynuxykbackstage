@@ -5,7 +5,6 @@ from .query import query
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
-
 from .nowdate import nowdate
 from .get_access_token import get_access_token
 

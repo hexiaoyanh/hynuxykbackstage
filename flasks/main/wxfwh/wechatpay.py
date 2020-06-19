@@ -38,7 +38,6 @@ def createsubpay():
     sign = get_sign(params, API_KEY)  # 获取签名
     params['sign'] = sign  # 添加签名到参数字典
     xml = trans_dict_to_xml(params)  # 转换字典为XML
-    print(xml)
     response = requests.post(url="https://api.mch.weixin.qq.com/pay/unifiedorder", data=xml.encode("utf-8"))
     data_dict = trans_xml_to_dict(response.content)['xml']  # 将请求返回的数据转为字典
     params = {}
@@ -68,7 +67,7 @@ def successpay():
         user = WXUser.query.filter_by(openid=data['openid']).first()
         bill = Bill(transaction_id=data['transaction_id'], out_trade_no=data['out_trade_no'],
                     total_fee=data['total_fee'], result_code=data['result_code'],
-                    openid=['openid'])
+                    openid=data['openid'])
         db.session.add(bill)
         nowtime = datetime.datetime.now()
         if nowtime.month < 7:

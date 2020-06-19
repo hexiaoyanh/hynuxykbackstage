@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    DEBUG = True
+    DEBUG = False
     threaded = True
     processes = True
     SECRET_KEY = "BU*8YVY*inNYG7JNON8TR%BR@#$VHJV"
