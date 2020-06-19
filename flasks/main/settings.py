@@ -26,11 +26,6 @@ class WechatSetting:
                             "type": "view",
                             "name": "订阅上课通知",
                             "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
-                        },
-                        {
-                            "type": "click",
-                            "name": "订阅考试成绩通知",
-                            "key": "sub_exam_notification"
                         }
                     ]
                 },
@@ -51,11 +46,6 @@ class WechatSetting:
                             "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
                             "appid": "wx365d77f700333956"
 
-                        },
-                        {
-                            "type": "click",
-                            "name": "今日课表",
-                            "key": "get_today_class"
                         }]
                 }]
         }

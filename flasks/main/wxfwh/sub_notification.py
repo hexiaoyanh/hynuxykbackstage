@@ -84,7 +84,7 @@ def successpay():
         else:
             nowtime = datetime.datetime(nowtime.year + 1, nowtime.month + 6 - 12, nowtime.day)
 
-        if user.is_subnotice:
+        if not user.is_subnotice:
             GetClass(user.userid, user.password)
 
         user.server_expire = nowtime

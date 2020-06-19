@@ -43,9 +43,6 @@ def create_app():
     from .publicexam import publicexam as publicexam_blueprint
     app.register_blueprint(publicexam_blueprint, url_prefix='/publicexam')
 
-    from .submsg import submsg as submsg_blueprint
-    app.register_blueprint(submsg_blueprint, url_prefix='/submsg')
-
     from .rank import rank as rank_blueprint
     app.register_blueprint(rank_blueprint, url_prefix='/rank')
 
