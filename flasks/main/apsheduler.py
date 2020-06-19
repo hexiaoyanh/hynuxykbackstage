@@ -15,6 +15,8 @@ def get_next_half_an_hours():
     if generator_minutes == 0: generator_minutes = 30
     if generator_minutes == 30: generator_hours += 1
     if generator_hours == 24: generator_hours = 0
+    if generator_hours <= 9:pass
+
 
 
 @scheduler.task('interval', minutes=30, id='send_class_notification', start_date='2020-6-19 14:29:00')

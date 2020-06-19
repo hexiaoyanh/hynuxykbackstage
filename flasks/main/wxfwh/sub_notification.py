@@ -149,3 +149,16 @@ def open_class_notification():
         "code": 1,
         "msg": "您已开启上课通知"
     })
+
+
+@wxfwh.route('/get_notification_status')
+@login_required
+def get_notification_status():
+    if current_user.notification_status:
+        return jsonify({
+            "code": 1
+        })
+    else:
+        return jsonify({
+            "code": -1
+        })
