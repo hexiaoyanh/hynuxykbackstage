@@ -52,7 +52,8 @@ def cancel_bind_jw():
         })
     else:
         curriculum = Curriculum.query.filter(Curriculum.userid == current_user.userid).all()
-        db.session.delete(curriculum)
+        for i in curriculum:
+            db.session.delete(i)
         current_user.userid = None
         current_user.password = None
         current_user.is_subnotice = False
