@@ -24,7 +24,7 @@ def get_qr_code():
     for i in allcode:
         if (now_time - i.exipre_in).seconds > 300:
             db.session.delete(i)
-    db.session.add(Generate_code(generate_code=str(generate_code)), exipre_in=datetime.now())
+    db.session.add(Generate_code(generate_code=str(generate_code), exipre_in=datetime.now()))
     db.session.commit()
     return jsonify({
         "code": 1,
@@ -95,6 +95,11 @@ def is_login(generate_code):
         })
     elif code.is_auth is True:
         user = WXUser.query.filter(WXUser.openid == code.openid).first()
+        if user.is_admin is False:
+            return jsonify({
+                "code": -1,
+                "msg": "您没有权限"
+            })
         login_user(user)
         return jsonify({
             "code": 1,
