@@ -45,6 +45,10 @@ def login():
             "msg": res['errmsg']
         })
     token = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
+    # 已扫码
+    token.is_scan = True
+    db.session.add(token)
+    db.session.commit()
     now_time = datetime.now()  # 如果不存到变量里会出问题，我也不知道为什么
     print(now_time, token.exipre_in)
     if token is None:
@@ -85,8 +89,13 @@ def is_login(generate_code):
     code = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
     if code is None:
         return jsonify({
-            "code": -1,
+            "code": -2,
             "msg": "该generate_code不存在"
+        })
+    elif code.is_scan:
+        return jsonify({
+            "code": 2,
+            "msg": "扫码成功"
         })
     elif code.is_auth is False:
         return jsonify({
@@ -97,7 +106,7 @@ def is_login(generate_code):
         user = WXUser.query.filter(WXUser.openid == code.openid).first()
         if user.is_admin is False:
             return jsonify({
-                "code": -1,
+                "code": -2,
                 "msg": "您没有权限"
             })
         login_user(user)

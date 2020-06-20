@@ -8,52 +8,18 @@ from . import access_token
 class WechatSetting:
     # 设置微信菜单
     total_fee = 1
-    data = {
-        "button": [
-            {
-                "type": "click",
-                "name": "订阅通知",
-                "key": "classinfo",
-                "sub_button": [
-                    {
-                        "type": "view",
-                        "name": "绑定教务网",
-                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect"
-                    },
-                    {
-                        "type": "view",
-                        "name": "订阅上课通知",
-                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
-                    },
-                    {
-                        "type": "click",
-                        "name": "订阅考试成绩通知",
-                        "key": "sub_exam_notification"
-                    }
-                ]
-            },
-            {
-                "type": "miniprogram",
-                "name": "小程序",
-                "pagepath": "pages/index/index",
-                "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-                "appid": "wx064b82571d2be21f"
-            },
-            {
-                "name": "课程表",
-                "sub_button": [
-                    {
-                        "type": "miniprogram",
-                        "name": "课表小程序",
-                        "pagepath": "pages/class/class",
-                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-                        "appid": "wx365d77f700333956"
+    data = None
 
-                    }]
-            }]
-    }
+    def _load_menu(self):
+        with open('menu.json', 'r') as f:
+            self.data = json.loads(f.read())
+
+    def _save_menu(self):
+        with open('menu.json', 'w') as f:
+            f.write(json.dumps(self.data))
 
     def _setmenu(self):
+        self._load_menu()
         access_tokens = access_token.get_access_token()
         headers = {
             "Content-Type": "application/json"
@@ -62,13 +28,16 @@ class WechatSetting:
                             headers=headers, data=json.dumps(self.data, ensure_ascii=False).encode('utf-8')
                             ).json()
         print("自定义菜单:", res['errmsg'])
+        return res['errmsg']
 
     def get_menu(self):
+        self._load_menu()
         return self.data
 
     def set_menu(self, data):
         self.data = data
         self._setmenu()
+        return self._save_menu()
 
     def set_total_fee(self, total_fee):
         self.total_fee = total_fee
@@ -81,4 +50,3 @@ class WechatSetting:
 
     def init_app(self, app):
         self.app = app
-        self._setmenu()
