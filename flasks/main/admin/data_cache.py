@@ -17,11 +17,11 @@ class Data_Cache():
             "is_auth": 0,
             "openid": None
         }
-        print(self.token_data)
+        print("push", self.token_data)
 
     def set(self, uuid, openid):
         now_time = datetime.datetime.now()
-        print(self.token_data)
+        print("set", self.token_data)
         if self.token_data.get(uuid) is None:
             return None
         elif (now_time - self.token_data[uuid]['expire_in']).seconds >= 120:
