@@ -45,7 +45,6 @@ def login():
             "msg": res['errmsg']
         })
     token = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
-    print((datetime.now() - token.exipre_in).seconds)
     if token is None:
         return jsonify({
             "code": -1,
