@@ -106,3 +106,12 @@ class Bill(db.Model):
     result_code = db.Column(db.String(16))
     openid = db.Column(db.String(128))
     create_time = db.Column(db.DateTime, default=datetime.datetime.now())
+
+
+class Generate_code(db.Model):
+    __tablename__ = 'generate_code'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    generate_code = db.Column(db.String(128), index=True)
+    exipre_in = db.Column(db.DateTime, default=datetime.datetime.now())
+    is_auth = db.Column(db.Boolean, default=False)
+    openid = db.Column(db.String(128))

@@ -1,3 +1,4 @@
+from datetime import datetime
 from urllib.parse import quote
 
 from flask import jsonify, request
@@ -5,22 +6,27 @@ from flask_login import login_user, login_required, current_user
 
 from . import admin
 import uuid
-from .data_cache import Data_Cache
-from main import access_token, admin_required, nowdates
-from main.models import WXUser, Usern, User
-
-data_cache = Data_Cache()
+from main import access_token, admin_required, db
+from main.models import WXUser, Usern, User, Generate_code
 
 
 # 生成二维码链接
 @admin.route('/get_qr_code')
 def get_qr_code():
     generate_code = uuid.uuid4()
-    data_cache.push(str(generate_code))
     url1 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri="
     url2 = "&response_type=code&scope=snsapi_userinfo&state=admin_login#wechat_redirect"
     redirect_url = "https://www.hynuxyk.club/wx/admin/login/" + str(generate_code)
     redirect_url = quote(redirect_url, 'utf-8')
+    # 删掉过期的code
+    now_time = datetime.now()
+    allcode = Generate_code.query.all()
+    for i in allcode:
+        print((now_time - i.exipre_in).seconds)
+        if (datetime.now() - i.exipre_in).seconds > 300:
+            db.session.delete(i)
+    db.session.add(Generate_code(generate_code=str(generate_code)))
+    db.session.commit()
     return jsonify({
         "code": 1,
         "url": url1 + redirect_url + url2,
@@ -39,23 +45,24 @@ def login():
             "code": "-1",
             "msg": res['errmsg']
         })
-    status = data_cache.set(generate_code, res['openid'])
-    if status is None:
+    token = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
+    if token is None:
         return jsonify({
             "code": -1,
-            "msg": "没有找到此generate_code"
+            "msg": "该generate_code已失效"
         })
-    elif status is False:
+    elif (datetime.now() - token.exipre_in).seconds > 120:
+        db.session.delete(token)
+        db.session.commit()
         return jsonify({
             "code": -1,
-            "msg": "此generate_code已过期，请刷新二维码再重试登录"
-        })
-    elif status == "used":
-        return jsonify({
-            "code": -1,
-            "msg": "此验证码已使用"
+            "msg": "该验证码已过期"
         })
     else:
+        token.openid = res['openid']
+        token.is_auth = True
+        db.session.add(token)
+        db.session.commit()
         return jsonify({
             "code": 1,
             "msg": "登录成功"
@@ -74,25 +81,19 @@ def is_logins():
 # 判断是否登录成功
 @admin.route('/is_login/<string:generate_code>')
 def is_login(generate_code):
-    status = data_cache.get(generate_code)
-    print(status)
-    if status is None:
+    code = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
+    if code is None:
         return jsonify({
             "code": -1,
-            "msg": "没有找到此generate_code"
+            "msg": "该generate_code不存在"
         })
-    elif status is False:
+    elif code.is_auth is False:
         return jsonify({
             "code": -1,
-            "msg": "用户还未扫码"
+            "msg": "该generate_code还未验证"
         })
-    elif status == "used":
-        return jsonify({
-            "code": -1,
-            "msg": "错误，此验证码已使用"
-        })
-    else:
-        user = WXUser.query.filter(WXUser.openid == status).first()
+    elif code.is_auth is True:
+        user = WXUser.query.filter(WXUser.openid == code.openid).first()
         login_user(user)
         return jsonify({
             "code": 1,

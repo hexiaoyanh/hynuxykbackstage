@@ -22,6 +22,7 @@ login_manager = LoginManager()
 nowdates = nowdate(2020, 2, 17)
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -31,7 +32,6 @@ def create_app():
     login_manager.init_app(app)
     nowdates.init_app(app)
     wechatsettings.init_app(app)
-
     # 初始化备份数据库定时器
     scheduler.init_app(app)
     from . import sheduler
