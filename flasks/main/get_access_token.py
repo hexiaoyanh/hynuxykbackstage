@@ -50,7 +50,6 @@ class get_access_token:
             "code": code,
             "grant_type": "authorization_code"
         }
-        print(params)
         res = requests.get(url="https://api.weixin.qq.com/sns/oauth2/access_token", params=params)
         res = json.loads(res.text)
         return res

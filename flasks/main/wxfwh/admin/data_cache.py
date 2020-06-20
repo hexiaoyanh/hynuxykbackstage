@@ -13,29 +13,35 @@ class Data_Cache():
     def push(self, uuid):
         self.token_data[uuid] = {
             "expire_in": datetime.datetime.now(),
-            "is_auth": 0
+            "is_auth": 0,
+            "openid": None
         }
 
-    def set(self, uuid):
+    def set(self, uuid, openid):
         now_time = datetime.datetime.now()
+        print(self.token_data)
         if self.token_data.get(uuid) is None:
             return None
-        elif (now_time - self.token_data['expire_in']).seconds >= 120:
+        elif (now_time - self.token_data[uuid]['expire_in']).seconds >= 120:
             return False
         else:
             self.token_data[uuid]['is_auth'] += 1
+            if self.token_data[uuid]['is_auth'] >= 2:
+                return "used"
+            self.token_data[uuid]['openid'] = openid
             return True
 
     def get(self, uuid):
+        print(self.token_data)
         if self.token_data.get(uuid) is None:
             return None
-        elif not self.token_data[uuid]['is_auth'] == 0:
+        elif self.token_data[uuid]['is_auth'] == 0:
             return False
         elif self.token_data[uuid]['is_auth'] != 0:
             self.token_data[uuid]['is_auth'] += 1
             if self.token_data[uuid]['is_auth'] > 2:
                 return "used"
-            return True
+            return self.token_data[uuid]['openid']
         else:
             return None
 
