@@ -7,7 +7,7 @@ class Data_Cache():
     def _delete_expired_data(self):
         now_time = datetime.datetime.now()
         for i in self.token_data:
-            if (now_time - i['expire_in']).seconds >= 120:
+            if (now_time - self.token_data[i]['expire_in']).seconds >= 120:
                 del i
 
     def push(self, uuid):
