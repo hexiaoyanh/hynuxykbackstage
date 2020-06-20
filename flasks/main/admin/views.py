@@ -24,7 +24,7 @@ def get_qr_code():
     for i in allcode:
         if (now_time - i.exipre_in).seconds > 300:
             db.session.delete(i)
-    db.session.add(Generate_code(generate_code=str(generate_code)))
+    db.session.add(Generate_code(generate_code=str(generate_code)), exipre_in=datetime.now())
     db.session.commit()
     return jsonify({
         "code": 1,
@@ -45,7 +45,8 @@ def login():
             "msg": res['errmsg']
         })
     token = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
-    now_time = datetime.now()
+    now_time = datetime.now()  # 如果不存到变量里会出问题，我也不知道为什么
+    print(now_time, token.exipre_in)
     if token is None:
         return jsonify({
             "code": -1,
