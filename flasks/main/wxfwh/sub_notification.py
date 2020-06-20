@@ -12,7 +12,7 @@ from flask_login import login_required, current_user
 from .pay_settings import random_str, APP_ID, MCH_ID, CREATE_IP, NOTIFY_URL, API_KEY, get_sign, trans_dict_to_xml, \
     trans_xml_to_dict
 from .sendnotification import send_success_sub
-from .verifyjw import verifyjw
+from main.verifyjw import verifyjw
 from .. import db, nowdates, wechatsettings
 from ..models import WXUser, Curriculum, Bill
 

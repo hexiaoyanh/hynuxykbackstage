@@ -1,6 +1,7 @@
 import requests
 
 
+# 教务网数据获取
 class verifyjw:
     @staticmethod
     def isuseriright(userid, password):
@@ -39,3 +40,18 @@ class verifyjw:
                 headers=headers).json()
         return res
 
+    @staticmethod
+    def get_exam(token, userid, xn):
+
+        headers = {
+            "token": token
+        }
+        if userid[0] is 'N':
+            res = requests.get(
+                url="http://59.51.24.41/app.do?method=getCjcx&xh=" + userid + "&xnxqid=" + xn,
+                headers=headers).json()
+        else:
+            res = requests.get(
+                url="http://59.51.24.46/hysf/app.do?method=getCjcx&xh=" + userid + "&xnxqid=" + xn,
+                headers=headers).json()
+        return res

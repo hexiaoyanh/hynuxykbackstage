@@ -83,6 +83,7 @@ class WXUser(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
 
 
+
 class Curriculum(db.Model):
     __tablename__ = 'curriculum'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

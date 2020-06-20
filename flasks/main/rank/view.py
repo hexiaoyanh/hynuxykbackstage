@@ -1,5 +1,5 @@
 from . import rank
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from ..models import User, Usern
 from .. import db
 
@@ -41,9 +41,18 @@ def select_data(mycursor, table_name, userid, xqmc):
     return rows
 
 
+def is_illegal(userid):
+    for i in userid:
+        if i not in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'N']:
+            return True
+    return False
+
+
 @rank.route('/getrankmsg', methods=['GET', 'POST'])
 def getrankmsg():
     data = request.get_json()
+    # 防止sql注入
+    if is_illegal(data['userid']): abort(500)
     if data['userid'][0] == 'N':
         user = Usern.query.get(data['userid'])
         useres = Usern.query.filter_by(bj=user.bj).all()

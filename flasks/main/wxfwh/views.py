@@ -32,6 +32,16 @@ def dealsubscrible(fromusername, tousername):
     }
 
 
+def sub_exam_notificate(fromusername, tousername):
+    return {
+        "ToUserName": fromusername,
+        "FromUserName": tousername,
+        "CreateTime": int(time.time()),
+        "MsgType": "text",
+        "Content": u"订阅考试通知需要绑定教务账号哦，绑定成功会自动订阅啦。",
+    }
+
+
 # 微信服务号的token验证
 @wxfwh.route('/wx', methods=['GET', 'POST'])
 def getinput():
@@ -65,14 +75,13 @@ def getinput():
                 event = resp_dict.get('Event')
                 if event == 'subscribe':
                     response = dealsubscrible(fromusername, tousername)
-                else:
-                    response = {
-                        "ToUserName": resp_dict.get('FromUserName'),
-                        "FromUserName": resp_dict.get('ToUserName'),
-                        "CreateTime": int(time.time()),
-                        "MsgType": "text",
-                        "Content": u"暂不支持的消息",
-                    }
+                elif event == 'CLICK':
+                    eventclick = resp_dict.get('EventKey')
+                    if eventclick == 'sub_exam_notification':
+                        response = sub_exam_notificate(fromusername, tousername)
+            if response is not None:
+                response = {"xml": response}
+                response = xmltodict.unparse(response)
             else:
                 response = {
                     "ToUserName": resp_dict.get('FromUserName'),
@@ -81,11 +90,6 @@ def getinput():
                     "MsgType": "text",
                     "Content": u"暂不支持的消息",
                 }
-            if response:
-                response = {"xml": response}
-                response = xmltodict.unparse(response)
-            else:
-                response = ''
             return make_response(response)
     else:
         return ""

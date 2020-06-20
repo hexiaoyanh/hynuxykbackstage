@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from . import wxfwh
 from flask_login import login_required, current_user
-from .verifyjw import verifyjw
+from main.verifyjw import verifyjw
 from .. import db
 from ..models import Curriculum
 
