@@ -11,11 +11,13 @@ class Data_Cache():
                 del i
 
     def push(self, uuid):
+        self._delete_expired_data()
         self.token_data[uuid] = {
             "expire_in": datetime.datetime.now(),
             "is_auth": 0,
             "openid": None
         }
+        print(self.token_data)
 
     def set(self, uuid, openid):
         now_time = datetime.datetime.now()

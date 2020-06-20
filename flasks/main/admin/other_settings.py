@@ -47,4 +47,24 @@ def set_customize_menu():
         "msg": "设置成功"
     })
 
-# @admin.route('/')
+
+@admin.route('/get_total_fee')
+@login_required
+@admin_required
+def get_total_fee():
+    return jsonify({
+        "code": 1,
+        "total_fee": wechatsettings.get_total_fee()
+    })
+
+
+@admin.route('/set_total_fee')
+@login_required
+@admin_required
+def set_total_fee():
+    total_fee = request.args.get('total_fee')
+    wechatsettings.set_total_fee(total_fee)
+    return jsonify({
+        "code": 1,
+        "msg": "设置成功"
+    })

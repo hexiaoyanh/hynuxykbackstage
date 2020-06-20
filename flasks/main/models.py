@@ -11,7 +11,6 @@ def load_user(user_id):
     return WXUser.query.get(int(user_id))
 
 
-
 # 定义User对象:
 class User(db.Model):
     # 表的名字:
@@ -106,3 +105,4 @@ class Bill(db.Model):
     total_fee = db.Column(db.Integer)
     result_code = db.Column(db.String(16))
     openid = db.Column(db.String(128))
+    create_time = db.Column(db.DateTime, default=datetime.datetime.now())
