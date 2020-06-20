@@ -22,7 +22,6 @@ def get_qr_code():
     now_time = datetime.now()
     allcode = Generate_code.query.all()
     for i in allcode:
-        print((now_time - i.exipre_in).seconds)
         if (datetime.now() - i.exipre_in).seconds > 300:
             db.session.delete(i)
     db.session.add(Generate_code(generate_code=str(generate_code)))
@@ -46,6 +45,7 @@ def login():
             "msg": res['errmsg']
         })
     token = Generate_code.query.filter(Generate_code.generate_code == generate_code).first()
+    print((datetime.now() - token.exipre_in).seconds)
     if token is None:
         return jsonify({
             "code": -1,
