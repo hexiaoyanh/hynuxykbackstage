@@ -114,5 +114,4 @@ class Generate_code(db.Model):
     generate_code = db.Column(db.String(128), index=True)
     exipre_in = db.Column(db.DateTime, default=datetime.datetime.now())
     is_auth = db.Column(db.Boolean, default=False)
-    is_scan = db.Column(db.Boolean, default=False)
     openid = db.Column(db.String(128))
