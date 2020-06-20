@@ -13,6 +13,11 @@ class nowdate:
         self.month = month
         self.day = day
 
+    def set(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
     def init_app(self, app):
         self.app = app
 

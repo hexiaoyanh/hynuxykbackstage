@@ -1,4 +1,3 @@
-import os
 from functools import wraps
 
 from flask import Flask, abort
@@ -21,7 +20,6 @@ scheduler = APScheduler()
 db = SQLAlchemy()
 login_manager = LoginManager()
 nowdates = nowdate(2020, 2, 17)
-
 
 
 def create_app():
@@ -51,14 +49,14 @@ def create_app():
     from .wxfwh import wxfwh as wxfwh_blueprint
     app.register_blueprint(wxfwh_blueprint, url_prefix='/wxfwh')
 
-    from .wxfwh.admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/wxfwh/admin')
+    from main.admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     return app
 
 
 def admin_required(func):
-    @wraps
+    @wraps(func)
     def decorated_view(*args, **kwargs):
         if current_user.is_admin:
             return func(*args, **kwargs)

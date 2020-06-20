@@ -33,7 +33,8 @@ def send_class_notificate():
     with scheduler.app.app_context():
         now_time = nowdates.get()
         weekday = str(datetime.datetime.now().weekday() + 1)
-        users = WXUser.query.filter(WXUser.is_subnotice == True).all()
+        # 查询订阅了且没有过期的
+        users = WXUser.query.filter(WXUser.is_subnotice == True, WXUser.expires_in >= datetime.datetime.now()).all()
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),

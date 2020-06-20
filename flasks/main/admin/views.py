@@ -1,13 +1,13 @@
 from urllib.parse import quote
 
 from flask import jsonify, request
-from flask_login import login_user
+from flask_login import login_user, login_required, current_user
 
 from . import admin
 import uuid
 from .data_cache import Data_Cache
-from ... import access_token
-from ...models import WXUser
+from main import access_token, admin_required, nowdates
+from main.models import WXUser, Usern, User
 
 data_cache = Data_Cache()
 
@@ -62,6 +62,15 @@ def login():
         })
 
 
+# 判断是否登录
+@admin.route('/is_logins')
+def is_logins():
+    if current_user.is_authenticated:
+        return jsonify({'code': 1})
+    else:
+        return jsonify({'code': -1})
+
+
 # 判断是否登录成功
 @admin.route('/is_login/<string:generate_code>')
 def is_login(generate_code):
@@ -89,3 +98,33 @@ def is_login(generate_code):
             "code": 1,
             "msg": "登录成功"
         })
+
+
+# 通过openid查询用户信息
+@admin.route('/openid2user/<string:openid>')
+@login_required
+@admin_required
+def openid2user(openid):
+    user = WXUser.query.filter(WXUser.openid == openid).first()
+    if user is None:
+        return jsonify({
+            "code": -1,
+            "msg": "此用户不存在"
+        })
+    if user.userid is None:
+        return jsonify({
+            "code": -1,
+            "msg": "此用户未绑定教务网"
+        })
+    if user.userid[0] == 'N':
+        users = Usern.query.filter(Usern.xh == user.userid).first()
+
+    else:
+        users = User.query.filter(User.xh == user.userid).first()
+    return jsonify({
+        "code": 1,
+        "userid": users.xh,
+        "class_name": users.bj,
+        "name": users.xm,
+        "phone_number": users.dh
+    })

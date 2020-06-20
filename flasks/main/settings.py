@@ -8,60 +8,70 @@ from . import access_token
 class WechatSetting:
     # 设置微信菜单
     total_fee = 1
+    data = {
+        "button": [
+            {
+                "type": "click",
+                "name": "订阅通知",
+                "key": "classinfo",
+                "sub_button": [
+                    {
+                        "type": "view",
+                        "name": "绑定教务网",
+                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect"
+                    },
+                    {
+                        "type": "view",
+                        "name": "订阅上课通知",
+                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
+                    },
+                    {
+                        "type": "click",
+                        "name": "订阅考试成绩通知",
+                        "key": "sub_exam_notification"
+                    }
+                ]
+            },
+            {
+                "type": "miniprogram",
+                "name": "小程序",
+                "pagepath": "pages/index/index",
+                "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
+                "appid": "wx064b82571d2be21f"
+            },
+            {
+                "name": "课程表",
+                "sub_button": [
+                    {
+                        "type": "miniprogram",
+                        "name": "课表小程序",
+                        "pagepath": "pages/class/class",
+                        "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
+                        "appid": "wx365d77f700333956"
+
+                    }]
+            }]
+    }
 
     def _setmenu(self):
-        data = {
-            "button": [
-                {
-                    "type": "click",
-                    "name": "订阅通知",
-                    "key": "classinfo",
-                    "sub_button": [
-                        {
-                            "type": "view",
-                            "name": "绑定教务网",
-                            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect"
-                        },
-                        {
-                            "type": "view",
-                            "name": "订阅上课通知",
-                            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=submsg#wechat_redirect"
-                        },
-                        {
-                            "type": "click",
-                            "name": "订阅考试成绩通知",
-                            "key": "sub_exam_notification"
-                        }
-                    ]
-                },
-                {
-                    "type": "miniprogram",
-                    "name": "小程序",
-                    "pagepath": "pages/index/index",
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-                    "appid": "wx064b82571d2be21f"
-                },
-                {
-                    "name": "课程表",
-                    "sub_button": [
-                        {
-                            "type": "miniprogram",
-                            "name": "课表小程序",
-                            "pagepath": "pages/class/class",
-                            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-                            "appid": "wx365d77f700333956"
-
-                        }]
-                }]
-        }
         access_tokens = access_token.get_access_token()
         headers = {
             "Content-Type": "application/json"
         }
         res = requests.post(url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + access_tokens,
-                            headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8')
+                            headers=headers, data=json.dumps(self.data, ensure_ascii=False).encode('utf-8')
                             ).json()
         print("自定义菜单:", res['errmsg'])
+
+    def get_menu(self):
+        return self.data
+
+    def set_menu(self, data):
+        self.data = data
+        self._setmenu()
+
+    def set_total_fee(self, total_fee):
+        self.total_fee = total_fee
 
     def get_total_fee(self):
         return self.total_fee
