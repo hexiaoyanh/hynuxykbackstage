@@ -65,7 +65,7 @@ def query_wxuser_by_userid():
 
 
 # 添加某人为管理员
-@admin.route('/set_admin')
+@admin.route('/change_admin_status')
 @login_required
 @admin_required
 def set_admin():
@@ -89,24 +89,4 @@ def set_admin():
         "msg": "设置成功"
     })
 
-
-# 添加某人订阅
-@admin.route('/set_sub')
-@login_required
-@admin_required
-def set_sub():
-    id = request.args.get()
-    user = WXUser.query.get(id)
-    if user is None:
-        return jsonify({
-            "code": -1,
-            "msg": "没有这个id"
-        })
-    user.is_subnotice = not user.is_subnotice
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({
-        "code": 1,
-        "msg": "修改成功"
-    })
 

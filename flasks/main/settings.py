@@ -41,9 +41,12 @@ class WechatSetting:
 
     def set_total_fee(self, total_fee):
         self.total_fee = total_fee
+        with open('total_fee', 'w') as f:
+            f.write(str(total_fee))
 
     def get_total_fee(self):
-        return self.total_fee
+        with open('total_fee', 'r') as f:
+            return int(f.read())
 
     def __init__(self):
         pass

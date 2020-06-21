@@ -68,6 +68,14 @@ def send_exam_notification_scheduler():
                     insert_data(db, i.userid[:5] if i.userid[0] == 'N' else i.userid[:4], j)
 
 
+@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
+def update_all_exam_score():
+    with scheduler.app.app_context():
+        now_time = nowdates.get()
+        users = User.query.all()
+
+
+
 # 查询数据
 def select_data(mycursor, userid, xn, ksxzmc, kcmc):
     sql = "select ifnull((select id  from grade_1769 where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(
