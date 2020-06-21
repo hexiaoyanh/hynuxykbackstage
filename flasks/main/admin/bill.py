@@ -13,15 +13,17 @@ from main.models import Bill, WXUser
 def query_bill():
     page = request.args.get('pages')
     num = request.args.get('num')
-    bills = Bill.query.paginate(int(page), int(num)).items
+    bills = Bill.query.paginate(int(page), int(num))
     data = {}
-    for i in bills:
+    for i in bills.items:
         data[i.transaction_id] = {
             "out_trade_no": i.out_trade_no,
             "total_fee": i.total_fee,
             "result_code": i.result_code,
-            "openid": i.openid
+            "openid": i.openid,
+            "create_time": i.create_time
         }
+    data['total_number'] = bills.pages
     return jsonify(data)
 
 

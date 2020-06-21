@@ -15,10 +15,10 @@ from ..models import Curriculum, WXUser
 def query_curriculum():
     pages = request.args.get('pages')
     num = request.args.get('num')
-    curriculum = Curriculum.query.paginate(int(pages), int(num)).items
+    curriculum = Curriculum.query.paginate(int(pages), int(num))
     data = {}
-    for i in curriculum:
-        data[i.id] = {
+    for i in curriculum.items:
+        data[str(i.id)] = {
             "userid": i.userid,
             "school_year": i.school_year,
             "week": i.week,
@@ -30,6 +30,7 @@ def query_curriculum():
             "end_time": i.endtime,
             "cycle": i.cycle
         }
+    data['total_number'] = curriculum.pages
     return jsonify(data)
 
 
