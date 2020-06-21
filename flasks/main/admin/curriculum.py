@@ -10,15 +10,16 @@ from ..models import Curriculum, WXUser
 
 
 @admin.route('/query_curriculum')
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def query_curriculum():
     pages = request.args.get('pages')
     num = request.args.get('num')
     curriculum = Curriculum.query.paginate(int(pages), int(num))
-    data = {}
+    data = []
     for i in curriculum.items:
-        data[str(i.id)] = {
+        data.append({
+            "id": i.id,
             "userid": i.userid,
             "school_year": i.school_year,
             "week": i.week,
@@ -29,9 +30,9 @@ def query_curriculum():
             "begin_time": i.begintime,
             "end_time": i.endtime,
             "cycle": i.cycle
-        }
-    data['total_number'] = curriculum.pages
-    return jsonify(data)
+        })
+    js = {'data': data, 'total_number': curriculum.pages}
+    return jsonify(js)
 
 
 @admin.route('/query_curriculum_by_userid')
@@ -40,9 +41,10 @@ def query_curriculum():
 def query_curriculum_by_userid():
     userid = request.args.get('userid')
     curriculum = Curriculum.query.filter(Curriculum.userid == userid).all()
-    data = {}
+    data = []
     for i in curriculum:
-        data[i.id] = {
+        data.append({
+            "id": i.id,
             "userid": i.userid,
             "school_year": i.school_year,
             "week": i.week,
@@ -53,7 +55,7 @@ def query_curriculum_by_userid():
             "begin_time": i.begintime,
             "end_time": i.endtime,
             "cycle": i.cycle
-        }
+        })
     return jsonify(data)
 
 
@@ -85,7 +87,7 @@ def get_schedule():
     if update_curriculum.is_running:
         return jsonify({
             "code": 1,
-            "msg": update_curriculum.get_schedule()
+            "schedule": update_curriculum.get_schedule()
         })
     else:
         return jsonify({

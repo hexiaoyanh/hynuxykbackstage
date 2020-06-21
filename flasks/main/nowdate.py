@@ -24,7 +24,7 @@ class nowdate:
     def get(self):
         a = datetime.date(self.year, self.month, self.day).isocalendar()
         b = datetime.datetime.now().isocalendar()
-        if self.month <= 7:
+        if self.month <= 9:
             return {
                 "xn": str(self.year - 1) + '-' + str(self.year) + '-' + '2',
                 'week': b[1] - a[1]

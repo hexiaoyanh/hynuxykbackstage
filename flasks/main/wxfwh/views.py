@@ -69,6 +69,7 @@ def getinput():
             msgtype = resp_dict.get('MsgType')
             fromusername = resp_dict.get('FromUserName')
             tousername = resp_dict.get('ToUserName')
+            response = None
             if 'text' == msgtype:
                 response = dealtextmsg(fromusername, tousername)
             elif msgtype == 'event':

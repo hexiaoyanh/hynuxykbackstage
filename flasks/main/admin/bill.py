@@ -14,17 +14,18 @@ def query_bill():
     page = request.args.get('pages')
     num = request.args.get('num')
     bills = Bill.query.paginate(int(page), int(num))
-    data = {}
+    data = []
     for i in bills.items:
-        data[i.transaction_id] = {
+        data.append({
+            "transaction_id": i.transaction_id,
             "out_trade_no": i.out_trade_no,
             "total_fee": i.total_fee,
             "result_code": i.result_code,
             "openid": i.openid,
             "create_time": i.create_time
-        }
-    data['total_number'] = bills.pages
-    return jsonify(data)
+        })
+    js = {'data': data, "total_number": bills.pages}
+    return jsonify(js)
 
 
 @admin.route('/query_bill_by_userid')
