@@ -184,3 +184,11 @@ def getaboutus():
         return jsonify({
             "code": 0
         })
+
+
+# 提示是否跳转小程序
+@query.route('/update_msg')
+def update_msg():
+    return jsonify({
+        "code": -1
+    })

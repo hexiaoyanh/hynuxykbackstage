@@ -30,6 +30,10 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
             "keyword4": {
                 "value": time_end,
                 "color": "#173177"
+            },
+            "remark": {
+                "value": "蟹蟹老板♪(･ω･)ﾉ",
+                "color": "#173177"
             }
         }
     }
@@ -68,6 +72,10 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
             "keyword4": {
                 "value": time,
                 "color": "#173177"
+            },
+            "remark": {
+                "value": "敌军还有30分钟到达战场",
+                "color": "173177"
             }
         }
     }
