@@ -18,7 +18,7 @@ def dealtextmsg(fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"我收到了，看到了回你",
+        "Content": u"我收到啦，看到信息就回你",
     }
 
 

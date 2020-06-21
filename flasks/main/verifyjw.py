@@ -42,7 +42,6 @@ class verifyjw:
 
     @staticmethod
     def get_exam(token, userid, xn):
-
         headers = {
             "token": token
         }

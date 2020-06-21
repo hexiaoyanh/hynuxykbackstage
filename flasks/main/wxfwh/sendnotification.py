@@ -80,3 +80,37 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
         data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
     print(res)
     return res
+
+
+def send_exam_notification(openid, exam_name, exam_score):
+    data = {
+        "touser": openid,
+        "template_id": "PCGL1m4dn5JR7U_ydFEBr13kXpQerTt6kXxbe5FqccI",
+        "data": {
+            "first": {
+                "value": "您有一节课的成绩粗来了",
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": exam_name,
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": exam_score,
+                "color": "#173177"
+            },
+            "remark": {
+                "value": "继续加油，奥利给！",
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res
