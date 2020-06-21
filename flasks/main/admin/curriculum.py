@@ -10,8 +10,8 @@ from ..models import Curriculum, WXUser
 
 
 @admin.route('/query_curriculum')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def query_curriculum():
     pages = request.args.get('pages')
     num = request.args.get('num')
