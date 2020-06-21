@@ -58,8 +58,8 @@ def get_total_fee():
 
 
 @admin.route('/set_total_fee')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def set_total_fee():
     total_fee = request.args.get('total_fee')
     wechatsettings.set_total_fee(total_fee)

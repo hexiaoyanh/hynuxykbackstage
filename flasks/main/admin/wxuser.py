@@ -32,8 +32,7 @@ def query_wxuser():
             "notification_status": i.notification_status,
             "is_admin": i.is_admin
         })
-    js = {"data": data, "total_number": wxuser.pages}
-    return jsonify(js)
+    return jsonify({"data": data, "total_number": wxuser.pages})
 
 
 @admin.route('/query_wxuser_by_userid')
@@ -88,5 +87,3 @@ def set_admin():
         "code": 1,
         "msg": "设置成功"
     })
-
-

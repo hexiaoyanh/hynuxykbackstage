@@ -31,8 +31,7 @@ def query_curriculum():
             "end_time": i.endtime,
             "cycle": i.cycle
         })
-    js = {'data': data, 'total_number': curriculum.pages}
-    return jsonify(js)
+    return jsonify({'data': data, 'total_number': curriculum.pages})
 
 
 @admin.route('/query_curriculum_by_userid')

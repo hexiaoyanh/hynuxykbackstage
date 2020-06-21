@@ -24,13 +24,12 @@ def query_bill():
             "openid": i.openid,
             "create_time": i.create_time
         })
-    js = {'data': data, "total_number": bills.pages}
-    return jsonify(js)
+    return jsonify({'data': data, "total_number": bills.pages})
 
 
 @admin.route('/query_bill_by_userid')
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def query_bill_by_userid():
     userid = request.args.get('userid')
     user = WXUser.query.filter(WXUser.userid == userid).first()
@@ -40,12 +39,14 @@ def query_bill_by_userid():
             "msg": "没有找到这个用户"
         })
     bill = Bill.query.filter(Bill.openid == user.openid).all()
-    data = {}
+    data = []
     for i in bill:
-        data[i.transaction_id] = {
+        data.append({
+            "transaction_id": i.transaction_id,
             "out_trade_no": i.out_trade_no,
             "total_fee": i.total_fee,
             "result_code": i.result_code,
-            "openid": i.openid
-        }
-    return jsonify(data)
+            "openid": i.openid,
+            "create_time": i.create_time
+        })
+    return jsonify({'data': data})
