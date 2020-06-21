@@ -8,6 +8,7 @@ from flask import request, make_response, jsonify
 from flask_login import login_user, login_required, current_user
 from . import wxfwh
 from main import db
+from .sendnotification import send_exam_notification
 from .. import access_token
 from ..models import WXUser
 
@@ -23,12 +24,13 @@ def dealtextmsg(fromusername, tousername):
 
 
 def dealsubscrible(fromusername, tousername):
+    send_exam_notification(fromusername, "美丽程度", "100昏！")
     return {
         "ToUserName": fromusername,
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"欢迎关注衡师小助手的微信服务号，我们现在还在测试阶段，所有的功能都能使用，遇到什么问题发信息给我啦QAQ",
+        "Content": u"欢迎关注衡师小助手的微信服务号，绑定教务网可以推送成绩信息给你，所有的功能都能使用，遇到什么问题发信息给我啦QAQ",
     }
 
 

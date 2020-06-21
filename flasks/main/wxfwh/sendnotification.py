@@ -54,7 +54,7 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
         "template_id": "fyxZENvUVm7b2elEY3kplBg0Pn5Q4rFQeYM3VIp5xpM",
         "data": {
             "first": {
-                "value": "您有一节课将在30分钟后开始",
+                "value": "您有一节课将在30分钟后开始Σ(⊙▽⊙\"a",
                 "color": "#173177"
             },
             "keyword1": {
@@ -96,7 +96,7 @@ def send_exam_notification(openid, exam_name, exam_score):
         "template_id": "PCGL1m4dn5JR7U_ydFEBr13kXpQerTt6kXxbe5FqccI",
         "data": {
             "first": {
-                "value": "您有一节课的成绩粗来了",
+                "value": "您有一节课的成绩粗来惹(#^.^#)",
                 "color": "#173177"
             },
             "keyword1": {
@@ -108,7 +108,7 @@ def send_exam_notification(openid, exam_name, exam_score):
                 "color": "#173177"
             },
             "remark": {
-                "value": "继续加油，奥利给！",
+                "value": "继续加油，奥利给！ヾ(◍°∇°◍)ﾉﾞ",
                 "color": "#173177"
             }
         }
