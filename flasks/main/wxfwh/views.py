@@ -18,7 +18,7 @@ def dealtextmsg(fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"我只是一只小白兔，还在进化当中^_^",
+        "Content": u"我收到了，看到了回你",
     }
 
 
@@ -28,7 +28,7 @@ def dealsubscrible(fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"欢迎关注衡师小助手的微信服务号，功能还在开发当中呢。",
+        "Content": u"欢迎关注衡师小助手的微信服务号，我们现在还在测试阶段，所有的功能都能使用，遇到什么问题发信息给我啦QAQ",
     }
 
 
