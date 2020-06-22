@@ -12,7 +12,7 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
         "template_id": "oY4cP55QkDeSHiUUV9oGt-_A3oTRnUkSHRjguU1SnxE",
         "data": {
             "first": {
-                "value": "上课提醒订阅成功！",
+                "value": "上课提醒订阅成功！(*^▽^*)",
                 "color": "#173177"
             },
             "keyword1": {
@@ -74,7 +74,7 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
                 "color": "#173177"
             },
             "remark": {
-                "value": "敌军还有30分钟到达战场",
+                "value": "不能对不起我的队友，再拖一会儿(〃＞皿＜)",
                 "color": "173177"
             }
         }

@@ -21,6 +21,13 @@ def set_time():
     })
 
 
+@admin.route('/get_begin_time')
+# @login_required
+# @admin_required
+def get_begin_time():
+    return jsonify(nowdates.get_begin_time())
+
+
 # 获取开学日期
 @admin.route('/get_time')
 @login_required

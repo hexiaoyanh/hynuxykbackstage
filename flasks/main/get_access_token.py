@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import time
 
@@ -26,15 +27,19 @@ class get_access_token:
         try:
             self.access_token = res['access_token']
             self.time = time.time()
+            with open('/tmp/access_token.json', 'w') as f:
+                f.write(json.dumps({"access_token": res['access_token'], "time": math.floor(self.time)}))
         except KeyError as e:
             print("access_token error:", e)
 
     # 判断是否过期
     def _is_expired(self):
         nowtime = time.time()
-        if nowtime - self.time >= 7000:
-            return True
-        return False
+        with open('/tmp/access_token.json', 'r') as f:
+            js = json.loads(f.read())
+            if nowtime - js['time'] >= 7000:
+                return True
+            return False
 
     def get_access_token(self):
         if self.access_token is None:
