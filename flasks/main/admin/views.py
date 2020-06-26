@@ -109,8 +109,8 @@ def is_login(generate_code):
 
 # 通过openid查询用户信息
 @admin.route('/openid2user/<string:openid>')
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def openid2user(openid):
     user = WXUser.query.filter(WXUser.openid == openid).first()
     if user is None:
@@ -125,9 +125,13 @@ def openid2user(openid):
         })
     if user.userid[0] == 'N':
         users = Usern.query.filter(Usern.xh == user.userid).first()
-
     else:
         users = User.query.filter(User.xh == user.userid).first()
+    if users is None:
+        return jsonify({
+            "code": -1,
+            "msg": "其他错误"
+        })
     return jsonify({
         "code": 1,
         "userid": users.xh,

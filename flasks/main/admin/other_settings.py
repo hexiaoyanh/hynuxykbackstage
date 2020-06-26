@@ -22,8 +22,8 @@ def set_time():
 
 
 @admin.route('/get_begin_time')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def get_begin_time():
     return jsonify(nowdates.get_begin_time())
 
@@ -48,9 +48,10 @@ def get_customize_menu():
 @admin_required
 def set_customize_menu():
     data = str(request.data, 'utf-8')
+    wechatsettings.set_menu(data)
     return jsonify({
         "code": 1,
-        "msg": wechatsettings.set_menu(data)
+        "msg": "ok"
     })
 
 
