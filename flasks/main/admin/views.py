@@ -109,8 +109,8 @@ def is_login(generate_code):
 
 # 通过openid查询用户信息
 @admin.route('/openid2user/<string:openid>')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def openid2user(openid):
     user = WXUser.query.filter(WXUser.openid == openid).first()
     if user is None:

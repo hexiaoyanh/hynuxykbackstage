@@ -68,7 +68,7 @@ def query_wxuser_by_userid():
 @login_required
 @admin_required
 def set_admin():
-    id = request.args.get()
+    id = request.args.get('id')
     if current_user.userid != os.getenv('admin_userid'):
         return jsonify({
             "code": -1,
