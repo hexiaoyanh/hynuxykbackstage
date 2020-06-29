@@ -62,10 +62,11 @@ def send_exam_notification_scheduler():
                 row = select_data(db, i.userid, now_time['xn'], j['ksxzmc'], j['kcmc'])
                 print(row[0][0])
                 if row[0][0] == 0:
-                    send_exam_notification(i.openid, j['kcmc'], j['zcj'])
                     j['bj'] = user.bj
                     j['userid'] = i.userid
                     insert_data(db, i.userid[:5] if i.userid[0] == 'N' else i.userid[:4], j)
+                    send_exam_notification(i.openid, j['kcmc'], j['zcj'])
+
 
 
 # @scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
@@ -78,7 +79,7 @@ def send_exam_notification_scheduler():
 
 # 查询数据
 def select_data(mycursor, userid, xn, ksxzmc, kcmc):
-    sql = "select ifnull((select id  from grade_1769 where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(
+    sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(
         userid[:5] if userid[0] == 'N' else userid[:4])
     value = {"userid": userid, "xn": xn, "ksxzmc": ksxzmc, "kcmc": kcmc}
     rows = mycursor.session.execute(sql, value).fetchall()
