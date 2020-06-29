@@ -44,6 +44,14 @@ def sub_exam_notificate(fromusername, tousername):
     }
 
 
+def dealunsubscrible(fromusername, tousername):
+    user = WXUser.query.filter(WXUser.openid == fromusername).first()
+    if user is None:
+        return ""
+    db.session.delete(user)
+    db.session.commit()
+    return ""
+
 # 微信服务号的token验证
 @wxfwh.route('/wx', methods=['GET', 'POST'])
 def getinput():
@@ -78,6 +86,8 @@ def getinput():
                 event = resp_dict.get('Event')
                 if event == 'subscribe':
                     response = dealsubscrible(fromusername, tousername)
+                elif event == 'unsubscribe':
+                    response = dealunsubscrible(fromusername, tousername)
                 elif event == 'CLICK':
                     eventclick = resp_dict.get('EventKey')
                     if eventclick == 'sub_exam_notification':
