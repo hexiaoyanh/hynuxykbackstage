@@ -7,19 +7,36 @@ import xmltodict as xmltodict
 from flask import request, make_response, jsonify
 from flask_login import login_user, login_required, current_user
 from . import wxfwh
-from main import db
+from main import db, nowdates
 from .sendnotification import send_exam_notification
 from .. import access_token
 from ..models import WXUser
+from ..verifyjw import verifyjw
 
 
-def dealtextmsg(fromusername, tousername):
+def dealtextmsg(content, fromusername, tousername):
+    msg = u"我收到啦，看到信息就回你"
+    if '成绩' in content:
+        wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
+        if wxuser is None or wxuser.userid is None:
+            msg = u"这里没有你的教务网账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号哦(*^▽^*)"
+        else:
+            token = verifyjw.login(wxuser.userid, wxuser.password)
+            exam = verifyjw.get_exam(token, wxuser.userid, nowdates.get()['xn'])
+            # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
+            if len(exam) == 1 and exam[0] is None:
+                msg = u"你这个学期都还没有成绩出来(〃＞皿＜)"
+            else:
+                msg = ""
+                for i in exam:
+                    msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + i[
+                        'kclbmc'] + '\n' + "总成绩：" + i['zcj'] + '\n\n'
     return {
         "ToUserName": fromusername,
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"我收到啦，看到信息就回你",
+        "Content": msg,
     }
 
 
@@ -52,6 +69,7 @@ def dealunsubscrible(fromusername, tousername):
     db.session.commit()
     return ""
 
+
 # 微信服务号的token验证
 @wxfwh.route('/wx', methods=['GET', 'POST'])
 def getinput():
@@ -68,7 +86,7 @@ def getinput():
     sha1.update(list[2].encode('utf-8'))
     hashcode = sha1.hexdigest()
 
-    if hashcode == signature:
+    if hashcode == echostr:
         if request.method == 'GET':
             return echostr
         else:
@@ -81,7 +99,8 @@ def getinput():
             tousername = resp_dict.get('ToUserName')
             response = None
             if 'text' == msgtype:
-                response = dealtextmsg(fromusername, tousername)
+                content = resp_dict.get('Content')
+                response = dealtextmsg(content, fromusername, tousername)
             elif msgtype == 'event':
                 event = resp_dict.get('Event')
                 if event == 'subscribe':
