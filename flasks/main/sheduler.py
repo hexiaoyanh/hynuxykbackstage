@@ -68,13 +68,20 @@ def send_exam_notification_scheduler():
                     send_exam_notification(i.openid, j['kcmc'], j['zcj'])
 
 
-
-# @scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
-# def update_all_exam_score():
-#     with scheduler.app.app_context():
-#         now_time = nowdates.get()
-#         users = User.query.all()
-#
+@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
+def update_all_exam_score():
+    with scheduler.app.app_context():
+        now_time = nowdates.get()
+        users = User.query.all()
+        for i in users:
+            exam = verifyjw.get_exam("", i.xh, now_time['xn'])
+            for j in exam:
+                if j is None: continue
+                row = select_data(db, i.xh, now_time['xn'], j['ksxzmc'], j['kcmc'])
+                if row[0][0] == 0:
+                    j['bj'] = i.bj
+                    j['userid'] = i.xh
+                    insert_data(db, i.xh[:5] if i.xh[0] == 'N' else i.xh[:4], j)
 
 
 # 查询数据

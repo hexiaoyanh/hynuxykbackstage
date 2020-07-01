@@ -25,7 +25,7 @@ def dealtextmsg(content, fromusername, tousername):
             exam = verifyjw.get_exam(token, wxuser.userid, nowdates.get()['xn'])
             # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
             if len(exam) == 1 and exam[0] is None:
-                msg = u"你这个学期都还没有成绩出来(〃＞皿＜)"
+                msg = u"你这个学期都还没有成绩粗来(〃＞皿＜)"
             else:
                 msg = ""
                 for i in exam:
@@ -86,7 +86,7 @@ def getinput():
     sha1.update(list[2].encode('utf-8'))
     hashcode = sha1.hexdigest()
 
-    if hashcode == echostr:
+    if hashcode == signature:
         if request.method == 'GET':
             return echostr
         else:
