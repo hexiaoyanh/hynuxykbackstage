@@ -82,6 +82,17 @@ def update_all_exam_score():
                     j['bj'] = i.bj
                     j['userid'] = i.xh
                     insert_data(db, i.xh[:5] if i.xh[0] == 'N' else i.xh[:4], j)
+        users = Usern.query.all()
+        for i in users:
+            token = verifyjw.login('N17080403', '128149')
+            exam = verifyjw.get_exam(token, i.xh, now_time['xn'])
+            for j in exam:
+                if j is None: continue
+                row = select_data(db, i.xh, now_time['xn'], j['ksxzmc'], j['kcmc'])
+                if row[0][0] == 0:
+                    j['bj'] = i.bj
+                    j['userid'] = i.xh
+                    insert_data(db, i.xh[:5] if i.xh[0] == 'N' else i.xh[:4], j)
 
 
 # 查询数据
