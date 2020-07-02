@@ -52,8 +52,10 @@ def send_class_notificate():
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
         now_time = nowdates.get()
-        users = WXUser.query.filter(WXUser.userid != None).all()
+        users = WXUser.query.all()
         for i in users:
+            if i.userid is None or i.userid == "":
+                continue
             token = verifyjw.login(i.userid, i.password)
             exam = verifyjw.get_exam(token, i.userid, now_time['xn'])
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
@@ -107,7 +109,6 @@ def select_data(mycursor, userid, xn, ksxzmc, kcmc):
 def insert_data(mycursor, table_name, data):
     sql = "insert into grade_{} (userid, bz, cjbsmc, kclbmc, zcj, xm, xqmc,kcxzmc, ksxzmc,kcmc, xf, bj) values ( (:userid),(:bz),(:cjbsmc),(:kclbmc),(:zcj),(:xm),(:xqmc),(:kcxzmc),(:ksxzmc),(:kcmc),(:xf),(:bj) )".format(
         table_name)
-    print(data)
     value = {
         "userid": data['userid'],
         "bz": data['bz'],
