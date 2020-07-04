@@ -62,7 +62,6 @@ def send_exam_notification_scheduler():
             for j in exam:
                 if j is None: continue
                 row = select_data(db, i.userid, now_time['xn'], j['ksxzmc'], j['kcmc'])
-                print(row[0][0])
                 if row[0][0] == 0:
                     j['bj'] = user.bj
                     j['userid'] = i.userid

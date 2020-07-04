@@ -1,4 +1,5 @@
 import json
+import time
 
 import requests
 
@@ -109,6 +110,40 @@ def send_exam_notification(openid, exam_name, exam_score):
             },
             "remark": {
                 "value": "继续加油，奥利给！ヾ(◍°∇°◍)ﾉﾞ",
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res
+
+
+def send_bind_notification(openid, userid):
+    data = {
+        "touser": openid,
+        "template_id": "nlIhlbTT7jUYM_inJdhsSlGDw2HonDCGggxDf5Fq9QU",
+        "data": {
+            "first": {
+                "value": "你的教务网账号已绑定成功，如有成绩出来将会发送通知给你啦ヾ(◍°∇°◍)ﾉﾞ",
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": userid,
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
+                "color": "#173177"
+            },
+            "remark": {
+                "value": "绑定成功还可以订阅上课通知哦，现在测试价一分钱(*^▽^*)ﾞ",
                 "color": "#173177"
             }
         }

@@ -57,6 +57,47 @@ def createsubpay():
     return jsonify(params)
 
 
+@wxfwh.route('/donate', methods=['POST'])
+def donate():
+    money = request.get_json()['money']
+    openid = request.get_json()['openid']
+    nonce_str = random_str()  # 拼接出随机的字符串即可，我这里是用 时间+随机数字+5个随机字母
+    params = {
+        'appid': "wx064b82571d2be21f",  # APPID
+        'mch_id': MCH_ID,  # 商户号
+        'nonce_str': nonce_str,  # 随机字符串
+        'out_trade_no': random_str(),  # 订单编号，可自定义
+        'total_fee': int(money),  # 订单总金额
+        'spbill_create_ip': CREATE_IP,  # 自己服务器的IP地址
+        'notify_url': "https://www.hynuxyk.club/wxfwh/success_donate",  # 回调地址，微信支付成功后会回调这个url，告知商户支付结果
+        'body': '衡师小助手小程序',  # 商品描述
+        'detail': '订阅上课通知',  # 商品描述
+        'trade_type': 'JSAPI',  # jsapi支付类型
+        'openid': openid
+    }
+    sign = get_sign(params, API_KEY)  # 获取签名
+    params['sign'] = sign  # 添加签名到参数字典
+    xml = trans_dict_to_xml(params)  # 转换字典为XML
+    response = requests.post(url="https://api.mch.weixin.qq.com/pay/unifiedorder", data=xml.encode("utf-8"))
+    data_dict = trans_xml_to_dict(response.content)['xml']  # 将请求返回的数据转为字典
+    print(data_dict)
+    params = {}
+    params['appId'] = "wx064b82571d2be21f"
+    params['timeStamp'] = int(time.time())
+    params['nonceStr'] = random_str(16)
+    params['package'] = 'prepay_id=' + data_dict['prepay_id']
+    params['signType'] = 'MD5'
+    params['paySign'] = get_sign({'appId': APP_ID,
+                                  "timeStamp": params['timeStamp'],
+                                  'nonceStr': params['nonceStr'],
+                                  'package': 'prepay_id=' + data_dict['prepay_id'],
+                                  'signType': 'MD5',
+                                  },
+                                 API_KEY)
+
+    return jsonify(params)
+
+
 @wxfwh.route('/get_total_fee')
 @login_required
 def get_total_fee():

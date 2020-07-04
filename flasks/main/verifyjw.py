@@ -11,7 +11,7 @@ class verifyjw:
             res = requests.get(
                 url="http://59.51.24.46/hysf/app.do?method=authUser&xh=" + userid + "&pwd=" + password).json()
         if res['flag'] == "1":
-            return True
+            return res
         else:
             return False
 

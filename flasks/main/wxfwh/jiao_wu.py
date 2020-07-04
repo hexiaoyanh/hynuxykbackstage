@@ -2,6 +2,7 @@ from flask import request, jsonify
 from . import wxfwh
 from flask_login import login_required, current_user
 from main.verifyjw import verifyjw
+from .sendnotification import send_bind_notification
 from .. import db
 from ..models import Curriculum
 
@@ -15,6 +16,7 @@ def bindjw():
         current_user.password = data['password']
         db.session.add(current_user)
         db.session.commit()
+        send_bind_notification(current_user.userid, data['userid'])
         return jsonify({
             "code": 1,
             "msg": "绑定成功"
