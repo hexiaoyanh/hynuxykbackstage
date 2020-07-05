@@ -131,7 +131,7 @@ def send_bind_notification(openid, userid):
         "template_id": "nlIhlbTT7jUYM_inJdhsSlGDw2HonDCGggxDf5Fq9QU",
         "data": {
             "first": {
-                "value": "你的教务网账号已绑定成功，如有成绩出来将会发送通知给你啦ヾ(◍°∇°◍)ﾉﾞ",
+                "value": "你的教务网账号已绑定成功，如有成绩出来将在一个小时内会发送通知给你啦ヾ(◍°∇°◍)ﾉﾞ",
                 "color": "#173177"
             },
             "keyword1": {

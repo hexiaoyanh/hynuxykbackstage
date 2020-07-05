@@ -33,9 +33,13 @@ def getrank(people, userid, obj):
 
 
 # 查询数据
-def select_data(mycursor, table_name, userid, xqmc):
-    sql = "select * from grade_{} where userid=(:userid) and xqmc=(:xqmc) and (kclbmc='必修' or kclbmc='任选' or kclbmc='限选')".format(
-        table_name)
+def select_data(mycursor, table_name, userid, xqmc, elective):
+    if elective:
+        sql = "select * from grade_{} where userid=(:userid) and xqmc=(:xqmc)".format(
+            table_name)
+    else:
+        sql = "select * from grade_{} where userid=(:userid) and xqmc=(:xqmc) and (kclbmc='必修' or kclbmc='任选' or kclbmc='限选')".format(
+            table_name)
     value = {"userid": userid, "xqmc": xqmc}
     rows = mycursor.session.execute(sql, value).fetchall()
     return rows
@@ -52,6 +56,10 @@ def is_illegal(userid):
 def getrankmsg():
     data = request.get_json()
     # 防止sql注入
+    if data.get('elective') is not None:
+        elective = data['elective']
+    else:
+        elective = False
     if is_illegal(data['userid']): abort(500)
     if data['userid'][0] == 'N':
         user = Usern.query.get(data['userid'])
@@ -62,9 +70,9 @@ def getrankmsg():
     people = []
     for i in useres:
         if i.xh[0] == 'N':
-            grade = select_data(db, i.xh[:5], i.xh, data['xqmc'])
+            grade = select_data(db, i.xh[:5], i.xh, data['xqmc'], elective)
         else:
-            grade = select_data(db, i.xh[:4], i.xh, data['xqmc'])
+            grade = select_data(db, i.xh[:4], i.xh, data['xqmc'], elective)
         total_num = 0  # 总分
         total_credit = 0  # 总学分
         total_pku_gpa = 0  # 北大gpa
