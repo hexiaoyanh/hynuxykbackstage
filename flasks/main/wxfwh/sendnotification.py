@@ -157,3 +157,36 @@ def send_bind_notification(openid, userid):
         data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
     print(res)
     return res
+
+def send_donate_notification(msg):
+    data = {
+        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "template_id": "nlIhlbTT7jUYM_inJdhsSlGDw2HonDCGggxDf5Fq9QU",
+        "data": {
+            "first": {
+                "value": "你的教务网账号已绑定成功，如有成绩出来将在一个小时内会发送通知给你啦ヾ(◍°∇°◍)ﾉﾞ",
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": "有人捐赠了",
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
+                "color": "#173177"
+            },
+            "remark": {
+                "value": msg,
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res

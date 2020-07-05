@@ -22,7 +22,6 @@ login_manager = LoginManager()
 nowdates = nowdate(2020, 2, 17)
 
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -51,6 +50,9 @@ def create_app():
 
     from main.admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
+    from .donate import donate as donate_blueprint
+    app.register_blueprint(donate_blueprint, url_prefix='/donate')
 
     return app
 

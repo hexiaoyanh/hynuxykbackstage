@@ -83,7 +83,6 @@ class WXUser(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
 
 
-
 class Curriculum(db.Model):
     __tablename__ = 'curriculum'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -116,3 +115,12 @@ class Generate_code(db.Model):
     exipre_in = db.Column(db.DateTime, default=datetime.datetime.now())
     is_auth = db.Column(db.Boolean, default=False)
     openid = db.Column(db.String(128))
+
+
+class Donate(db.Model):
+    __tablename__ = 'donate'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    openid = db.Column(db.String(128), index=True)
+    name = db.Column(db.String(32), index=True)
+    fee = db.Column(db.Integer)
+    message = db.Column(db.String(512))
