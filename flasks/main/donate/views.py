@@ -28,7 +28,7 @@ def code2session():
 
 
 @donate.route('/donate', methods=['POST'])
-def donate():
+def donates():
     money = request.get_json()['money']
     openid = request.get_json()['openid']
     nonce_str = random_str()  # 拼接出随机的字符串即可，我这里是用 时间+随机数字+5个随机字母
@@ -72,9 +72,9 @@ def success_donate():
     data = xmltodict.parse(request.data)['xml']
     print(data)
     if data['result_code'] == 'SUCCESS':
-        donate = Donate.query.filter_by(Donate.openid == data['openid']).first()
+        donate = Donate.query.filter(Donate.openid == data['openid']).first()
         if donate is None:
-            donate = Donate(data['openid'], int(data['total_fee']))
+            donate = Donate(openid=data['openid'], fee=int(data['total_fee']))
         else:
             donate.fee += int(data['total_fee'])
         db.session.add(donate)
@@ -86,7 +86,7 @@ def success_donate():
 def update_user_info():
     data = request.get_json()
     send_donate_notification(data['msg'])
-    donate = Donate.query.filter_by(Donate.openid == data['openid']).first()
+    donate = Donate.query.filter(Donate.openid == data['openid']).first()
     donate.message = data['msg']
     donate.name = data['name']
     db.session.add(donate)
