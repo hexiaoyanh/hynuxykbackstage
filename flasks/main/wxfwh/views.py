@@ -57,7 +57,7 @@ def sub_exam_notificate(fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"订阅考试通知需要绑定教务账号哦，绑定成功会自动订阅啦。",
+        "Content": u"订阅考试通知需要绑定教务账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号，绑定成功会自动订阅啦。",
     }
 
 

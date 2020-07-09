@@ -160,8 +160,8 @@ def send_bind_notification(openid, userid):
 
 def send_donate_notification(msg):
     data = {
-        "touser": "VVhOVUrytNSKvJXn6rrV3i3rlwWHF8KBFuOMJlBsoSY",
-        "template_id": "nlIhlbTT7jUYM_inJdhsSlGDw2HonDCGggxDf5Fq9QU",
+        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "template_id": "VVhOVUrytNSKvJXn6rrV3i3rlwWHF8KBFuOMJlBsoSY",
         "data": {
             "first": {
                 "value": "有人捐赠了",
