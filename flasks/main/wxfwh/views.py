@@ -36,7 +36,7 @@ def dealtextmsg(content, fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": msg,
+        "Content": msg+"或者前往小程序-【课表成绩】-【成绩】查询当前学期的成绩或排名",
     }
 
 
