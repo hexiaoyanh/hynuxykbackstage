@@ -4,7 +4,7 @@ import time
 from . import scheduler, db
 from flask import current_app
 
-from .models import Curriculum, WXUser, User, Usern
+from .models import Curriculum, WXUser, User, Usern, Grade
 from .verifyjw import verifyjw
 from .wxfwh.sendnotification import send_class_notification, send_exam_notification
 from . import nowdates
@@ -61,11 +61,14 @@ def send_exam_notification_scheduler():
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             for j in exam:
                 if j is None: continue
-                row = select_data(db, i.userid, now_time['xn'], j['ksxzmc'], j['kcmc'])
-                if row[0][0] == 0:
-                    j['bj'] = user.bj
-                    j['userid'] = i.userid
-                    insert_data(db, i.userid[:5] if i.userid[0] == 'N' else i.userid[:4], j)
+                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                if grade is None:
+                    grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                                  xm=user.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
+                                  xf=j['xf'], bj=user.bj)
+                    db.session.add(grade)
+                    db.session.commit()
                     send_exam_notification(i.openid, j['kcmc'], j['zcj'])
 
 
@@ -78,48 +81,54 @@ def update_all_exam_score():
             exam = verifyjw.get_exam("", i.xh, now_time['xn'])
             for j in exam:
                 if j is None: continue
-                row = select_data(db, i.xh, now_time['xn'], j['ksxzmc'], j['kcmc'])
-                if row[0][0] == 0:
-                    j['bj'] = i.bj
-                    j['userid'] = i.xh
-                    insert_data(db, i.xh[:5] if i.xh[0] == 'N' else i.xh[:4], j)
+                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                if grade is None:
+                    grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                                  xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
+                                  xf=j['xf'], bj=i.bj)
+                    db.session.add(grade)
+                    db.session.commit()
         users = Usern.query.all()
         for i in users:
             token = verifyjw.login('N17080403', '128149')
             exam = verifyjw.get_exam(token, i.xh, now_time['xn'])
             for j in exam:
                 if j is None: continue
-                row = select_data(db, i.xh, now_time['xn'], j['ksxzmc'], j['kcmc'])
-                if row[0][0] == 0:
-                    j['bj'] = i.bj
-                    j['userid'] = i.xh
-                    insert_data(db, i.xh[:5] if i.xh[0] == 'N' else i.xh[:4], j)
+                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                if grade is None:
+                    grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                                  xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
+                                  xf=j['xf'], bj=i.bj)
+                    db.session.add(grade)
+                    db.session.commit()
 
 
-# 查询数据
-def select_data(mycursor, userid, xn, ksxzmc, kcmc):
-    sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(
-        userid[:5] if userid[0] == 'N' else userid[:4])
-    value = {"userid": userid, "xn": xn, "ksxzmc": ksxzmc, "kcmc": kcmc}
-    rows = mycursor.session.execute(sql, value).fetchall()
-    return rows
-
-
-def insert_data(mycursor, table_name, data):
-    sql = "insert into grade_{} (userid, bz, cjbsmc, kclbmc, zcj, xm, xqmc,kcxzmc, ksxzmc,kcmc, xf, bj) values ( (:userid),(:bz),(:cjbsmc),(:kclbmc),(:zcj),(:xm),(:xqmc),(:kcxzmc),(:ksxzmc),(:kcmc),(:xf),(:bj) )".format(
-        table_name)
-    value = {
-        "userid": data['userid'],
-        "bz": data['bz'],
-        "cjbsmc": data['cjbsmc'],
-        "kclbmc": data['kclbmc'],
-        "zcj": data['zcj'],
-        "xm": data['xm'],
-        "xqmc": data['xqmc'],
-        "kcxzmc": data['kcxzmc'],
-        "ksxzmc": data['ksxzmc'],
-        "kcmc": data['kcmc'],
-        "xf": data['xf'],
-        "bj": data['bj']}
-    mycursor.session.execute(sql, value)
-    mycursor.session.commit()
+# # 查询数据
+# def select_data(mycursor, userid, xn, ksxzmc, kcmc):
+#     sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(
+#         userid[:5] if userid[0] == 'N' else userid[:4])
+#     value = {"userid": userid, "xn": xn, "ksxzmc": ksxzmc, "kcmc": kcmc}
+#     rows = mycursor.session.execute(sql, value).fetchall()
+#     return rows
+#
+#
+# def insert_data(mycursor, table_name, data):
+#     sql = "insert into grade_{} (userid, bz, cjbsmc, kclbmc, zcj, xm, xqmc,kcxzmc, ksxzmc,kcmc, xf, bj) values ( (:userid),(:bz),(:cjbsmc),(:kclbmc),(:zcj),(:xm),(:xqmc),(:kcxzmc),(:ksxzmc),(:kcmc),(:xf),(:bj) )".format(
+#         table_name)
+#     value = {
+#         "userid": data['userid'],
+#         "bz": data['bz'],
+#         "cjbsmc": data['cjbsmc'],
+#         "kclbmc": data['kclbmc'],
+#         "zcj": data['zcj'],
+#         "xm": data['xm'],
+#         "xqmc": data['xqmc'],
+#         "kcxzmc": data['kcxzmc'],
+#         "ksxzmc": data['ksxzmc'],
+#         "kcmc": data['kcmc'],
+#         "xf": data['xf'],
+#         "bj": data['bj']}
+#     mycursor.session.execute(sql, value)
+#     mycursor.session.commit()
