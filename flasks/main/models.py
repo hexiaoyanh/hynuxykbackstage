@@ -124,3 +124,20 @@ class Donate(db.Model):
     name = db.Column(db.String(32), index=True)
     fee = db.Column(db.Integer)
     message = db.Column(db.String(512))
+
+
+class Grade(db.Model):
+    __tablename__ = 'grade'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    userid = db.Column(db.String(64), index=True)
+    bz = db.Column(db.String(64))
+    cjbsmc = db.Column(db.String(64))
+    kclbmc = db.Column(db.String(64), index=True)
+    zcj = db.Column(db.String(64))
+    xm = db.Column(db.String(64))
+    xqmc = db.Column(db.String(64), index=True)
+    kcxzmc = db.Column(db.String(64))
+    ksxzmc = db.Column(db.String(64), index=True)
+    kcmc = db.Column(db.String(64))
+    xf = db.Column(db.String(10))
+    bj = db.Column(db.String(64), index=True)

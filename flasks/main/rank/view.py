@@ -1,6 +1,6 @@
 from . import rank
 from flask import request, jsonify, abort
-from ..models import User, Usern
+from ..models import User, Usern, Grade
 from .. import db
 
 rank2grade = {
@@ -55,11 +55,11 @@ def is_illegal(userid):
 @rank.route('/getrankmsg', methods=['GET', 'POST'])
 def getrankmsg():
     data = request.get_json()
-    # 防止sql注入
     if data.get('elective') is not None:
         elective = data['elective']
     else:
         elective = False
+    # 防止sql注入
     if is_illegal(data['userid']): abort(500)
     if data['userid'][0] == 'N':
         user = Usern.query.get(data['userid'])
@@ -69,29 +69,31 @@ def getrankmsg():
         useres = User.query.filter_by(bj=user.bj).all()
     people = []
     for i in useres:
-        if i.xh[0] == 'N':
-            grade = select_data(db, i.xh[:5], i.xh, data['xqmc'], elective)
+        # grade = select_data(db, i.xh[:5], i.xh, data['xqmc'], elective)
+        if elective:
+            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == data['xqmc']).all()
         else:
-            grade = select_data(db, i.xh[:4], i.xh, data['xqmc'], elective)
+            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == data['xqmc'], Grade.kclbmc != '公选').all()
+
         total_num = 0  # 总分
         total_credit = 0  # 总学分
         total_pku_gpa = 0  # 北大gpa
         total_ave_gpa = 0  # 平均学分绩点
         for j in grade:
             global num
-            if is_contains_chinese(j[5]):
-                num = rank2grade[j[5]]
+            if is_contains_chinese(j.zcj):
+                num = rank2grade[j.zcj]
                 total_num += num
                 if num >= 60:
-                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600 * float(j[11])
+                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600 * float(j.xf)
             else:
-                num = float(j[5])
+                num = float(j.zcj)
                 total_num += num
                 if num >= 60:
-                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600) * float(j[11])
+                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600) * float(j.xf)
             # print(j[6], j[11], float(j[11]))
-            total_credit += float(j[11])
-            total_ave_gpa += num * float(j[11])
+            total_credit += float(j.xf)
+            total_ave_gpa += num * float(j.xf)
         # 北京大学gpa计算
         total_pku_gpa = total_pku_gpa / total_credit if total_credit != 0 else 0
         total_ave_gpa = total_ave_gpa / total_credit if total_credit != 0 else 0
