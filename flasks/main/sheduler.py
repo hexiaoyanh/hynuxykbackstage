@@ -62,8 +62,9 @@ def send_exam_notification_scheduler():
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
-                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
+
                     grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=user.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
                                   xf=j['xf'], bj=user.bj)
@@ -82,7 +83,7 @@ def update_all_exam_score():
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
-                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
                     grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
@@ -96,7 +97,7 @@ def update_all_exam_score():
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
-                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc'])
+                                           Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
                     grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
