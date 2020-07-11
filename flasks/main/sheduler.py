@@ -64,7 +64,6 @@ def send_exam_notification_scheduler():
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
-
                     grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=user.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
                                   xf=j['xf'], bj=user.bj)
@@ -82,10 +81,10 @@ def update_all_exam_score():
             exam = verifyjw.get_exam("", i.xh, now_time['xn'])
             for j in exam:
                 if j is None: continue
-                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
+                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
-                    grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                    grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
                                   xf=j['xf'], bj=i.bj)
                     db.session.add(grade)
@@ -96,15 +95,14 @@ def update_all_exam_score():
             exam = verifyjw.get_exam(token, i.xh, now_time['xn'])
             for j in exam:
                 if j is None: continue
-                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
+                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
-                    grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                    grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
                                   xf=j['xf'], bj=i.bj)
                     db.session.add(grade)
                     db.session.commit()
-
 
 # # 查询数据
 # def select_data(mycursor, userid, xn, ksxzmc, kcmc):

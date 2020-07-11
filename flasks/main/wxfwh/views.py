@@ -52,13 +52,23 @@ def dealsubscrible(fromusername, tousername):
 
 
 def sub_exam_notificate(fromusername, tousername):
-    return {
-        "ToUserName": fromusername,
-        "FromUserName": tousername,
-        "CreateTime": int(time.time()),
-        "MsgType": "text",
-        "Content": u"订阅考试通知需要绑定教务账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号，绑定成功会自动订阅啦。",
-    }
+    user = WXUser.query.filter(WXUser.openid==fromusername).first()
+    if user is None or user.userid is None:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": u"订阅考试通知需要绑定教务账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号，绑定成功会自动订阅啦。",
+        }
+    else:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": u"你已经绑定教务网了，成绩出来的第一时间会发送通知给你的哦(*^▽^*)",
+        }
 
 
 def dealunsubscrible(fromusername, tousername):
