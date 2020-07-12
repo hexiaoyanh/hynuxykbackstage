@@ -18,7 +18,7 @@ def bindjw():
         })
 
     res = verifyjw.isuseriright(data['userid'], data['password'])
-    if res is True or res == "账号未启用":
+    if res is not False or res == "账号未启用":
         current_user.userid = data['userid']
         current_user.password = data['password']
         db.session.add(current_user)
@@ -31,7 +31,7 @@ def bindjw():
     else:
         return jsonify({
             "code": -1,
-            "msg": "账号或密码错误，如果密码正确，还是绑定不了，请使用小程序查询"
+            "msg": "账号或密码错误"
         })
 
 
