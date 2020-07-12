@@ -16,7 +16,9 @@ def bindjw():
             "code": -1,
             "msg": "请输入账号或密码"
         })
-    if verifyjw.isuseriright(data['userid'], data['password']):
+
+    res = verifyjw.isuseriright(data['userid'], data['password'])
+    if res is True or res == "账号未启用":
         current_user.userid = data['userid']
         current_user.password = data['password']
         db.session.add(current_user)

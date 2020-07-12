@@ -10,6 +10,8 @@ class verifyjw:
         else:
             res = requests.get(
                 url="http://59.51.24.46/hysf/app.do?method=authUser&xh=" + userid + "&pwd=" + password).json()
+        if res['msg'] == '账号未启用':
+            return "账号未启用"
         if res['flag'] == "1":
             return res
         else:
