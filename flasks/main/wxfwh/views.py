@@ -14,7 +14,7 @@ from ..models import WXUser
 from ..verifyjw import verifyjw
 
 
-def  dealtextmsg(content, fromusername, tousername):
+def dealtextmsg(content, fromusername, tousername):
     msg = u"我收到啦，看到信息就回你"
     if '成绩' in content:
         wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
@@ -28,8 +28,7 @@ def  dealtextmsg(content, fromusername, tousername):
                 "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a>",
             }
         else:
-            token = verifyjw.login(wxuser.userid, wxuser.password)
-            exam = verifyjw.get_exam(token, wxuser.userid, nowdates.get()['xn'])
+            exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
             # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
             if len(exam) == 1 and exam[0] is None:
                 msg = u"你这个学期都还没有成绩粗来(〃＞皿＜)"

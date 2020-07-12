@@ -29,6 +29,10 @@ class verifyjw:
 
     @staticmethod
     def getclass(token, userid, xn, week):
+        if userid[0] is 'N':
+            token = verifyjw.login('N17080403', '128149')
+        else:
+            token = ""
         headers = {
             "token": token
         }

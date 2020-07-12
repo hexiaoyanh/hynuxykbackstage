@@ -59,8 +59,7 @@ def send_exam_notification_scheduler():
         for i in users:
             if i.userid is None or i.userid == "":
                 continue
-            token = verifyjw.login(i.userid, i.password)
-            exam = verifyjw.get_exam(token, i.userid, now_time['xn'])
+            exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             for j in exam:
                 if j is None: continue
@@ -74,6 +73,7 @@ def send_exam_notification_scheduler():
                     db.session.commit()
                     send_exam_notification(i.openid, j['kcmc'], j['zcj'])
         print("考试成绩结束")
+
 
 @scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
 def update_all_exam_score():
