@@ -29,7 +29,7 @@ def bindjw():
     else:
         return jsonify({
             "code": -1,
-            "msg": "账号或密码错误"
+            "msg": "账号或密码错误，如果密码正确，还是连接不上，请使用小程序查询"
         })
 
 
