@@ -14,7 +14,7 @@ from ..models import WXUser
 from ..verifyjw import verifyjw
 
 
-def dealtextmsg(content, fromusername, tousername):
+def  dealtextmsg(content, fromusername, tousername):
     msg = u"我收到啦，看到信息就回你"
     if '成绩' in content:
         wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
@@ -24,7 +24,7 @@ def dealtextmsg(content, fromusername, tousername):
                 "ToUserName": fromusername,
                 "FromUserName": tousername,
                 "CreateTime": int(time.time()),
-                "MsgType": "news",
+                "MsgType": "text",
                 "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a>",
             }
         else:
@@ -55,7 +55,7 @@ def dealsubscrible(fromusername, tousername):
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": u"欢迎关注衡师小助手的微信服务号，绑定教务网可以推送成绩信息给你，所有的功能都能使用，遇到什么问题发信息给我啦QAQ",
+        "Content": u"欢迎关注衡师小助手的微信服务号，<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a> 即可绑定，有新成绩下来的时候会发通知给你哦。\n\n有什么问题可以在下面给我发消息哦\n(๑′ᴗ‵๑)Ｉ Lᵒᵛᵉᵧₒᵤ",
     }
 
 
@@ -129,6 +129,8 @@ def getinput():
                     eventclick = resp_dict.get('EventKey')
                     if eventclick == 'sub_exam_notification':
                         response = sub_exam_notificate(fromusername, tousername)
+                    elif eventclick == 'get_exam_score':
+                        response = dealtextmsg("成绩", fromusername, tousername)
             if response is not None:
                 response = {"xml": response}
                 response = xmltodict.unparse(response)

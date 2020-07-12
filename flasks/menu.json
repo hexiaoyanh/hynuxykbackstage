@@ -23,15 +23,25 @@
       ]
     },
     {
-      "type": "miniprogram",
-      "name": "小程序",
-      "pagepath": "pages/index/index",
-      "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
-      "appid": "wx064b82571d2be21f"
+      "name": "查询",
+      "sub_button": [
+        {
+          "type": "click",
+          "name": "查询本学期成绩",
+          "key": "get_exam_score"
+        }
+      ]
     },
     {
-      "name": "课程表",
+      "name": "小程序",
       "sub_button": [
+        {
+          "type": "miniprogram",
+          "name": "小程序",
+          "pagepath": "pages/index/index",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect",
+          "appid": "wx064b82571d2be21f"
+        },
         {
           "type": "miniprogram",
           "name": "课表小程序",

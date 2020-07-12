@@ -32,6 +32,7 @@ def get_next_half_an_hours():
 @scheduler.task('interval', minutes=30, id='send_class_notification', start_date='2020-6-19 14:30:00')
 def send_class_notificate():
     with scheduler.app.app_context():
+        print("上课提醒开始：")
         now_time = nowdates.get()
         weekday = str(datetime.datetime.now().weekday() + 1)
         # 查询订阅了且没有过期的
@@ -46,11 +47,13 @@ def send_class_notificate():
                                            ).first()
             if data is None: continue
             send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime)
+        print("上课提醒结束")
 
 
 @scheduler.task('interval', hours=1, id='send_exam_notification_scheduler', start_date='2020-6-19 14:30:00')
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
+        print("考试成绩开始")
         now_time = nowdates.get()
         users = WXUser.query.all()
         for i in users:
@@ -70,11 +73,12 @@ def send_exam_notification_scheduler():
                     db.session.add(grade)
                     db.session.commit()
                     send_exam_notification(i.openid, j['kcmc'], j['zcj'])
-
+        print("考试成绩结束")
 
 @scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
 def update_all_exam_score():
     with scheduler.app.app_context():
+        print("所有成绩开始")
         now_time = nowdates.get()
         users = User.query.all()
         for i in users:
@@ -103,7 +107,7 @@ def update_all_exam_score():
                                   xf=j['xf'], bj=i.bj)
                     db.session.add(grade)
                     db.session.commit()
-
+        print("所有成绩结束")
 # # 查询数据
 # def select_data(mycursor, userid, xn, ksxzmc, kcmc):
 #     sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(

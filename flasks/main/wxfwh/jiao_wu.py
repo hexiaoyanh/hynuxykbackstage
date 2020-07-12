@@ -11,6 +11,11 @@ from ..models import Curriculum
 @login_required
 def bindjw():
     data = request.get_json()
+    if data['userid'] is None or data['password'] is None:
+        return jsonify({
+            "code": -1,
+            "msg": "请输入账号或密码"
+        })
     if verifyjw.isuseriright(data['userid'], data['password']):
         current_user.userid = data['userid']
         current_user.password = data['password']
