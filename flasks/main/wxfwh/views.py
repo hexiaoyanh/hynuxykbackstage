@@ -20,6 +20,13 @@ def dealtextmsg(content, fromusername, tousername):
         wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
         if wxuser is None or wxuser.userid is None:
             msg = u"这里没有你的教务网账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号哦(*^▽^*)"
+            return {
+                "ToUserName": fromusername,
+                "FromUserName": tousername,
+                "CreateTime": int(time.time()),
+                "MsgType": "news",
+                "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a>",
+            }
         else:
             token = verifyjw.login(wxuser.userid, wxuser.password)
             exam = verifyjw.get_exam(token, wxuser.userid, nowdates.get()['xn'])
@@ -31,12 +38,13 @@ def dealtextmsg(content, fromusername, tousername):
                 for i in exam:
                     msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + i[
                         'kclbmc'] + '\n' + "总成绩：" + i['zcj'] + '\n\n'
+
     return {
         "ToUserName": fromusername,
         "FromUserName": tousername,
         "CreateTime": int(time.time()),
         "MsgType": "text",
-        "Content": msg+"或者前往小程序-【课表成绩】-【成绩】查询当前学期的成绩或排名",
+        "Content": msg + "或者前往小程序-【课表成绩】-【成绩】查询当前学期的成绩或排名",
     }
 
 
@@ -52,7 +60,7 @@ def dealsubscrible(fromusername, tousername):
 
 
 def sub_exam_notificate(fromusername, tousername):
-    user = WXUser.query.filter(WXUser.openid==fromusername).first()
+    user = WXUser.query.filter(WXUser.openid == fromusername).first()
     if user is None or user.userid is None:
         return {
             "ToUserName": fromusername,
