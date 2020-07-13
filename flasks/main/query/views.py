@@ -70,9 +70,15 @@ def cj():
 
     from main.hynuxykSpider.api.querycj import querycj
     cj = querycj(cookies, nanyue)
-
+    allcj = cj.queryallcj(date)
+    if allcj == "wrong":
+        allcj = {
+            "0": {
+                "className": "教务网错误，请重试"
+            }
+        }
     jsons = {
-        'cj': json.dumps(cj.queryallcj(date), ensure_ascii=False),
+        'cj': json.dumps(allcj, ensure_ascii=False),
         'cookie': cj.cookie
     }
     return jsonify(jsons)
