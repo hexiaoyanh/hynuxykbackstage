@@ -1,4 +1,4 @@
-from flask import request, json, jsonify
+from flask import request, json, jsonify, abort
 
 from . import query
 
@@ -72,11 +72,7 @@ def cj():
     cj = querycj(cookies, nanyue)
     allcj = cj.queryallcj(date)
     if allcj == "wrong":
-        allcj = {
-            "0": {
-                "className": "教务网错误，请重试"
-            }
-        }
+        abort(500)
     jsons = {
         'cj': json.dumps(allcj, ensure_ascii=False),
         'cookie': cj.cookie
