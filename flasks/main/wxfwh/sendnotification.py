@@ -158,6 +158,7 @@ def send_bind_notification(openid, userid):
     print(res)
     return res
 
+
 def send_donate_notification(msg):
     data = {
         "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
@@ -177,6 +178,36 @@ def send_donate_notification(msg):
             },
             "remark": {
                 "value": msg,
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res
+
+
+def send_ad_notification(userid, username):
+    data = {
+        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "template_id": "VVhOVUrytNSKvJXn6rrV3i3rlwWHF8KBFuOMJlBsoSY",
+        "data": {
+            "first": {
+                "value": userid,
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": username,
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
                 "color": "#173177"
             }
         }
