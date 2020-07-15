@@ -15,7 +15,6 @@ from ..verifyjw import verifyjw
 
 
 def dealtextmsg(content, fromusername, tousername):
-    msg = u"我收到啦，看到信息就回你"
     if '成绩' in content:
         wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
         if wxuser is None or wxuser.userid is None:
@@ -38,13 +37,15 @@ def dealtextmsg(content, fromusername, tousername):
                     msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + i[
                         'kclbmc'] + '\n' + "总成绩：" + i['zcj'] + '\n\n'
 
-    return {
-        "ToUserName": fromusername,
-        "FromUserName": tousername,
-        "CreateTime": int(time.time()),
-        "MsgType": "text",
-        "Content": msg + "或者前往小程序-【课表成绩】-【成绩】查询当前学期的成绩，平时分和排名",
-    }
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": msg,
+        }
+    else:
+        return ""
 
 
 def dealsubscrible(fromusername, tousername):
@@ -109,7 +110,6 @@ def getinput():
         else:
             resp_data = request.data
             resp_dict = xmltodict.parse(resp_data).get('xml')
-            print(resp_dict)
             # 如果是文本消息
             msgtype = resp_dict.get('MsgType')
             fromusername = resp_dict.get('FromUserName')
@@ -130,17 +130,13 @@ def getinput():
                         response = sub_exam_notificate(fromusername, tousername)
                     elif eventclick == 'get_exam_score':
                         response = dealtextmsg("成绩", fromusername, tousername)
-            if response is not None:
+            if response == "":
+                pass
+            elif response is not None:
                 response = {"xml": response}
                 response = xmltodict.unparse(response)
             else:
-                response = {
-                    "ToUserName": resp_dict.get('FromUserName'),
-                    "FromUserName": resp_dict.get('ToUserName'),
-                    "CreateTime": int(time.time()),
-                    "MsgType": "text",
-                    "Content": u"暂不支持的消息",
-                }
+                response = ""
             return make_response(response)
     else:
         return ""

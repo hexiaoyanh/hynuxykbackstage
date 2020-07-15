@@ -28,6 +28,23 @@ class verifyjw:
             return res['token']
 
     @staticmethod
+    def get_user_info(userid):
+        if userid[0] is 'N':
+            token = verifyjw.login('N17080403', '128149')
+        else:
+            token = ""
+        headers = {
+            "token": token
+        }
+        if userid[0] == 'N':
+            res = requests.get(url="http://59.51.24.41/app.do?method=getUserInfo&xh=" + userid,headers=headers).json()
+            return res
+        else:
+            res = requests.get(
+                url="http://59.51.24.46/hysf/app.do?method=authUser&xh=" + userid,headers=headers).json()
+            return res
+
+    @staticmethod
     def getclass(token, userid, xn, week):
         if userid[0] is 'N':
             token = verifyjw.login('N17080403', '128149')

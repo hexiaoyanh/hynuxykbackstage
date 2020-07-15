@@ -32,19 +32,6 @@ def getrank(people, userid, obj):
     return rank
 
 
-# 查询数据
-def select_data(mycursor, table_name, userid, xqmc, elective):
-    if elective:
-        sql = "select * from grade_{} where userid=(:userid) and xqmc=(:xqmc)".format(
-            table_name)
-    else:
-        sql = "select * from grade_{} where userid=(:userid) and xqmc=(:xqmc) and (kclbmc='必修' or kclbmc='任选' or kclbmc='限选')".format(
-            table_name)
-    value = {"userid": userid, "xqmc": xqmc}
-    rows = mycursor.session.execute(sql, value).fetchall()
-    return rows
-
-
 def is_illegal(userid):
     for i in userid:
         if i not in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'N']:
@@ -85,12 +72,12 @@ def getrankmsg():
                 num = rank2grade[j.zcj]
                 total_num += num
                 if num >= 60:
-                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600 * float(j.xf)
+                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600.0 * float(j.xf)
             else:
                 num = float(j.zcj)
                 total_num += num
                 if num >= 60:
-                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600) * float(j.xf)
+                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600.0) * float(j.xf)
             # print(j[6], j[11], float(j[11]))
             total_credit += float(j.xf)
             total_ave_gpa += num * float(j.xf)
@@ -175,3 +162,38 @@ def findyou():
                 "nj": i.nj
             }
         return jsonify(js)
+
+
+@rank.route('/update_class_info')
+def update_class_info():
+    class_name = request.args.get('class_name')
+    for i in range(1, 100):
+        userid = class_name
+        if i <= 9:
+            userid += "0" + str(i)
+        else:
+            userid += str(i)
+        if userid[0] == 'N':
+            user = Usern.query.filter(Usern.xh == userid).first()
+        else:
+            user = User.query.filter(User.xh == userid).first()
+        if user is not None: continue
+        if user is None:
+            from ..verifyjw import verifyjw
+            info = verifyjw.get_user_info(userid)
+            print(userid)
+            print(info)
+            if info == {}: continue
+            if userid[0] == 'N':
+                user = Usern(fxzy=info['fxzy'], xh=info['xh'], xm=info['xm'], dqszj=info['dqszj'], yxmc=info['yxmc'],
+                             xz=info['xz'], bj=info['bj'],
+                             dh=info['dh'], email=info['email'], rxnf=info['rxnf'], xb=info['xb'], ksh=info['ksh'],
+                             nj=info['nj'], qq=info['qq'], zymc=info['zymc'])
+            else:
+                user = User(fxzy=info['fxzy'], xh=info['xh'], xm=info['xm'], dqszj=info['dqszj'], yxmc=info['yxmc'],
+                            xz=info['xz'], bj=info['bj'],
+                            dh=info['dh'], email=info['email'], rxnf=info['rxnf'], xb=info['xb'], ksh=info['ksh'],
+                            nj=info['nj'], qq=info['qq'], zymc=info['zymc'])
+            db.session.add(user)
+            db.session.commit()
+        return "ok"
