@@ -102,6 +102,7 @@ def getrankmsg():
     numrank = getrank(people, data['userid'], "total_num")
     pkurank = getrank(people, data['userid'], 'total_pku_gpa')
     avegpa_rank = getrank(people, data['userid'], 'total_ave_gpa')
+    average_num_rank = getrank(people, data['userid'], 'average_num')
     classrank = 1
     for i in people:
         if i['xh'] == data['userid']: break
@@ -110,6 +111,7 @@ def getrankmsg():
     userdata['num_rank'] = numrank  # 添加总分排名
     userdata['pku_gpa_rank'] = pkurank
     userdata['avegpa_rank'] = avegpa_rank
+    userdata['average_num_rank'] = average_num_rank
     return jsonify(userdata)
 
 
@@ -206,6 +208,7 @@ def update_class_info():
 def update_class_exam():
     class_name = request.args.get('class_name')
     xn = request.args.get('xn')
+    # send_ad_notification("更新" + class_name, xn)
     if class_name[0] is 'N':
         users = Usern.query.filter(Usern.xh.like(class_name + '%')).all()
     else:
@@ -224,4 +227,4 @@ def update_class_exam():
                               xf=j['xf'], bj=i.bj)
                 db.session.add(grade)
                 db.session.commit()
-    return "ok"
+    return "已更新学号前6位为" + class_name + "的所有人"
