@@ -72,7 +72,7 @@ def getrankmsg():
                 num = rank2grade[j.zcj]
                 total_num += num
                 if num >= 60:
-                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600.0 * float(j.xf)
+                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600.0) * float(j.xf)
             else:
                 num = float(j.zcj)
                 total_num += num

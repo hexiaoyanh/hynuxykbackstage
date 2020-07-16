@@ -113,16 +113,18 @@ def getMsg():
 def resetPassword():
     data = request.get_json()
     from ..hynuxykSpider.api.findpassword import findpassword
+    try:
 
-    if data['username'] and data['idcardnum'] and data['nanyue'] is not None:
-        findp = findpassword(data['username'], data['idcardnum'], data['nanyue'])
-        return jsonify(findp.resetPasswd())
-    else:
-        return jsonify({
-            "Code": "-1",
-            "Msg": "参数错误"
-        })
-
+        if data['username'] and data['idcardnum'] and data['nanyue'] is not None:
+            findp = findpassword(data['username'], data['idcardnum'], data['nanyue'])
+            return jsonify(findp.resetPasswd())
+        else:
+            return jsonify({
+                "Code": "-1",
+                "Msg": "参数错误"
+            })
+    except KeyError:
+        return jsonify({"Code":-1,"Msg":"错误"})
 
 @query.route('/getxklb', methods=['POST', 'GET'])
 def getXklb():

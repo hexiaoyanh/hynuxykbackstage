@@ -42,7 +42,7 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": msg,
+            "Content": msg+"或者前往【小程序】-【校园卡和成绩】-【课表成绩】-【成绩】查询当前学期的成绩平时分和排名",
         }
     else:
         return ""

@@ -66,6 +66,7 @@ def send_exam_notification_scheduler():
                 continue
             for j in exam:
                 if j is None: continue
+                print(i.userid, j['kckc'])
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
@@ -78,7 +79,7 @@ def send_exam_notification_scheduler():
         print("----------------------考试成绩结束")
 
 
-@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
+@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 03:00:00')
 def update_all_exam_score():
     with scheduler.app.app_context():
         print("----------------------所有成绩开始")

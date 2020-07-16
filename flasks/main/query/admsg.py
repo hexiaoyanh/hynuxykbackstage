@@ -18,8 +18,8 @@ import requests
 @query.route('/viewadd', methods=['GET', 'POST'])
 def viewadd():
     data = request.get_json()
-    from main.wxfwh.sendnotification import send_ad_notification
-    send_ad_notification(data['userid'],data['username'])
+    #from main.wxfwh.sendnotification import send_ad_notification
+    #send_ad_notification(data['userid'],data['username'])
     nowtime = str(datetime.datetime.now().year) + str(datetime.datetime.now().month) + str(
         datetime.datetime.now().day) + ".json"
     try:
