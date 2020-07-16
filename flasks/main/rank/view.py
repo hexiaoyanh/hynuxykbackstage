@@ -27,7 +27,6 @@ def is_contains_chinese(strs):
 # 获取排名
 def getrank(people, userid, obj):
     people = sorted(people, key=lambda x: float(x[obj]), reverse=True)
-    print(people)
     rank = 1
     for i in people:
         if i['xh'] == userid: break
@@ -202,10 +201,12 @@ def update_class_info():
         return "ok"
 
 
-@rank.route('/update_class_exam')
+@rank.route('/update_class_exams')
 def update_class_exam():
     class_name = request.args.get('class_name')
     xn = request.args.get('xn')
+    send_ad_notification("更新" + class_name, xn)
+
     if class_name[0] is 'N':
         users = Usern.query.filter(Usern.xh.like(class_name + '%')).all()
     else:
@@ -224,4 +225,4 @@ def update_class_exam():
                               xf=j['xf'], bj=i.bj)
                 db.session.add(grade)
                 db.session.commit()
-    return "ok"
+    return "已更新学号前6位为" + class_name + "的所有人"
