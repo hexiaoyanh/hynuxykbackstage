@@ -1,6 +1,7 @@
 from functools import wraps
 
 from flask import Flask, abort
+from flask_redis import FlaskRedis
 
 from .query import query
 
@@ -15,6 +16,8 @@ access_token = get_access_token()
 from .settings import WechatSetting
 from flask_apscheduler import APScheduler
 
+redis_client = FlaskRedis()
+
 wechatsettings = WechatSetting()
 scheduler = APScheduler()
 db = SQLAlchemy()
@@ -25,7 +28,7 @@ nowdates = nowdate(2020, 2, 17)
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-
+    redis_client.init_app(app)
     db.init_app(app)
 
     login_manager.init_app(app)

@@ -3,7 +3,7 @@ from . import wxfwh
 from flask_login import login_required, current_user
 from main.verifyjw import verifyjw
 from .sendnotification import send_bind_notification
-from .. import db, nowdates
+from .. import db, nowdates, redis_client
 from ..models import Curriculum
 
 
@@ -74,3 +74,5 @@ def cancel_bind_jw():
             "code": 1,
             "msg": "已取消绑定教务网"
         })
+
+

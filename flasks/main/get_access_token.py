@@ -35,15 +35,19 @@ class get_access_token:
     # 判断是否过期
     def _is_expired(self):
         nowtime = time.time()
-        with open('/tmp/access_token.json', 'r') as f:
-            js = json.loads(f.read())
-            if nowtime - js['time'] >= 7000:
-                return True
-            return False
+        try:
+            with open('/tmp/access_token.json', 'r') as f:
+                try:
+                    js = json.loads(f.read())
+                except json.decoder.JSONDecodeError:
+                    self._update_access_token()
+                if nowtime - int(js['time']) >= 7000:
+                    return True
+                return False
+        except FileNotFoundError:
+            self._update_access_token()
 
     def get_access_token(self):
-        if self.access_token is None:
-            self._update_access_token()
         if self._is_expired():
             self._update_access_token()
         return self.access_token
