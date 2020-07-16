@@ -2,6 +2,8 @@ from . import rank
 from flask import request, jsonify, abort
 from ..models import User, Usern, Grade
 from .. import db
+from ..verifyjw import verifyjw
+from ..wxfwh.sendnotification import send_ad_notification
 
 rank2grade = {
     "优": 95,
@@ -25,6 +27,7 @@ def is_contains_chinese(strs):
 # 获取排名
 def getrank(people, userid, obj):
     people = sorted(people, key=lambda x: float(x[obj]), reverse=True)
+    print(people)
     rank = 1
     for i in people:
         if i['xh'] == userid: break
@@ -197,3 +200,28 @@ def update_class_info():
             db.session.add(user)
             db.session.commit()
         return "ok"
+
+
+@rank.route('/update_class_exam')
+def update_class_exam():
+    class_name = request.args.get('class_name')
+    xn = request.args.get('xn')
+    if class_name[0] is 'N':
+        users = Usern.query.filter(Usern.xh.like(class_name + '%')).all()
+    else:
+        users = User.query.filter(User.xh.like(class_name + '%')).all()
+    for i in users:
+        if i.xh is None or i.xh == "":
+            continue
+        exam = verifyjw.get_exam("token", i.xh, xn)
+        for j in exam:
+            if j is None: continue
+            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == xn,
+                                       Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
+            if grade is None:
+                grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                              xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
+                              xf=j['xf'], bj=i.bj)
+                db.session.add(grade)
+                db.session.commit()
+    return "ok"
