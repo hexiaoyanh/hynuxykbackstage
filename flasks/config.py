@@ -12,6 +12,7 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:03190319@localhost:3306/grade?charset=utf8mb4"
     SCHEDULER_API_ENABLED = True
+    REDIS_URL = "redis://:@localhost:6379/0"
 
     @staticmethod
     def __int__(self):

@@ -50,7 +50,7 @@ def send_class_notificate():
         print("----------------------上课提醒结束")
 
 
-@scheduler.task('interval', hours=1, id='send_exam_notification_scheduler', start_date='2020-6-19 14:30:00')
+@scheduler.task('interval', hours=1, id='send_exam_notification_scheduler', start_date='2020-6-19 14:15:00')
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
         print("----------------------考试成绩开始")
@@ -62,14 +62,13 @@ def send_exam_notification_scheduler():
             exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             if user is None:
-                send_ad_notification(i.userid, "没有这个学号")
                 continue
             for j in exam:
                 if j is None: continue
-                print(i.userid, j['kckc'])
                 grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == now_time['xn'],
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
+                    print(i.userid, j['kcmc'])
                     grade = Grade(userid=i.userid, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
                                   xm=user.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
                                   xf=j['xf'], bj=user.bj)

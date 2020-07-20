@@ -74,3 +74,5 @@ def cancel_bind_jw():
             "code": 1,
             "msg": "已取消绑定教务网"
         })
+
+

@@ -34,8 +34,7 @@ def dealtextmsg(content, fromusername, tousername):
             else:
                 msg = ""
                 for i in exam:
-                    msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + i[
-                        'kclbmc'] + '\n' + "总成绩：" + i['zcj'] + '\n\n'
+                    msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + str(i.get('kclbmc')) + '\n' + "总成绩：" + str(i.get('zcj')) + '\n\n'
 
         return {
             "ToUserName": fromusername,
