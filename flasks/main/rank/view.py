@@ -1,9 +1,11 @@
+from flask_login import login_required
+
 from . import rank
 from flask import request, jsonify, abort
 from ..models import User, Usern, Grade
 from .. import db
 from ..verifyjw import verifyjw
-from ..wxfwh.sendnotification import send_ad_notification
+from ..wxfwh.sendnotification import send_ad_notification, send_update_notifications
 
 rank2grade = {
     "优": 95,
@@ -203,12 +205,21 @@ def update_class_info():
         return "ok"
 
 
-@rank.route('/update_class_exams')
+@rank.route('/request_update_exam')
+def request_update_exam():
+    class_name = request.args.get('class_name')[:-2]
+    send_update_notifications(class_name, "收到一个班级成绩更新通知",
+                              "https://www.hynuxyk.club/wx/updateExam?class_name=" + class_name)
+    return jsonify({
+        "code": 1,
+        "msg": "请求发送成功"
+    })
+
+
+@rank.route('/update_class_exam')
 def update_class_exam():
     class_name = request.args.get('class_name')
-    xn = request.args.get('xn')
-
-    send_ad_notification("更新" + class_name, xn)
+    # send_ad_notification("更新" + class_name, xn)
     if class_name[0] is 'N':
         users = Usern.query.filter(Usern.xh.like(class_name + '%')).all()
     else:
@@ -216,10 +227,10 @@ def update_class_exam():
     for i in users:
         if i.xh is None or i.xh == "":
             continue
-        exam = verifyjw.get_exam("token", i.xh, xn)
+        exam = verifyjw.get_exam("token", i.xh, "2019-2020-2")
         for j in exam:
             if j is None: continue
-            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == xn,
+            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2019-2020-2",
                                        Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
             if grade is None:
                 grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],

@@ -43,7 +43,7 @@ class get_access_token:
                     self._update_access_token()
                 self.access_token = js['access_token']
 
-                if nowtime - int(js['time']) >= 7000:
+                if nowtime - int(js['time']) >= 5000:
                     return True
                 return False
         except FileNotFoundError:
