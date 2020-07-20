@@ -216,7 +216,7 @@ def request_update_exam():
     })
 
 
-@rank.route('/update_class_exam')
+@rank.route('/update_class_exams')
 def update_class_exam():
     class_name = request.args.get('class_name')
     # send_ad_notification("更新" + class_name, xn)
