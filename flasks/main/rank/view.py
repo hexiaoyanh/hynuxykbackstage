@@ -209,7 +209,7 @@ def update_class_info():
 @rank.route('/request_update_exam')
 @login_required
 def request_update_exam():
-    class_name = request.args.get('class_name')[:-2]
+    class_name = request.args.get('class_name')
     send_update_notifications(class_name, "收到一个班级成绩更新通知",
                               "https://www.hynuxyk.club/wx/updateExam?class_name=" + class_name)
     return jsonify({
@@ -218,9 +218,9 @@ def request_update_exam():
     })
 
 
-@rank.route('/update_class_exam')
+@rank.route('/update_class_exams')
 def update_class_exam():
-    class_name = request.args.get('class_name')
+    class_name = request.args.get('class_name')[:-2]
     # send_ad_notification("更新" + class_name, xn)
     if class_name[0] is 'N':
         users = Usern.query.filter(Usern.xh.like(class_name + '%')).all()
