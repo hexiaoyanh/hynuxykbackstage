@@ -41,7 +41,8 @@ class get_access_token:
                     js = json.loads(f.read())
                 except json.decoder.JSONDecodeError:
                     self._update_access_token()
-                if nowtime - int(js['time']) >= 7000:
+                self.access_token = js['access_token']
+                if nowtime - int(js['time']) >= 5000:
                     return True
                 return False
         except FileNotFoundError:

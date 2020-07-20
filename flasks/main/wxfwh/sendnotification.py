@@ -221,3 +221,35 @@ def send_ad_notification(userid, username):
         data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
     print(res)
     return res
+
+
+def send_update_notifications(userid, msg, url):
+    data = {
+        #"touser": "ovtKGs185Ka5r0deXTE5Lhqlwrrg",
+        "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        "template_id": "xBsPkbbbPM244-IGJ-kA1Bk09jUQT9wqukSAjCUOL08",
+        "url": url,
+        "data": {
+            "first": {
+                "value": msg,
+                "color": "#173177"
+            },
+            "keyword1": {
+                "value": userid,
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
+                "color": "#173177"
+            }
+        }
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    access_tokens = get_access_token()
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    print(res)
+    return res
