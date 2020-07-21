@@ -207,12 +207,38 @@ def update_class_info():
 
 @rank.route('/request_update_exam')
 def request_update_exam():
-    class_name = request.args.get('class_name')
-    send_update_notifications(class_name, "收到一个班级成绩更新通知",
-                              "https://www.hynuxyk.club/wx/updateExam?class_name=" + class_name)
+    userid = request.args.get('class_name')
+    if userid[0] == 'N':
+        user = Usern.query.filter(Usern.xh == userid).first()
+    else:
+        user = User.query.filter(User.xh == userid).first()
+    if user is None:
+        return jsonify({
+            "code": 1,
+            "msg": "学号错误，请输入正确的学号"
+        })
+    if userid[0] is 'N':
+        users = Usern.query.filter(Usern.bj == user.bj).all()
+    else:
+        users = User.query.filter(Usern.bj == user.bj).all()
+
+    for i in users:
+        if i.xh is None or i.xh == "":
+            continue
+        exam = verifyjw.get_exam("token", i.xh, "2019-2020-2")
+        for j in exam:
+            if j is None: continue
+            grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2019-2020-2",
+                                       Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
+            if grade is None:
+                grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
+                              xm=i.xm, xqmc=j['xqmc'], kcxzmc=j['kcxzmc'], ksxzmc=j['ksxzmc'], kcmc=j['kcmc'],
+                              xf=j['xf'], bj=i.bj)
+                db.session.add(grade)
+                db.session.commit()
     return jsonify({
         "code": 1,
-        "msg": "请求发送成功"
+        "msg": "更新完成"
     })
 
 
