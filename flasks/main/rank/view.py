@@ -217,11 +217,11 @@ def request_update_exam():
             "code": 1,
             "msg": "学号错误，请输入正确的学号"
         })
+
     if userid[0] is 'N':
         users = Usern.query.filter(Usern.bj == user.bj).all()
     else:
-        users = User.query.filter(Usern.bj == user.bj).all()
-
+        users = User.query.filter(User.bj == user.bj).all()
     for i in users:
         if i.xh is None or i.xh == "":
             continue
