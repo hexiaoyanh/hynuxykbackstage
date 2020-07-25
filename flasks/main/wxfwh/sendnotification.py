@@ -143,7 +143,7 @@ def send_bind_notification(openid, userid):
                 "color": "#173177"
             },
             "remark": {
-                "value": "绑定成功还可以订阅上课通知哦，现在测试价一分钱(*^▽^*)ﾞ",
+                "value": "绑定成功还可以订阅上课通知哦(*^▽^*)ﾞ",
                 "color": "#173177"
             }
         }
