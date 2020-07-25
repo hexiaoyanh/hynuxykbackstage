@@ -1,8 +1,12 @@
+from celery import Celery
+
 from main import create_app, db
 from flask_script import Manager, Command, Shell
 
 app = create_app()
 manager = Manager(app)
+
+
 
 
 def make_shell_context():

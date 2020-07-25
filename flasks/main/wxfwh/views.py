@@ -184,3 +184,11 @@ def islogin():
         return jsonify({'code': 1})
     else:
         return jsonify({'code': -1})
+
+
+@wxfwh.route('/test')
+def test():
+    print(time.time())
+    send_exam_notification('ovtKGs1iMFFTTClFSQtRmfqsIkt0', '测试', 100)
+    print(time.time())
+    return "ok"
