@@ -4,7 +4,21 @@ import time
 import requests
 
 from main import get_access_token
+from .. import celery
+from .. import access_token
 
+
+@celery.task()
+def send_request(data):
+    headers = {
+        "Content-Type": "application/json"
+    }
+    res = requests.post(
+        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_token.get_access_token(),
+        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
+    if res.get('errcode') != 0:
+        print('==============error:' + res.get('errmsg') + '==============')
+    return res
 
 def send_success_sub(openid, out_trade_no, total_fee, time_end):
     # 发生成功订阅通知
@@ -38,15 +52,7 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_class_notification(openid, classname, location, teacher=None, time=None):
@@ -75,20 +81,12 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
                 "color": "#173177"
             },
             "remark": {
-                "value": "不能对不起我的队友，再拖一会儿(〃＞皿＜)",
+                "value": "(〃＞皿＜)",
                 "color": "173177"
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_exam_notification(openid, exam_name, exam_score):
@@ -114,15 +112,7 @@ def send_exam_notification(openid, exam_name, exam_score):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_bind_notification(openid, userid):
@@ -148,15 +138,7 @@ def send_bind_notification(openid, userid):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_donate_notification(msg):
@@ -182,15 +164,7 @@ def send_donate_notification(msg):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_ad_notification(userid, username):
@@ -212,21 +186,13 @@ def send_ad_notification(userid, username):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)
 
 
 def send_update_notifications(userid, msg, url):
     data = {
         "touser": "ovtKGs185Ka5r0deXTE5Lhqlwrrg",
-        #"touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
+        # "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
         "template_id": "xBsPkbbbPM244-IGJ-kA1Bk09jUQT9wqukSAjCUOL08",
         "url": url,
         "data": {
@@ -244,12 +210,4 @@ def send_update_notifications(userid, msg, url):
             }
         }
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    access_tokens = get_access_token()
-    res = requests.post(
-        url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_tokens.get_access_token(),
-        data=json.dumps(data, ensure_ascii=False).encode('utf-8'), headers=headers).json()
-    print(res)
-    return res
+    send_request.delay(data)

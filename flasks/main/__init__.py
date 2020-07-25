@@ -1,14 +1,17 @@
 from functools import wraps
 
+from celery import Celery
 from flask import Flask, abort
 from flask_redis import FlaskRedis
 
+from celery_config import broker_url
 from .query import query
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from config import Config
 from .nowdate import nowdate
+
 from .get_access_token import get_access_token
 
 access_token = get_access_token()
@@ -23,6 +26,7 @@ scheduler = APScheduler()
 db = SQLAlchemy()
 login_manager = LoginManager()
 nowdates = nowdate(2020, 2, 17)
+celery = Celery(__name__, broker=broker_url)
 
 
 def create_app():
@@ -39,6 +43,8 @@ def create_app():
     from . import sheduler
     scheduler.start()
 
+    # 注册celery
+    register_celery(app)
     from .query import query as query_blueprint
     app.register_blueprint(query_blueprint, url_prefix='/query')
 
@@ -69,3 +75,18 @@ def admin_required(func):
             abort(401)
 
     return decorated_view
+
+
+def register_celery(app):
+    celery.config_from_object('celery_config')
+
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask

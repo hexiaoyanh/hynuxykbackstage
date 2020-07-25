@@ -215,7 +215,7 @@ def request_update_exam():
         user = User.query.filter(User.xh == userid).first()
     if user is None:
         return jsonify({
-            "code": 1,
+            "code": -1,
             "msg": "学号错误，请输入正确的学号"
         })
 
