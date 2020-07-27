@@ -1,3 +1,4 @@
+import requests
 from flask import request, jsonify
 from . import wxfwh
 from flask_login import login_required, current_user
@@ -16,8 +17,13 @@ def bindjw():
             "code": -1,
             "msg": "请输入账号或密码"
         })
-
-    res = verifyjw.isuseriright(data['userid'], data['password'])
+    try:
+        res = verifyjw.isuseriright(data['userid'], data['password'])
+    except requests.exceptions.ConnectionError:
+        return jsonify({
+            "code": -1,
+            "msg": "教务网暂时不可能访问，请稍后再试"
+        })
     if res is not False or res == "账号未启用":
         current_user.userid = data['userid']
         current_user.password = data['password']
