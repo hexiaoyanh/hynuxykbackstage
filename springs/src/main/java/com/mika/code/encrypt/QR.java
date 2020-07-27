@@ -90,6 +90,8 @@ public class QR {
 
     @RequestMapping(value = "/getqr",method = RequestMethod.POST)
     public String getqr(@RequestBody Data item) throws IOException{
+        System.out.println(item.getCustomerID());
+        System.out.println(item.getAgentID());
         String a = encrypt.m2865a(
                 encrypt.m2866a(Integer.parseInt(item.getCustomerID()), Integer.parseInt(item.getAgentID())),
                 ("1,1," + item.getAgentID() + "," + item.getCustomerID() + "," + item.getAccNum() + "," + item.getCardID() + "," + m2691k(item.getAccName()) + "," + item.getPerCode() + ","
@@ -108,7 +110,6 @@ public class QR {
                         + item.getOrderNumb() + "," + item.getRandomNum()).getBytes(StringUtils.GB2312)
         );
         byte[] temp = a.getBytes(StringUtils.GB2312);
-        String b = a + "," + encrypt.m2863a(temp, temp.length);
-        return b;
+        return a + "," + encrypt.m2863a(temp, temp.length);
     }
 }
