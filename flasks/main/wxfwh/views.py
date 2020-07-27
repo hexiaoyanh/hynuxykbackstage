@@ -27,7 +27,17 @@ def dealtextmsg(content, fromusername, tousername):
                 "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a>",
             }
         else:
-            exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
+            try:
+                exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
+            # 教务网不可访问的错误s
+            except requests.exceptions.ConnectionError:
+                return {
+                    "ToUserName": fromusername,
+                    "FromUserName": tousername,
+                    "CreateTime": int(time.time()),
+                    "MsgType": "text",
+                    "Content": "教务网暂时不可以访问o(╥﹏╥)o",
+                }
             # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
             if len(exam) == 1 and exam[0] is None:
                 msg = u"你这个学期都还没有成绩粗来(〃＞皿＜)"
