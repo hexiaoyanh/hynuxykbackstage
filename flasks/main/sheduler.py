@@ -1,6 +1,8 @@
 import datetime
 import time
 
+import requests
+
 from . import scheduler, db
 from flask import current_app
 
@@ -59,7 +61,10 @@ def send_exam_notification_scheduler():
         for i in users:
             if i.userid is None or i.userid == "":
                 continue
-            exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
+            try:
+                exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
+            except requests.exceptions.ConnectTimeout:
+                pass
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             if user is None:
                 send_ad_notification(i.userid, "没有这个学号")
@@ -85,7 +90,10 @@ def update_all_exam_score():
         now_time = nowdates.get()
         users = User.query.all()
         for i in users:
-            exam = verifyjw.get_exam("", i.xh, now_time['xn'])
+            try:
+                exam = verifyjw.get_exam("", i.xh, now_time['xn'])
+            except requests.exceptions.ConnectTimeout:
+                pass
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
@@ -98,8 +106,10 @@ def update_all_exam_score():
                     db.session.commit()
         users = Usern.query.all()
         for i in users:
-            token = verifyjw.login('N17080403', '128149')
-            exam = verifyjw.get_exam(token, i.xh, now_time['xn'])
+            try:
+                exam = verifyjw.get_exam("token", i.xh, now_time['xn'])
+            except requests.exceptions.ConnectTimeout:
+                pass
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
