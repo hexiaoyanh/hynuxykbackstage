@@ -64,7 +64,7 @@ def send_exam_notification_scheduler():
             try:
                 exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             if user is None:
                 send_ad_notification(i.userid, "没有这个学号")
@@ -93,7 +93,7 @@ def update_all_exam_score():
             try:
                 exam = verifyjw.get_exam("", i.xh, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
@@ -109,7 +109,7 @@ def update_all_exam_score():
             try:
                 exam = verifyjw.get_exam("token", i.xh, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
