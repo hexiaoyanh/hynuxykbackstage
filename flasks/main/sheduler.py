@@ -93,7 +93,7 @@ def update_all_exam_score():
             try:
                 exam = verifyjw.get_exam("", i.xh, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
@@ -109,7 +109,7 @@ def update_all_exam_score():
             try:
                 exam = verifyjw.get_exam("token", i.xh, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             for j in exam:
                 if j is None: continue
                 grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == now_time['xn'],
