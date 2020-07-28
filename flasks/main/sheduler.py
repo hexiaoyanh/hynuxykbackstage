@@ -64,7 +64,7 @@ def send_exam_notification_scheduler():
             try:
                 exam = verifyjw.get_exam("token", i.userid, now_time['xn'])
             except requests.exceptions.ConnectTimeout:
-                pass
+                continue
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
             if user is None:
                 continue
