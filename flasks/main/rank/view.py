@@ -14,6 +14,7 @@ rank2grade = {
     "及格": 60,
     "合格": 60,
     "不及格": 0,
+    '不通过': 0,
     "通过": 60
 }
 
@@ -75,14 +76,11 @@ def getrankmsg():
             global num
             if is_contains_chinese(j.zcj):
                 num = rank2grade[j.zcj]
-                total_num += num
-                if num >= 60:
-                    total_pku_gpa += 4 - 3 * (100 - num) ** 2 / 1600.0 * float(j.xf)
             else:
                 num = float(j.zcj)
-                total_num += num
-                if num >= 60:
-                    total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600.0) * float(j.xf)
+            total_num += num
+            if num >= 60:
+                total_pku_gpa += (4 - 3 * (100 - num) ** 2 / 1600.0) * float(j.xf)
             # print(j[6], j[11], float(j[11]))
             total_credit += float(j.xf)
             total_ave_gpa += num * float(j.xf)

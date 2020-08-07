@@ -54,6 +54,14 @@ def dealtextmsg(content, fromusername, tousername):
             "MsgType": "text",
             "Content": msg,
         }
+    elif '学费' in content:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": "<a href='http://fszj.czt.hunan.gov.cn/#/pay/queryInfo?_k=a2i81w'>点击查询学费</a>",
+        }
     else:
         return ""
 
