@@ -53,6 +53,14 @@ def dealtextmsg(content, fromusername, tousername):
             "MsgType": "text",
             "Content": msg+"或者前往【小程序】-【校园卡和成绩】-【课表成绩】-【成绩】查询当前学期的成绩平时分和排名",
         }
+    elif '学费' in content:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": "<a href='http://fszj.czt.hunan.gov.cn/#/'>点击查询学费(地区请选湖南省本级,或者关注湖南非税公众号缴费)</a>",
+        }
     else:
         return ""
 
