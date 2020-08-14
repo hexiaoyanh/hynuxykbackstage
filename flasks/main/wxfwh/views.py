@@ -61,6 +61,14 @@ def dealtextmsg(content, fromusername, tousername):
             "MsgType": "text",
             "Content": "<a href='http://fszj.czt.hunan.gov.cn/#/'>点击查询学费(地区请选湖南省本级,或者关注湖南非税公众号缴费)</a>",
         }
+    elif '开学' in content:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": "现在还不知道哦，等来通知了我第一时间发信息给你，表着急o(╥﹏╥)o",
+        }
     else:
         return ""
 
