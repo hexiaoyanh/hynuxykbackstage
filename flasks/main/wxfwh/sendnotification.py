@@ -20,6 +20,7 @@ def send_request(data):
         print('==============error:' + res.get('errmsg') + '==============')
     return res
 
+
 def send_success_sub(openid, out_trade_no, total_fee, time_end):
     # 发生成功订阅通知
     data = {
@@ -208,6 +209,36 @@ def send_update_notifications(userid, msg, url):
                 "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
                 "color": "#173177"
             }
+        }
+    }
+    send_request.delay(data)
+
+
+def send_start_school_notifications(userid, time_msg, remark_msg):
+    data = {
+        "touser": userid,
+        "template_id": "56OyEcjUN8w8bL4_j-98FH2gXXTUwDR-VlRLyfnxYiw",
+        "data": {
+            "keyword1": {
+                "value": "衡师学子",
+                "color": "#173177"
+            },
+            "keyword2": {
+                "value": "衡师服务小助手",
+                "color": "#173177"
+            },
+            "keyword3": {
+                "value": time_msg,
+                "color": "#173177"
+            },
+            "keyword4": {
+                "value": "衡阳师范学院",
+                "color": "#173177"
+            },
+            "remark": {
+                "value": remark_msg,
+                "color": "#173177"
+            },
         }
     }
     send_request.delay(data)
