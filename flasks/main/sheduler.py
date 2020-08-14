@@ -52,7 +52,7 @@ def send_class_notificate():
         print("----------------------上课提醒结束")
 
 
-@scheduler.task('interval', hours=1, id='send_exam_notification_scheduler', start_date='2020-6-19 14:30:00')
+@scheduler.task('interval', days=1, id='send_exam_notification_scheduler', start_date='2020-6-19 12:00:00')
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
         print("----------------------考试成绩开始")
@@ -83,7 +83,7 @@ def send_exam_notification_scheduler():
         print("----------------------考试成绩结束")
 
 
-@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
+@scheduler.task('interval', days=30, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
 def update_all_exam_score():
     with scheduler.app.app_context():
         print("----------------------所有成绩开始")

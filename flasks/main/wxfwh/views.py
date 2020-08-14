@@ -60,7 +60,15 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": "<a href='http://fszj.czt.hunan.gov.cn/#/pay/queryInfo?_k=a2i81w'>点击查询学费</a>",
+            "Content": "<a href='http://fszj.czt.hunan.gov.cn/'>点击查询学费</a>",
+        }
+    elif '开学' in content:
+        return {
+            "ToUserName": fromusername,
+            "FromUserName": tousername,
+            "CreateTime": int(time.time()),
+            "MsgType": "text",
+            "Content": "现在还不知道哦，等来通知了我第一时间发信息给你，表着急o(╥﹏╥)o",
         }
     else:
         return ""
