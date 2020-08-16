@@ -59,7 +59,7 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": "<a href='http://fszj.czt.hunan.gov.cn/#/'>点击查询学费(地区请选湖南省本级,或者关注湖南非税公众号缴费)</a>",
+            "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirec'>点击查询或缴纳学费</a>",
         }
     elif '开学' in content:
         return {
@@ -67,7 +67,7 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": "现在还不知道哦，等来通知了我第一时间发信息给你，表着急o(╥﹏╥)o",
+            "Content": "现在还不知道哦，等来通知了我第一时间发信息给你，表着急o(╥﹏╥)o\n\n小道消息一：开学可能会在9月5，6号\n\n小道消息二：开学可能在国庆节后\n\n大概是对的消息：开学会在元旦节之前。\n\n据我所知，小道消息大部分是扯淡，学校的保密工作极好，学生工作处的老师都没有一点消息，望大家节哀o(╥﹏╥)o\n顺便还有什么小道消息也可以告诉我。",
         }
     else:
         return ""
