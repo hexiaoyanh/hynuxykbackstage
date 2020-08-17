@@ -92,7 +92,6 @@ def set_total_fee():
 #        "msg": "任务已添加"
 #    })
 
-
 rank2grade = {
     "优": 95,
     "良": 85,

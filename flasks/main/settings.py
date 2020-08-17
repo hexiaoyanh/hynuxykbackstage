@@ -49,7 +49,7 @@ class WechatSetting:
             return int(f.read())
 
     def __init__(self):
-        #self._setmenu()
+        self._setmenu()
         pass
 
     def init_app(self, app):
