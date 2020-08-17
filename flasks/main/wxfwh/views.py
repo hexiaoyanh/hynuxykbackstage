@@ -60,7 +60,7 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirec'>点击或缴纳学费</a>",
+            "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm%3Fuser_defined%3D0000000000_wx9751bc82bf134ec9&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'>点击或缴纳学费</a>",
         }
     elif '开学' in content:
         return {

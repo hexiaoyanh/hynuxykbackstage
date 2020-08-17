@@ -31,9 +31,9 @@
           "key": "get_exam_score"
         },
         {
-          "type": "click",
+          "type": "view",
           "name": "查询或缴纳学费",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirec"
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm%3Fuser_defined%3D0000000000_wx9751bc82bf134ec9&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
         }
       ]
     },
