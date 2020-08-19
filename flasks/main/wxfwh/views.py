@@ -10,78 +10,55 @@ from . import wxfwh
 from main import db, nowdates
 from .sendnotification import send_exam_notification
 from .. import access_token
-from ..models import WXUser
+from ..models import WXUser, Keywords
 from ..verifyjw import verifyjw
+
+
+def generate_return(msg, fromusername, tousername):
+    return {
+        "ToUserName": fromusername,
+        "FromUserName": tousername,
+        "CreateTime": int(time.time()),
+        "MsgType": "text",
+        "Content": msg
+    }
 
 
 def dealtextmsg(content, fromusername, tousername):
     if '成绩' in content:
         wxuser = WXUser.query.filter(WXUser.openid == fromusername).first()
         if wxuser is None or wxuser.userid is None:
-            msg = u"这里没有你的教务网账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号哦(*^▽^*)"
-            return {
-                "ToUserName": fromusername,
-                "FromUserName": tousername,
-                "CreateTime": int(time.time()),
-                "MsgType": "text",
-                "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a>",
-            }
+            keyword = Keywords.query.filter(Keywords.keyword == 'can_not_find_account').first()
+            return generate_return(keyword.reply, fromusername, tousername)
         else:
             try:
                 exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
             # 教务网不可访问的错误s
             except requests.exceptions.ConnectionError:
-                return {
-                    "ToUserName": fromusername,
-                    "FromUserName": tousername,
-                    "CreateTime": int(time.time()),
-                    "MsgType": "text",
-                    "Content": "教务网暂时不可以访问o(╥﹏╥)o",
-                }
+                keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first()
+                return generate_return(keyword.reply, fromusername, tousername)
             # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
             if len(exam) == 1 and exam[0] is None:
-                msg = u"你这个学期都还没有成绩粗来(〃＞皿＜)"
+                msg = keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first().reply
             else:
                 msg = ""
                 for i in exam:
                     msg += "考试名称：" + i['kcmc'] + '\n' + "考试性质：" + i['ksxzmc'] + '\n' + "课程性质：" + str(i.get('kclbmc')) + '\n' + "总成绩：" + str(i.get('zcj')) + '\n\n'
 
-        return {
-            "ToUserName": fromusername,
-            "FromUserName": tousername,
-            "CreateTime": int(time.time()),
-            "MsgType": "text",
-            "Content": msg+"或者前往【小程序】-【校园卡和成绩】-【课表成绩】-【成绩】查询当前学期的成绩平时分和排名",
-        }
-    elif '学费' in content:
-        return {
-            "ToUserName": fromusername,
-            "FromUserName": tousername,
-            "CreateTime": int(time.time()),
-            "MsgType": "text",
-            "Content": "<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm%3Fuser_defined%3D0000000000_wx9751bc82bf134ec9&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'>点击查询或缴纳学费</a>",
-        }
-    elif '开学' in content:
-        return {
-            "ToUserName": fromusername,
-            "FromUserName": tousername,
-            "CreateTime": int(time.time()),
-            "MsgType": "text",
-            "Content": "老生将在9月5-6日开学，新生将在9月19-20日开学!<a href='http://xww.hynu.cn/info/1005/8562.htm'>点击查看具体信息</a>",
-        }
+        return generate_return(msg, fromusername, tousername)
     else:
+        keywords = Keywords.query.all()
+        for i in keywords:
+            if i.keyword in content:
+                return generate_return(i.reply, fromusername, tousername)
         return ""
 
 
 def dealsubscrible(fromusername, tousername):
     send_exam_notification(fromusername, "美丽程度", "100昏！")
-    return {
-        "ToUserName": fromusername,
-        "FromUserName": tousername,
-        "CreateTime": int(time.time()),
-        "MsgType": "text",
-        "Content": u"欢迎关注衡师小助手的微信服务号，<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a> 即可绑定，有新成绩下来的时候会发通知给你哦。\n\n有什么问题可以在下面给我发消息哦\n(๑′ᴗ‵๑)Ｉ Lᵒᵛᵉᵧₒᵤ",
-    }
+    return generate_return(
+        u"欢迎关注衡师小助手的微信服务号，<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a> 即可绑定，有新成绩下来的时候会发通知给你哦。\n\n有什么问题可以在下面给我发消息哦\n(๑′ᴗ‵๑)Ｉ Lᵒᵛᵉᵧₒᵤ",
+        fromusername, tousername)
 
 
 def sub_exam_notificate(fromusername, tousername):
