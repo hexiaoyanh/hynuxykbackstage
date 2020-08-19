@@ -39,7 +39,7 @@ def dealtextmsg(content, fromusername, tousername):
                 return generate_return(keyword.reply, fromusername, tousername)
             # exam = verifyjw.get_exam(token, wxuser.userid, "2019-2020-1")
             if len(exam) == 1 and exam[0] is None:
-                msg = keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first().reply
+                msg = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first().reply
             else:
                 msg = ""
                 for i in exam:
@@ -57,29 +57,18 @@ def dealtextmsg(content, fromusername, tousername):
 
 def dealsubscrible(fromusername, tousername):
     send_exam_notification(fromusername, "美丽程度", "100昏！")
-    return generate_return(
-        u"欢迎关注衡师小助手的微信服务号，<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3f45ab7ab0b12aed&redirect_uri=https%3A%2F%2Fwww.hynuxyk.club%2Fwx/&response_type=code&scope=snsapi_userinfo&state=bindjw#wechat_redirect'>点击绑定教务网</a> 即可绑定，有新成绩下来的时候会发通知给你哦。\n\n有什么问题可以在下面给我发消息哦\n(๑′ᴗ‵๑)Ｉ Lᵒᵛᵉᵧₒᵤ",
-        fromusername, tousername)
+    return generate_return(Keywords.query.filter(Keywords.keyword == 'subscribe').first().reply, fromusername,
+                           tousername)
 
 
 def sub_exam_notificate(fromusername, tousername):
     user = WXUser.query.filter(WXUser.openid == fromusername).first()
     if user is None or user.userid is None:
-        return {
-            "ToUserName": fromusername,
-            "FromUserName": tousername,
-            "CreateTime": int(time.time()),
-            "MsgType": "text",
-            "Content": u"订阅考试通知需要绑定教务账号哦，请前往[订阅通知]-[绑定教务网]绑定你的教务网账号，绑定成功会自动订阅啦。",
-        }
+        return generate_return(Keywords.query.filter(Keywords.keyword == 'can_not_find_account').first(), fromusername,
+                               tousername)
     else:
-        return {
-            "ToUserName": fromusername,
-            "FromUserName": tousername,
-            "CreateTime": int(time.time()),
-            "MsgType": "text",
-            "Content": u"你已经绑定教务网了，成绩出来的第一时间会发送通知给你的哦(*^▽^*)",
-        }
+        return generate_return(Keywords.query.filter(Keywords.keyword == 'is_bind_ok').first().reply, fromusername,
+                               tousername)
 
 
 def dealunsubscrible(fromusername, tousername):
@@ -189,10 +178,3 @@ def islogin():
     else:
         return jsonify({'code': -1})
 
-
-@wxfwh.route('/test')
-def test():
-    print(time.time())
-    send_exam_notification('ovtKGs1iMFFTTClFSQtRmfqsIkt0', '测试', 100)
-    print(time.time())
-    return "ok"
