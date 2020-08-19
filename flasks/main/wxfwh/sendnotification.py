@@ -220,7 +220,7 @@ def send_start_school_notifications(userid, time_msg, remark_msg):
         "template_id": "56OyEcjUN8w8bL4_j-98FH2gXXTUwDR-VlRLyfnxYiw",
         "data": {
             "first": {
-                "value": "真实消息",
+                "value": "由官方组织或个人所知",
                 "color": "#173177"
             },
             "keyword1": {

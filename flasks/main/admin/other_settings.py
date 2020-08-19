@@ -79,18 +79,18 @@ def set_total_fee():
     })
 
 
-#@admin.route('/send_start_school_notifications', methods=['POST'])
-#@login_required
-#@admin_required
-#def send_school_notifications():
-#    data = request.get_json()
-#    user = WXUser.query.all()
-#    for i in user:
-#        send_start_school_notifications(i.openid, data['time_msg'], data['remark_msg'])
-#    return jsonify({
-#        "code": 1,
-#        "msg": "任务已添加"
-#    })
+@admin.route('/send_start_school_notifications', methods=['POST'])
+@login_required
+@admin_required
+def send_school_notifications():
+    data = request.get_json()
+    user = WXUser.query.all()
+    for i in user:
+        send_start_school_notifications(i.openid, data['time_msg'], data['remark_msg'])
+    return jsonify({
+        "code": 1,
+        "msg": "任务已添加"
+    })
 
 rank2grade = {
     "优": 95,

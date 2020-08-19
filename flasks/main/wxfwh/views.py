@@ -67,7 +67,7 @@ def dealtextmsg(content, fromusername, tousername):
             "FromUserName": tousername,
             "CreateTime": int(time.time()),
             "MsgType": "text",
-            "Content": "根据官方电话回复，开学通知将会在8月20号左右发布，敬请期待！",
+            "Content": "根据师院彭书记所说，老生将在9月5-6日开学，新生将在9月19-20日开学!",
         }
     else:
         return ""
