@@ -214,13 +214,14 @@ def send_update_notifications(userid, msg, url):
     send_request.delay(data)
 
 
-def send_start_school_notifications(userid, time_msg, remark_msg):
+def send_start_school_notifications(userid, time_msg, remark_msg, url):
     data = {
         "touser": userid,
         "template_id": "56OyEcjUN8w8bL4_j-98FH2gXXTUwDR-VlRLyfnxYiw",
+        "url": url,
         "data": {
             "first": {
-                "value": "恭喜你白高兴了",
+                "value": "具体消息请查看衡阳师范学院官方微信公众号",
                 "color": "#173177"
             },
             "keyword1": {
