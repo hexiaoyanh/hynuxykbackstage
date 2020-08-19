@@ -5,7 +5,7 @@ from . import admin
 
 # 设置开学日期
 from main import admin_required, nowdates, wechatsettings
-from ..models import User, Usern, Grade, WXUser
+from ..models import User, Usern, Grade, WXUser, Keywords
 from ..wxfwh.sendnotification import send_start_school_notifications
 
 
@@ -84,7 +84,7 @@ def set_total_fee():
 @admin_required
 def send_school_notifications():
     data = request.get_json()
-    #user = WXUser.query.all()
+    # user = WXUser.query.all()
     send_start_school_notifications("ovtKGs1iMFFTTClFSQtRmfqsIkt0", data['time_msg'], data['remark_msg'], data['url'])
     # for i in user:
     #     send_start_school_notifications(i.openid, data['time_msg'], data['remark_msg'], data['url'])
@@ -123,6 +123,7 @@ def getrank(people, userid, obj):
         if i['xh'] == userid: break
         rank += 1
     return rank
+
 
 # @admin.route('/generate_data_analysis')
 # # @login_required
@@ -210,3 +211,4 @@ def getrank(people, userid, obj):
 #         "grade_distributed": dict(grade_distributed),
 #         "gpa_rank": gpa_rank
 #     })
+

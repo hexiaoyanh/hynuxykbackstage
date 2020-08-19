@@ -141,3 +141,10 @@ class Grade(db.Model):
     kcmc = db.Column(db.String(64))
     xf = db.Column(db.String(10))
     bj = db.Column(db.String(64), index=True)
+
+
+class Keywords(db.Model):
+    __tablename__ = 'keyword'
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    keyword = db.Column(db.Text(1024), index=True)
+    reply = db.Column(db.Text(1024))
