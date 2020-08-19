@@ -5,7 +5,7 @@ from . import admin
 
 # 设置开学日期
 from main import admin_required, nowdates, wechatsettings
-from ..models import User, Usern, Grade, WXUser
+from ..models import User, Usern, Grade, WXUser, Keywords
 from ..wxfwh.sendnotification import send_start_school_notifications
 
 
@@ -123,6 +123,7 @@ def getrank(people, userid, obj):
         rank += 1
     return rank
 
+
 # @admin.route('/generate_data_analysis')
 # # @login_required
 # # @admin_required
@@ -209,3 +210,4 @@ def getrank(people, userid, obj):
 #         "grade_distributed": dict(grade_distributed),
 #         "gpa_rank": gpa_rank
 #     })
+
