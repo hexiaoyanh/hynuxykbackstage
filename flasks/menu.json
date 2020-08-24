@@ -2,7 +2,7 @@
   "button": [
     {
       "type": "click",
-      "name": "订阅通知",
+      "name": "教务服务",
       "key": "classinfo",
       "sub_button": [
         {
@@ -19,26 +19,41 @@
           "type": "click",
           "name": "订阅考试成绩通知",
           "key": "sub_exam_notification"
-        }
-      ]
-    },
-    {
-      "name": "查询",
-      "sub_button": [
+        },
         {
           "type": "click",
           "name": "查询本学期成绩",
           "key": "get_exam_score"
-        },
-        {
-          "type": "view",
-          "name": "查询或缴纳学费",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm%3Fuser_defined%3D0000000000_wx9751bc82bf134ec9&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
         }
       ]
     },
     {
-      "name": "小程序",
+      "name": "校内服务",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "查询或缴纳学费",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9751bc82bf134ec9&redirect_uri=http%3A%2F%2Ffszj.czt.hunan.gov.cn%2Fwap%2Fcommon%2Fwx%2FloginAuth.htm%3Fuser_defined%3D0000000000_wx9751bc82bf134ec9&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "电子健康卡",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5c5ee20cde3b70e7&redirect_uri=https%3a%2f%2fjkkgzh.hnhfpc.gov.cn%2fjkk%2fopenid.aspx&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "宿舍保修",
+          "url": "http://bx.houqinbao.com/wechat/studentManage?universityId=gh_0c909b2b3145&openid=ozqQzs_snlqYoOhk_UX9f8vW_4KU&oldopenid=oVnT0w2iYvhrOHLMJqF9TWN8XkhM"
+        },
+        {
+          "type": "view",
+          "name": "图书馆",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4cc56bc778208a8c&redirect_uri=https%3A%2F%2Fu.interlib.cn%2Findex.php%3Fg%3DWap%26m%3DIndex%26a%3Dindex%26token%3Dkygexb1499309018%26diymenu%3D1&response_type=code&scope=snsapi_userinfo&state=oauth&connect_redirect=1#wechat_redirect"
+        }
+      ]
+    },
+    {
+      "name": "个人服务",
       "sub_button": [
         {
           "type": "miniprogram",

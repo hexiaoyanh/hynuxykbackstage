@@ -7,8 +7,8 @@ from ..models import Keywords
 
 
 @admin.route('/query_keyword')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def query_keyword():
     pages = request.args.get('pages')
     num = request.args.get('num')
@@ -24,8 +24,8 @@ def query_keyword():
 
 
 @admin.route('/set_keyword', methods=['POST'])
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def set_keyword():
     data = request.get_json()
     keyword = Keywords.query.filter(Keywords.keyword == data['keyword']).first()
@@ -43,4 +43,23 @@ def set_keyword():
     return jsonify({
         "code": 1,
         "msg": "修改成功"
+    })
+
+
+@admin.route('/delete_keyword')
+@login_required
+@admin_required
+def delete_keyword():
+    id = request.args.get('id')
+    keyword = Keywords.query.filter(Keywords.id == id).first()
+    if keyword is None:
+        return jsonify({
+            "code": -1,
+            "msg": "id不存在"
+        })
+    db.session.add(keyword)
+    db.session.commit()
+    return jsonify({
+        "code": 1,
+        "msg": "删除成功"
     })
