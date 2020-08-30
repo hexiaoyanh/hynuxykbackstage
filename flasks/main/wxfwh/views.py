@@ -47,6 +47,9 @@ def dealtextmsg(content, fromusername, tousername):
                         'kclbmc'] + '\n' + "总成绩：" + i['zcj'] + '\n\n'
 
         return generate_return(msg, fromusername, tousername)
+    elif '情话' in content:
+        res = requests.get("https://chp.shadiao.app/api.php")
+        return generate_return(res.text,fromusername,tousername)
     else:
         keywords = Keywords.query.all()
         for i in keywords:
