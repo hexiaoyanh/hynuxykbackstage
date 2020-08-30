@@ -49,7 +49,13 @@ def dealtextmsg(content, fromusername, tousername):
         return generate_return(msg, fromusername, tousername)
     elif '情话' in content:
         res = requests.get("https://chp.shadiao.app/api.php")
-        return generate_return(res.text,fromusername,tousername)
+        return generate_return(res.text, fromusername, tousername)
+    elif '朋友圈文案' in content:
+        res = requests.get("https://pyq.shadiao.app/api.php")
+        return generate_return(res.text, fromusername, tousername)
+    elif '毒鸡汤' in content:
+        res = requests.get("https://du.shadiao.app/api.php")
+        return generate_return(res.text, fromusername, tousername)
     else:
         keywords = Keywords.query.all()
         for i in keywords:
@@ -180,4 +186,3 @@ def islogin():
         return jsonify({'code': 1})
     else:
         return jsonify({'code': -1})
-
