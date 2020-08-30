@@ -102,6 +102,7 @@ def getinput():
             resp_data = request.data
             resp_dict = xmltodict.parse(resp_data).get('xml')
             # 如果是文本消息
+            print(resp_dict)
             msgtype = resp_dict.get('MsgType')
             fromusername = resp_dict.get('FromUserName')
             tousername = resp_dict.get('ToUserName')

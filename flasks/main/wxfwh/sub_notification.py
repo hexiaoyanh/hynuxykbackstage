@@ -134,7 +134,8 @@ def is_sub():
     if current_user.is_subnotice:
         return jsonify({
             "code": 1,
-            "msg": "您已订阅上课通知"
+            "msg": "您已订阅上课通知",
+            "server_expire":str(current_user.server_expire)
         })
     else:
         return jsonify({

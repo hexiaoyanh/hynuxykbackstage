@@ -57,7 +57,7 @@ def delete_keyword():
             "code": -1,
             "msg": "id不存在"
         })
-    db.session.add(keyword)
+    db.session.delete(keyword)
     db.session.commit()
     return jsonify({
         "code": 1,
