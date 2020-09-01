@@ -12,7 +12,7 @@ class Update_curriculum:
                 token = verifyjw.login(userid, password)
                 nowtime = nowdates.get()
                 for i in range(25):
-                    kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
+                    kecheng = verifyjw.getclass(token, userid, '2020-2021-1', str(i))
                     for j in kecheng:
                         if j is None: continue
                         curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=i,

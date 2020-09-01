@@ -69,7 +69,7 @@ update_curriculum = Update_curriculum()
 @admin_required
 def update_class():
     now_time = datetime.datetime.now()
-    user = WXUser.query.filter(WXUser.is_subnotice == True and WXUser.expires_in >= now_time).all()
+    user = WXUser.query.filter(WXUser.server_expire >= now_time).all()
     thr = threading.Thread(target=update_curriculum.update_class, args=[user, ])  # 创建线程更新课表
     thr.start()
     return jsonify({
