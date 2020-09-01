@@ -6,7 +6,7 @@ import requests
 from . import scheduler, db
 from flask import current_app
 
-from .models import Curriculum, WXUser, User, Usern, Grade
+from .models import Curriculum, WXUser, User, Usern, Grade, Keywords
 from .verifyjw import verifyjw
 from .wxfwh.sendnotification import send_class_notification, send_exam_notification, send_ad_notification
 from . import nowdates
@@ -38,7 +38,9 @@ def send_class_notificate():
         now_time = nowdates.get()
         weekday = str(datetime.datetime.now().weekday() + 1)
         # 查询订阅了且没有过期的
-        users = WXUser.query.filter(WXUser.is_subnotice == True, WXUser.expires_in >= datetime.datetime.now()).all()
+        users = WXUser.query.filter(WXUser.is_subnotice == True, WXUser.server_expire >= datetime.datetime.now()).all()
+        sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
+        not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
@@ -48,7 +50,13 @@ def send_class_notificate():
                                            Curriculum.begintime == get_next_half_an_hours()
                                            ).first()
             if data is None: continue
-            send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime)
+            if i.is_experience:
+                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
+                                        remark=not_sub_text)
+            else:
+                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
+                                        remark=sub_text)
+
         print("----------------------上课提醒结束")
 
 

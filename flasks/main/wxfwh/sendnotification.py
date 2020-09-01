@@ -56,7 +56,7 @@ def send_success_sub(openid, out_trade_no, total_fee, time_end):
     send_request.delay(data)
 
 
-def send_class_notification(openid, classname, location, teacher=None, time=None):
+def send_class_notification(openid, classname, location, teacher=None, time=None, remark='(〃＞皿＜)'):
     data = {
         "touser": openid,
         "template_id": "fyxZENvUVm7b2elEY3kplBg0Pn5Q4rFQeYM3VIp5xpM",
@@ -82,7 +82,7 @@ def send_class_notification(openid, classname, location, teacher=None, time=None
                 "color": "#173177"
             },
             "remark": {
-                "value": "(〃＞皿＜)",
+                "value": remark,
                 "color": "173177"
             }
         }

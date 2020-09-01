@@ -1,10 +1,12 @@
+import datetime
+
 from flask import request, jsonify
 from flask_login import login_required
 
 from . import admin
 
 # 设置开学日期
-from main import admin_required, nowdates, wechatsettings
+from main import admin_required, nowdates, wechatsettings, db
 from ..models import User, Usern, Grade, WXUser, Keywords
 from ..wxfwh.sendnotification import send_start_school_notifications
 
@@ -125,6 +127,29 @@ def getrank(people, userid, obj):
     return rank
 
 
+# 给所有人添加福利的方法
+@admin.route('/fuli')
+# @login_required
+# @admin_required
+def fuli():
+    days = request.args.get('days')
+    user = WXUser.query.all()
+    for i in user:
+        # 体验版和过期用户
+        print(i.expires_in)
+        if i.server_expire is None or i.server_expire <= datetime.datetime.now() :
+            i.is_experience = True
+            i.server_expire = datetime.datetime.now() + datetime.timedelta(days=int(days))
+        else:
+            i.server_expire += datetime.timedelta(days=int(days))
+
+        db.session.add(i)
+    db.session.commit()
+    return jsonify({
+        "code": 1,
+        "msg": "福利添加成功"
+    })
+
 # @admin.route('/generate_data_analysis')
 # # @login_required
 # # @admin_required
@@ -211,4 +236,3 @@ def getrank(people, userid, obj):
 #         "grade_distributed": dict(grade_distributed),
 #         "gpa_rank": gpa_rank
 #     })
-
