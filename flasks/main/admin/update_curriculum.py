@@ -6,6 +6,7 @@ from main.verifyjw import verifyjw
 class Update_curriculum:
 
     def _getclass(self, userid, password):
+
         # 使用nowdates的app上下文防止
         with nowdates.app.app_context():
             try:
@@ -34,6 +35,7 @@ class Update_curriculum:
         self.lens = len(useres)
         self.is_running = True
         for i in useres:
+            if i.userid is None:continuel
             self._getclass(i.userid, i.password)
             self.now_run += 1
         self.is_running = False
