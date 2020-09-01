@@ -81,6 +81,7 @@ class WXUser(db.Model, UserMixin):
     is_subnotice = db.Column(db.Boolean, default=False)
     notification_status = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
+    is_experience = db.Column(db.Boolean, default=False)
 
 
 class Curriculum(db.Model):

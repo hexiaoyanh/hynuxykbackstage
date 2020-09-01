@@ -57,8 +57,6 @@ def createsubpay():
     return jsonify(params)
 
 
-
-
 @wxfwh.route('/get_total_fee')
 @login_required
 def get_total_fee():
@@ -131,11 +129,11 @@ def getclass(userid, password):
 @wxfwh.route('/is_sub_class')
 @login_required
 def is_sub():
-    if current_user.is_subnotice:
+    if current_user.server_expire <= datetime.datetime.now():
         return jsonify({
             "code": 1,
             "msg": "您已订阅上课通知",
-            "server_expire":str(current_user.server_expire)
+            "server_expire": str(current_user.server_expire)
         })
     else:
         return jsonify({
