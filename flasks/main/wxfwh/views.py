@@ -34,7 +34,7 @@ def dealtextmsg(content, fromusername, tousername):
             try:
                 exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
                 if exam[0] == None:
-                    return generate_return("您在"+nowdates.get()['xn']+"学期没有成绩出来",fromusername,tousername)
+                    return generate_return(Keywords.query.filter(Keywords.keyword == 'can_not_find_exam').first().reply,fromusername,tousername)
             # 教务网不可访问的错误s
             except requests.exceptions.ConnectionError:
                 keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first()
