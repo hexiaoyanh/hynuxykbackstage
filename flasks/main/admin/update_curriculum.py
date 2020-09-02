@@ -35,7 +35,7 @@ class Update_curriculum:
         self.lens = len(useres)
         self.is_running = True
         for i in useres:
-            if i.userid is None:continue
+            if i.userid is None: continue
             self._getclass(i.userid, i.password)
             self.now_run += 1
         self.is_running = False

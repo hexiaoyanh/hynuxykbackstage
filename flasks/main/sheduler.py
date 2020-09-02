@@ -50,6 +50,8 @@ def send_class_notificate():
                                            Curriculum.begintime == get_next_half_an_hours()
                                            ).first()
             if data is None: continue
+            # 专业实习课不用通知
+            if data.class_name == '专业实习': continue
             if i.is_experience:
                 send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
                                         remark=not_sub_text)

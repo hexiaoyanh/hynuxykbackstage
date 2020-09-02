@@ -21,6 +21,11 @@ def send_request(data):
     return res
 
 
+@celery.task()
+def update_curriculum(userid, password):
+    pass
+
+
 def send_success_sub(openid, out_trade_no, total_fee, time_end):
     # 发生成功订阅通知
     data = {
