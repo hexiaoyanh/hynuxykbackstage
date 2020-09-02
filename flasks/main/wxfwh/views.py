@@ -33,6 +33,8 @@ def dealtextmsg(content, fromusername, tousername):
         else:
             try:
                 exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
+                if exam[0] == None:
+                    return generate_return("您在"+nowdates.get()['xn']+"学期没有成绩出来",fromusername,tousername)
             # 教务网不可访问的错误s
             except requests.exceptions.ConnectionError:
                 keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first()
@@ -188,3 +190,4 @@ def islogin():
         return jsonify({'code': 1})
     else:
         return jsonify({'code': -1})
+
