@@ -129,8 +129,8 @@ def getrank(people, userid, obj):
 
 # 给所有人添加福利的方法
 @admin.route('/fuli')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def fuli():
     days = request.args.get('days')
     user = WXUser.query.all()
