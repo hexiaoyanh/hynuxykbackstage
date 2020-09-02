@@ -129,7 +129,7 @@ def getclass(userid, password):
 @wxfwh.route('/is_sub_class')
 @login_required
 def is_sub():
-    if current_user.server_expire <= datetime.datetime.now():
+    if current_user.server_expire >= datetime.datetime.now():
         return jsonify({
             "code": 1,
             "msg": "您已订阅上课通知",

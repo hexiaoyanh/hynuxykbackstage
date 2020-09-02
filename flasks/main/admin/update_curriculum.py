@@ -13,7 +13,7 @@ class Update_curriculum:
                 token = verifyjw.login(userid, password)
                 nowtime = nowdates.get()
                 for i in range(25):
-                    kecheng = verifyjw.getclass(token, userid, '2020-2021-1', str(i))
+                    kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
                     for j in kecheng:
                         if j is None: continue
                         curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=i,
@@ -35,7 +35,7 @@ class Update_curriculum:
         self.lens = len(useres)
         self.is_running = True
         for i in useres:
-            if i.userid is None:continuel
+            if i.userid is None:continue
             self._getclass(i.userid, i.password)
             self.now_run += 1
         self.is_running = False
