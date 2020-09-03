@@ -41,6 +41,7 @@ def send_class_notificate():
         users = WXUser.query.filter(WXUser.is_subnotice == True, WXUser.server_expire >= datetime.datetime.now()).all()
         sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
         not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
+        res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
@@ -54,10 +55,10 @@ def send_class_notificate():
             if data.class_name == '专业实习': continue
             if i.is_experience:
                 send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
-                                        remark=not_sub_text)
+                                        remark=not_sub_text, first=res)
             else:
                 send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
-                                        remark=sub_text)
+                                        remark=sub_text, first=res)
 
         print("----------------------上课提醒结束")
 
