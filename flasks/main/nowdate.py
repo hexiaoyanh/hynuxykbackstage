@@ -48,7 +48,9 @@ class nowdate:
     def get(self):
         self._get()
         a = datetime.date(self.year, self.month, self.day).isocalendar()
+        # 开学日期对应的周数和周几
         b = datetime.datetime.now().isocalendar()
+        # 现在的日期
         if 8 >= self.month >= 2:
             return {
                 "xn": str(self.year - 1) + '-' + str(self.year) + '-' + '2',
@@ -56,8 +58,11 @@ class nowdate:
             }
         else:
             c = datetime.date(self.year, 12, 31).isocalendar()
-
-            if c[1] - a[1] > b[1] - a[1]:
+            # 当年的最后一天
+            print(a, b, c)
+            print(a[1], b[1], c[1])
+            # 表示过去了一年
+            if b[0] > a[0]:
                 return {
                     "xn": str(self.year) + '-' + str(self.year + 1) + '-' + '1',
                     'week': (c[1] - a[1]) + b[1]
