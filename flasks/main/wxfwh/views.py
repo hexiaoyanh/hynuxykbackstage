@@ -60,6 +60,7 @@ def dealtextmsg(content, fromusername, tousername):
         return generate_return(res.text, fromusername, tousername)
     elif '骂我' in content:
         res = requests.get("https://nmsl.shadiao.app/api.php?level=min?from=hynuxyk")
+        return generate_return(res.text, fromusername, tousername)
     else:
         keywords = Keywords.query.all()
         for i in keywords:

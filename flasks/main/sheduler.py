@@ -38,18 +38,18 @@ def send_class_notificate():
         now_time = nowdates.get()
         weekday = str(datetime.datetime.now().weekday() + 1)
         # 查询订阅了且没有过期的
-        users = WXUser.query.filter(WXUser.is_subnotice == True, WXUser.server_expire >= datetime.datetime.now()).all()
+        users = WXUser.query.filter(WXUser.server_expire >= datetime.datetime.now()).all()
         sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
         not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
         res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
+        next_hour = get_next_half_an_hours()
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
                                            Curriculum.week == now_time['week'],
                                            Curriculum.school_year == now_time['xn'],
                                            Curriculum.userid == i.userid,
-                                           Curriculum.begintime == get_next_half_an_hours()
-                                           ).first()
+                                           Curriculum.begintime == next_hour).first()
             if data is None: continue
             # 专业实习课不用通知
             if data.class_name == '专业实习': continue
