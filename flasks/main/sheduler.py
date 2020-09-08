@@ -42,16 +42,16 @@ def send_class_notificate():
         sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
         not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
         res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
+        next_hour = get_next_half_an_hours()
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
                                            Curriculum.week == now_time['week'],
                                            Curriculum.school_year == now_time['xn'],
                                            Curriculum.userid == i.userid,
-                                           Curriculum.begintime == get_next_half_an_hours()
-                                           ).first()
-            print(data)
+                                           Curriculum.begintime == next_hour).first()
             if data is None: continue
+            print(data)
             # 专业实习课不用通知
             if data.class_name == '专业实习': continue
             if i.is_experience:
@@ -63,7 +63,7 @@ def send_class_notificate():
 
         print("----------------------上课提醒结束")
 
-
+'''
 @scheduler.task('interval', days=10, id='send_exam_notification_scheduler', start_date='2020-6-19 20:56:00')
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
@@ -95,7 +95,7 @@ def send_exam_notification_scheduler():
         print("----------------------考试成绩结束")
 
 
-@scheduler.task('interval', days=10, id='update_all_exam_score', start_date='2020-6-25 00:00:00')
+@scheduler.task('interval', days=1, id='update_all_exam_score', start_date='2020-6-25 12:59:00')
 def update_all_exam_score():
     with scheduler.app.app_context():
         print("----------------------所有成绩开始")
@@ -133,6 +133,7 @@ def update_all_exam_score():
                     db.session.add(grade)
                     db.session.commit()
         print("----------------------所有成绩结束")
+'''
 # # 查询数据
 # def select_data(mycursor, userid, xn, ksxzmc, kcmc):
 #     sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(

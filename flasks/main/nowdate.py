@@ -54,21 +54,20 @@ class nowdate:
         if 8 >= self.month >= 2:
             return {
                 "xn": str(self.year - 1) + '-' + str(self.year) + '-' + '2',
-                'week': b[1] - a[1]
+                'week': b[1] - a[1] + 1
             }
         else:
             c = datetime.date(self.year, 12, 31).isocalendar()
             # 当年的最后一天
-            print(a, b, c)
-            print(a[1], b[1], c[1])
+
             # 表示过去了一年
             if b[0] > a[0]:
                 return {
                     "xn": str(self.year) + '-' + str(self.year + 1) + '-' + '1',
-                    'week': (c[1] - a[1]) + b[1]
+                    'week': (c[1] - a[1]) + b[1] + 1
                 }
             else:
                 return {
                     "xn": str(self.year) + '-' + str(self.year + 1) + '-' + '1',
-                    'week': b[1] - a[1]
+                    'week': b[1] - a[1] + 1
                 }
