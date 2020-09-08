@@ -90,6 +90,7 @@ def successpay():
         user.server_expire = nowtime
         user.is_subnotice = True
         user.notification_status = True
+        user.is_experience = False
         db.session.add(user)
         db.session.commit()
     return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>"
@@ -177,4 +178,3 @@ def get_notification_status():
         return jsonify({
             "code": -1
         })
-
