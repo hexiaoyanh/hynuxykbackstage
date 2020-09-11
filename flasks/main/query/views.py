@@ -1,6 +1,7 @@
 from flask import request, json, jsonify, abort
 
 from . import query
+from ..models import Keywords
 
 
 @query.route('/login', methods=['POST'])
@@ -96,16 +97,15 @@ def pscj():
 
 @query.route('/getMsg', methods=['POST'])
 def getMsg():
-    import os
-    msg = os.environ.get("msg")
-    if msg is not None:
+    msg = Keywords.query.filter(Keywords.keyword == "miniprogram_msg").first()
+    if msg is None:
         return jsonify({
-            "code": 1,
-            "msg": msg
+            "code": "0"
         })
     else:
         return jsonify({
-            "code": 0
+            "code": 1,
+            "msg": msg.reply
         })
 
 
@@ -175,17 +175,11 @@ def getscore():
 
 @query.route('/getaboutus', methods=['GET'])
 def getaboutus():
-    import os
-    msg = os.environ.get("aboutus")
-    if msg is not None:
-        return jsonify({
-            "code": 1,
-            "msg": msg
-        })
-    else:
-        return jsonify({
-            "code": 0
-        })
+    aboutus = Keywords.query.filter(Keywords.keyword == "miniprogram_aboutus").first().reply
+    return jsonify({
+        "code": 1,
+        "msg": aboutus
+    })
 
 
 # 提示是否跳转小程序
