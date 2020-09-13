@@ -13,22 +13,8 @@ from . import nowdates
 
 
 def get_next_half_an_hours():
-    generator_hours = int(time.strftime("%H"))
-    generator_minutes = int(time.strftime("%M"))
-    if generator_minutes == 0: generator_minutes = 30
-    if generator_minutes == 30:
-        generator_hours += 1
-        generator_minutes = 0
-    if generator_hours == 24: generator_hours = 0
-    if generator_hours <= 9:
-        generator_hours = "0" + str(generator_hours)
-    else:
-        generator_hours = str(generator_hours)
-    if generator_minutes <= 9:
-        generator_minutes = "0" + str(generator_minutes)
-    else:
-        generator_minutes = str(generator_minutes)
-    return generator_hours + ":" + generator_minutes
+    gtime = (datetime.datetime.now() + datetime.timedelta(minutes=30)).strftime("%H:%M")
+    return gtime
 
 
 @scheduler.task('interval', minutes=30, id='send_class_notification', start_date='2020-6-19 14:30:00')
