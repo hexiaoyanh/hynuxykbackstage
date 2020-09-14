@@ -101,6 +101,22 @@ def GetClass(userid, password):
     thr.start()
 
 
+# 同步学校的作息时间
+def convert_begintime(s):
+    t = s.split(":")
+    m = int(t[1])
+    h = int(t[0])
+    m += 30
+    if m >= 60:
+        m -= 60
+        h += 1
+    m = str(m)
+    h = str(h)
+    if len(h) == 1: h = "0" + h
+    if len(m) == 1: m = "0" + m
+    return h + ":" + m
+
+
 def getclass(userid, password):
     # 使用nowdates的app上下文防止导入两次manager导致定时任务重复运行
     with nowdates.app.app_context():
@@ -115,7 +131,7 @@ def getclass(userid, password):
                                                             class_time=j['kcsj'],
                                                             class_name=j['kcmc'], teacher=j['jsxm'],
                                                             location=j['jsmc'],
-                                                            begintime=j['kssj'], endtime=j['jssj'],
+                                                            begintime=convert_begintime(j['kssj']), endtime=j['jssj'],
                                                             cycle=j['kkzc']).first()
                     if curriculum is not None: continue
                     curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=i, class_time=j['kcsj'],
