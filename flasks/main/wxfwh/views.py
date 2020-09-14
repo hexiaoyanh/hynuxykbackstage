@@ -198,34 +198,14 @@ def islogin():
 def resetTime():
     thr = threading.Thread(target=resetT, args=[])  # 创建线程
     thr.start()
+    return "ok"
 
 
 def resetT():
-    c = Curriculum.query.filter(Curriculum.begintime == "08:00").all()
-    if c is not None:
-        for i in c:
-            i.begintime = "8:30"
-            db.session.add(i)
-    c = Curriculum.query.filter(Curriculum.begintime == "10:00").all()
-    if c is not None:
-        for i in c:
-            i.begintime = "10:30"
-            db.session.add(i)
-    c = Curriculum.query.filter(Curriculum.begintime == "14:00").all()
-    if c is not None:
-        for i in c:
-            i.begintime = "14:30"
-            db.session.add(i)
-    c = Curriculum.query.filter(Curriculum.begintime == "16:00").all()
-    if c is not None:
-        for i in c:
-            i.begintime = "16:30"
-            db.session.add(i)
-    c = Curriculum.query.filter(Curriculum.begintime == "19:00").all()
-    if c is not None:
-        for i in c:
-            i.begintime = "19:30"
-            db.session.add(i)
-
-    db.session.commit()
-    return "ok"
+    with nowdates.app.app_context():
+        c = Curriculum.query.filter(Curriculum.begintime == "8:30").all()
+        if c is not None:
+            for i in c:
+                i.begintime = "08:30"
+                db.session.add(i)
+        db.session.commit()
