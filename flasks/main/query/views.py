@@ -1,7 +1,6 @@
 from flask import request, json, jsonify, abort
 
 from . import query
-from ..models import Keywords
 
 
 @query.route('/login', methods=['POST'])
@@ -175,6 +174,8 @@ def getscore():
 
 @query.route('/getaboutus', methods=['GET'])
 def getaboutus():
+    from ..models import Keywords
+
     aboutus = Keywords.query.filter(Keywords.keyword == "miniprogram_aboutus").first().reply
     return jsonify({
         "code": 1,

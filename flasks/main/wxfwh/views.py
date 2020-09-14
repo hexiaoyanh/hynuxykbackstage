@@ -5,12 +5,12 @@ import time
 import requests
 import xmltodict as xmltodict
 from flask import request, make_response, jsonify
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, current_user
 from . import wxfwh
 from main import db, nowdates
 from .sendnotification import send_exam_notification
 from .. import access_token
-from ..models import WXUser, Keywords
+from ..models import WXUser, Keywords, Curriculum
 from ..verifyjw import verifyjw
 
 
@@ -34,7 +34,7 @@ def dealtextmsg(content, fromusername, tousername):
             try:
                 exam = verifyjw.get_exam("token", wxuser.userid, nowdates.get()['xn'])
                 if exam[0] == None:
-                    return generate_return("您在"+nowdates.get()['xn']+"学期没有成绩出来",fromusername,tousername)
+                    return generate_return("您在" + nowdates.get()['xn'] + "学期没有成绩出来", fromusername, tousername)
             # 教务网不可访问的错误s
             except requests.exceptions.ConnectionError:
                 keyword = Keywords.query.filter(Keywords.keyword == 'can_not_request_jiaowu').first()
@@ -192,3 +192,34 @@ def islogin():
     else:
         return jsonify({'code': -1})
 
+
+@wxfwh.route('/resetTime')
+def resetTime():
+    c = Curriculum.query.filter(Curriculum.begintime == "08:00").all()
+    if c is not None:
+        for i in c:
+            i.begintime = "8:30"
+            db.session.add(i)
+    c = Curriculum.query.filter(Curriculum.begintime == "10:00").all()
+    if c is not None:
+        for i in c:
+            i.begintime = "10:30"
+            db.session.add(i)
+    c = Curriculum.query.filter(Curriculum.begintime == "14:00").all()
+    if c is not None:
+        for i in c:
+            i.begintime = "14:30"
+            db.session.add(i)
+    c = Curriculum.query.filter(Curriculum.begintime == "16:00").all()
+    if c is not None:
+        for i in c:
+            i.begintime = "16:30"
+            db.session.add(i)
+    c = Curriculum.query.filter(Curriculum.begintime == "19:00").all()
+    if c is not None:
+        for i in c:
+            i.begintime = "19:30"
+            db.session.add(i)
+
+    db.session.commit()
+    return "ok"
