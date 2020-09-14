@@ -37,7 +37,6 @@ def send_class_notificate():
                                            Curriculum.userid == i.userid,
                                            Curriculum.begintime == next_hour).first()
             if data is None: continue
-            print(data)
             # 专业实习课不用通知
             if data.class_name == '专业实习': continue
             if i.is_experience:
