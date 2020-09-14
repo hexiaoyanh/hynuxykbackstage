@@ -1,5 +1,6 @@
 import hashlib
 import json
+import threading
 import time
 
 import requests
@@ -195,6 +196,11 @@ def islogin():
 
 @wxfwh.route('/resetTime')
 def resetTime():
+    thr = threading.Thread(target=resetT, args=[])  # 创建线程
+    thr.start()
+
+
+def resetT():
     c = Curriculum.query.filter(Curriculum.begintime == "08:00").all()
     if c is not None:
         for i in c:
