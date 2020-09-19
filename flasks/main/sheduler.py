@@ -31,6 +31,8 @@ def send_class_notificate():
         next_hour = get_next_half_an_hours()
         for i in users:
             if not i.notification_status: continue
+            if i.userid is None:continue
+            if i.userid[:6] == "191303":continue
             data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
                                            Curriculum.week == now_time['week'],
                                            Curriculum.school_year == now_time['xn'],
