@@ -27,9 +27,9 @@ def query_curriculum():
             "class_name": i.class_name,
             "teacher": i.teacher,
             "location": i.location,
-            "begin_time": i.begintime,
-            "end_time": i.endtime,
-            "cycle": i.cycle
+            "begin_time": " ",
+            "end_time": " ",
+            "cycle": " "
         })
     return jsonify({'data': data, 'total_number': curriculum.pages})
 
@@ -51,9 +51,9 @@ def query_curriculum_by_userid():
             "class_name": i.class_name,
             "teacher": i.teacher,
             "location": i.location,
-            "begin_time": i.begintime,
-            "end_time": i.endtime,
-            "cycle": i.cycle
+            "begin_time": " ",
+            "end_time": " ",
+            "cycle": " "
         })
     return jsonify(data)
 
@@ -65,8 +65,8 @@ update_curriculum = Update_curriculum()
 
 # 更新所有人的课表
 @admin.route('/update_class')
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def update_class():
     now_time = datetime.datetime.now()
     user = WXUser.query.filter(WXUser.server_expire >= now_time).all()
@@ -93,4 +93,3 @@ def get_schedule():
             "code": -1,
             "msg": "没有任务在运行"
         })
-

@@ -15,6 +15,7 @@ from .sendnotification import send_success_sub
 from main.verifyjw import verifyjw
 from .. import db, nowdates, wechatsettings
 from ..models import WXUser, Curriculum, Bill
+from ..sdk.get_curriculum_from_jiaowu import get_curriculum_from_jiaowu
 
 
 @wxfwh.route('/createsubpay')
@@ -117,26 +118,33 @@ def convert_begintime(s):
     return h + ":" + m
 
 
+@wxfwh.route('/test')
+def test():
+    getclass("19050128", "19050128")
+    return "ok"
+
+
 def getclass(userid, password):
     # 使用nowdates的app上下文防止导入两次manager导致定时任务重复运行
     with nowdates.app.app_context():
         try:
-            token = verifyjw.login(userid, password)
             nowtime = nowdates.get()
-            for i in range(25):
-                kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
-                for j in kecheng:
+            user = get_curriculum_from_jiaowu(userid, password, nowtime['xn'])
+            kb = user.get_all()
+            for i in kb:
+                print(i)
+                for j in i:
+                    print(j)
                     if j is None: continue
-                    curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=i,
-                                                            class_time=j['kcsj'],
-                                                            class_name=j['kcmc'], teacher=j['jsxm'],
-                                                            location=j['jsmc'],
-                                                            begintime=convert_begintime(j['kssj']), endtime=j['jssj'],
-                                                            cycle=j['kkzc']).first()
+                    curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=j["week"],
+                                                            class_time=j['class_time'],
+                                                            class_name=j['class_name'], teacher=j['teacher'],
+                                                            location=j['location'],class_day=j['class_day']).first()
                     if curriculum is not None: continue
-                    curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=i, class_time=j['kcsj'],
-                                            class_name=j['kcmc'], teacher=j['jsxm'], location=j['jsmc'],
-                                            begintime=j['kssj'], endtime=j['jssj'], cycle=j['kkzc'])
+                    curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=j["week"],
+                                            class_time=j['class_time'],
+                                            class_name=j['class_name'], teacher=j['teacher'],
+                                            location=j['location'],class_day=j['class_day'])
                     db.session.add(curriculum)
             db.session.commit()
         except Exception as e:

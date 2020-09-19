@@ -12,7 +12,7 @@ from . import publicexam
 @publicexam.route('/cetgetverify', methods=['GET', 'POST'])
 def cetgetverify():
     data = request.get_json()
-    from ..hynuxykSpider.api.cet import cet
+    from main.sdk.hynuxykSpider.api.cet import cet
     try:
         cets = cet(data['id_num'], data['name'])
         return jsonify(cets.get_img())
@@ -23,7 +23,7 @@ def cetgetverify():
 @publicexam.route('/cetgetscore', methods=['GET', 'POST'])
 def cetgetscore():
     data = request.get_json()
-    from ..hynuxykSpider.api.cet import cet
+    from main.sdk.hynuxykSpider.api.cet import cet
     try:
         cets = cet(data['id_num'], data['name'])
         return jsonify(cets.get_score(data['capcha'], data['cookie']))
@@ -32,7 +32,7 @@ def cetgetscore():
 
 @publicexam.route('/ntcegetverify',methods=['GET','POST'])
 def ntcegetverify():
-    from  ..hynuxykSpider.api.ntce import ntce
+    from main.sdk.hynuxykSpider.api.ntce import ntce
     try:
         ntces = ntce("","")
         return jsonify(ntces.get_img())

@@ -16,7 +16,7 @@ def login():
         nanyue = data['nanyue']
     if username != None and password != None:
         try:
-            from ..hynuxykSpider.api.jwlogin import jwlogin
+            from main.sdk.hynuxykSpider.api.jwlogin import jwlogin
             logins = jwlogin(username, password, nanyue)
             Msg = logins.Msg
             if Msg != "OK":
@@ -45,7 +45,7 @@ def kb():
         # 如果是cookie
     cookies = data['cookies']
 
-    from main.hynuxykSpider.api.querykb import querykb
+    from main.sdk.hynuxykSpider.api.querykb import querykb
     kb = querykb(cookies, nanyue)
 
     jsons = {
@@ -68,7 +68,7 @@ def cj():
     else:
         nanyue = data['nanyue']
 
-    from main.hynuxykSpider.api.querycj import querycj
+    from main.sdk.hynuxykSpider.api.querycj import querycj
     cj = querycj(cookies, nanyue)
     allcj = cj.queryallcj(date)
     if allcj == "wrong":
@@ -89,13 +89,14 @@ def pscj():
         nanyue = False
     else:
         nanyue = data['nanyue']
-    from ..hynuxykSpider.api.queryqxcj import querypscj
+    from main.sdk.hynuxykSpider.api.queryqxcj import querypscj
     pscj = querypscj(url, cookie, nanyue)
     return pscj
 
 
 @query.route('/getMsg', methods=['POST'])
 def getMsg():
+    from main.models import Keywords
     msg = Keywords.query.filter(Keywords.keyword == "miniprogram_msg").first()
     if msg is None:
         return jsonify({
@@ -111,7 +112,7 @@ def getMsg():
 @query.route('/resetPassword', methods=['POST', 'GET'])
 def resetPassword():
     data = request.get_json()
-    from ..hynuxykSpider.api.findpassword import findpassword
+    from main.sdk.hynuxykSpider.api.findpassword import findpassword
 
     if data['username'] and data['idcardnum'] and data['nanyue'] is not None:
         findp = findpassword(data['username'], data['idcardnum'], data['nanyue'])
@@ -126,7 +127,7 @@ def resetPassword():
 @query.route('/getxklb', methods=['POST', 'GET'])
 def getXklb():
     data = request.get_json()
-    from ..hynuxykSpider.api.elective import elective
+    from main.sdk.hynuxykSpider.api.elective import elective
     if data['cookie'] and data['nanyue'] is not None:
         electives = elective(data['cookie'], data['nanyue'])
         return jsonify(electives.getXklb())
@@ -140,7 +141,7 @@ def getXklb():
 @query.route('/getallcourse', methods=['GET', 'POST'])
 def getallcourse():
     data = request.get_json()
-    from ..hynuxykSpider.api.elective import elective
+    from main.sdk.hynuxykSpider.api.elective import elective
     electives = elective(data['cookie'], data['nanyue'])
     return jsonify(electives.getallcourse(data['date']))
 
@@ -148,7 +149,7 @@ def getallcourse():
 @query.route('/pickcourse', methods=['POST', 'GET'])
 def pickcourse():
     data = request.get_json()
-    from ..hynuxykSpider.api.elective import elective
+    from main.sdk.hynuxykSpider.api.elective import elective
     electives = elective(data['cookie'], data['nanyue'])
     return jsonify({
         "Code": "1",
@@ -159,7 +160,7 @@ def pickcourse():
 @query.route('/getcetimg', methods=['GET', 'POST'])
 def getcetimg():
     data = request.get_json()
-    from ..hynuxykSpider.api.cet import cet
+    from main.sdk.hynuxykSpider.api.cet import cet
     cets = cet(data['id_num'], data['name'])
     return jsonify(cets.get_img())
 
@@ -167,7 +168,7 @@ def getcetimg():
 @query.route('/getscore', methods=['GET', 'POST'])
 def getscore():
     data = request.get_json()
-    from ..hynuxykSpider.api.cet import cet
+    from main.sdk.hynuxykSpider.api.cet import cet
     cets = cet(data['id_num'], data['name'])
     return jsonify(cets.get_score(data['capcha'], data['cookies']))
 
