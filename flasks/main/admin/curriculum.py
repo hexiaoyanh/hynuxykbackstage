@@ -65,8 +65,8 @@ update_curriculum = Update_curriculum()
 
 # 更新所有人的课表
 @admin.route('/update_class')
-# @login_required
-# @admin_required
+@login_required
+@admin_required
 def update_class():
     now_time = datetime.datetime.now()
     user = WXUser.query.filter(WXUser.server_expire >= now_time).all()
@@ -93,3 +93,17 @@ def get_schedule():
             "code": -1,
             "msg": "没有任务在运行"
         })
+
+
+@admin.route('/update_curriculum_by_userid')
+@login_required
+@admin_required
+def update_curriculum_by_userid():
+    userid = request.args.get('userid')
+    user = WXUser.query.filter(WXUser.userid.like(userid + '%')).all()
+    thr = threading.Thread(target=update_curriculum.update_class, args=[user, ])  # 创建线程更新课表
+    thr.start()
+    return jsonify({
+        "code": 1,
+        "msg": "任务已接收"
+    })
