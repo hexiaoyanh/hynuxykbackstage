@@ -90,13 +90,11 @@ class Curriculum(db.Model):
     userid = db.Column(db.String(12), index=True)
     school_year = db.Column(db.String(32), index=True)
     week = db.Column(db.Integer, index=True)
+    class_day = db.Column(db.String(10), index=True)
     class_time = db.Column(db.String(16), index=True)
     class_name = db.Column(db.String(32))
     teacher = db.Column(db.String(32))
     location = db.Column(db.String(32))
-    begintime = db.Column(db.String(16), index=True)
-    endtime = db.Column(db.String(16))
-    cycle = db.Column(db.String(64))
 
 
 class Bill(db.Model):

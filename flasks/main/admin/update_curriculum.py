@@ -1,5 +1,6 @@
 from main import nowdates, db
 from main.models import Curriculum
+from main.sdk.get_curriculum_from_jiaowu import get_curriculum_from_jiaowu
 from main.verifyjw import verifyjw
 
 
@@ -10,22 +11,22 @@ class Update_curriculum:
         # 使用nowdates的app上下文防止
         with nowdates.app.app_context():
             try:
-                token = verifyjw.login(userid, password)
                 nowtime = nowdates.get()
-                for i in range(25):
-                    kecheng = verifyjw.getclass(token, userid, nowtime['xn'], str(i))
-                    for j in kecheng:
+                user = get_curriculum_from_jiaowu(userid, password, nowtime['xn'])
+                kb = user.get_all()
+                for i in kb:
+                    for j in i:
                         if j is None: continue
-                        curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'], week=i,
-                                                                class_time=j['kcsj'],
-                                                                class_name=j['kcmc'], teacher=j['jsxm'],
-                                                                location=j['jsmc'],
-                                                                begintime=j['kssj'], endtime=j['jssj'],
-                                                                cycle=j['kkzc']).first()
+                        curriculum = Curriculum.query.filter_by(userid=userid, school_year=nowtime['xn'],
+                                                                week=j["week"],
+                                                                class_time=j['class_time'],
+                                                                class_name=j['class_name'], teacher=j['teacher'],
+                                                                location=j['location'], class_day=j['class_day']).first()
                         if curriculum is not None: continue
-                        curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=i, class_time=j['kcsj'],
-                                                class_name=j['kcmc'], teacher=j['jsxm'], location=j['jsmc'],
-                                                begintime=j['kssj'], endtime=j['jssj'], cycle=j['kkzc'])
+                        curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=j["week"],
+                                                class_time=j['class_time'],
+                                                class_name=j['class_name'], teacher=j['teacher'],
+                                                location=j['location'], class_day=j['class_day'])
                         db.session.add(curriculum)
                 db.session.commit()
             except Exception as e:
@@ -59,3 +60,4 @@ class Update_curriculum:
         self.is_running = False
         self.lens = 0
         self.now_run = 0
+

@@ -59,7 +59,6 @@ class nowdate:
         else:
             c = datetime.date(self.year, 12, 31).isocalendar()
             # 当年的最后一天
-
             # 表示过去了一年
             if b[0] > a[0]:
                 return {

@@ -22,7 +22,7 @@ def send_class_notificate():
     with scheduler.app.app_context():
         print("----------------------上课提醒开始：")
         now_time = nowdates.get()
-        weekday = str(datetime.datetime.now().weekday() + 1)
+        class_day = str(datetime.datetime.now().weekday() + 1)
         # 查询订阅了且没有过期的
         users = WXUser.query.filter(WXUser.server_expire >= datetime.datetime.now()).all()
         sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
@@ -32,20 +32,16 @@ def send_class_notificate():
         for i in users:
             if not i.notification_status: continue
             if i.userid is None:continue
-            if i.userid[:6] == "191303":continue
-            data = Curriculum.query.filter(Curriculum.class_time.like(weekday + '%'),
-                                           Curriculum.week == now_time['week'],
-                                           Curriculum.school_year == now_time['xn'],
-                                           Curriculum.userid == i.userid,
-                                           Curriculum.begintime == next_hour).first()
+            data = Curriculum.query.filter_by(userid=i.userid, school_year=now_time['xn'], class_time=next_hour,
+                                              week=now_time['week'], class_day=class_day).first()
             if data is None: continue
             # 专业实习课不用通知
             if data.class_name == '专业实习': continue
             if i.is_experience:
-                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
+                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.class_time,
                                         remark=not_sub_text, first=res)
             else:
-                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.begintime,
+                send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.class_time,
                                         remark=sub_text, first=res)
 
         print("----------------------上课提醒结束")
