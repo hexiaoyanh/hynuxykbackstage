@@ -8,7 +8,8 @@ from flask import current_app
 
 from .models import Curriculum, WXUser, User, Usern, Grade, Keywords
 from .verifyjw import verifyjw
-from .wxfwh.sendnotification import send_class_notification, send_exam_notification, send_ad_notification
+from .wxfwh.sendnotification import send_class_notification, send_exam_notification, send_ad_notification, \
+    send_over_notification
 from . import nowdates
 
 
@@ -29,6 +30,7 @@ def send_class_notificate():
         not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
         res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
         next_hour = get_next_half_an_hours()
+        all_msg = 0  # 总共发送多少条信息
         for i in users:
             if not i.notification_status: continue
             data = Curriculum.query.filter_by(userid=i.userid, school_year=now_time['xn'], class_time=next_hour,
@@ -42,6 +44,9 @@ def send_class_notificate():
             else:
                 send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.class_time,
                                         remark=sub_text, first=res)
+            all_msg += 1
+        if all_msg != 0:
+            send_over_notification("本次共发送" + str(all_msg) + "信息", res, not_sub_text)
 
         print("----------------------上课提醒结束")
 

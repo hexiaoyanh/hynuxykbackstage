@@ -44,6 +44,7 @@ class jwlogin:
         else:
             url = "http://59.51.24.46/hysf/Logon.do?method=logon"
         data = requests.post(url=url, cookies=self.cookie, data=payload)
+        print(data.text)
         bs = BeautifulSoup(data.text, 'html.parser')
         error = bs.find(id='errorinfo')
         if error is not None:

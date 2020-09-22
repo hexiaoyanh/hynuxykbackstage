@@ -5,7 +5,7 @@ from flask import request, jsonify
 from flask_login import login_required
 
 from . import admin
-from main import admin_required
+from main import admin_required, db
 from ..models import Curriculum, WXUser
 
 
@@ -101,6 +101,11 @@ def get_schedule():
 def update_curriculum_by_userid():
     userid = request.args.get('userid')
     user = WXUser.query.filter(WXUser.userid.like(userid + '%')).all()
+    for i in user:
+        curriculum = Curriculum.query.filter(Curriculum.userid == i.userid).all()
+        for j in curriculum:
+            db.session.delete(j)
+    db.session.commit()
     thr = threading.Thread(target=update_curriculum.update_class, args=[user, ])  # 创建线程更新课表
     thr.start()
     return jsonify({
