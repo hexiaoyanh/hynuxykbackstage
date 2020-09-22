@@ -16,7 +16,6 @@ def querypscj(urls, cookie, nanyue):
     data = soup.find(id="mxhDiv")
 
     data = data.find_all('td')
-    print(data)
     if len(data) ==0:
         return jsonify("无", "无", "无", "无", "无")
     return jsonify([data[0].text, data[1].text, data[4].text, data[5].text, data[6].text])

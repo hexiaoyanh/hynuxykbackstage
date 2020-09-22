@@ -1,7 +1,7 @@
 import re
 
-from hynuxykSpider.api.jwlogin import jwlogin
-from hynuxykSpider.api.querykb import querykb
+from .hynuxykSpider.api.jwlogin import jwlogin
+from .hynuxykSpider.api.querykb import querykb
 import json
 
 
@@ -36,12 +36,10 @@ class get_curriculum_from_jiaowu:
             times = str(list(i[1].keys())[0])  # 获取时间日期
             msg = list(i[1].values())[0]
             if msg == '': continue
-            print(class_name)
             # 将多余的空格转成一个并且分开
             msg = msg[len(class_name):]
             # 有些班级比较离谱，课程名里有空格
             msg = re.sub(r'\s+', ' ', msg).split(' ')
-            print(msg)
             all.append({
                 "class_time": convert_key_to_time(times),
                 "class_day": times[2],
