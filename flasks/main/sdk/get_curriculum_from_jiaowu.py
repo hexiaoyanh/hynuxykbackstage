@@ -61,3 +61,8 @@ class get_curriculum_from_jiaowu:
         self.password = password
         self.now_time = now_time
         self.login()
+
+
+# if __name__ == '__main__':
+#     a = get_curriculum_from_jiaowu("", "", "2020-2021-1")
+#     print(a.get_all())

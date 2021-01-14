@@ -67,10 +67,10 @@ def cj():
         nanyue = False
     else:
         nanyue = data['nanyue']
-
     from main.sdk.hynuxykSpider.api.querycj import querycj
     cj = querycj(cookies, nanyue)
     allcj = cj.queryallcj(date)
+    print(allcj)
     if allcj == "wrong":
         abort(500)
     jsons = {

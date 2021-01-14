@@ -173,21 +173,25 @@ def send_donate_notification(msg):
     send_request.delay(data)
 
 
-def send_ad_notification(userid, username):
+def send_over_notification(msg_len, msg, remark):
     data = {
         "touser": "ovtKGs1iMFFTTClFSQtRmfqsIkt0",
         "template_id": "VVhOVUrytNSKvJXn6rrV3i3rlwWHF8KBFuOMJlBsoSY",
         "data": {
             "first": {
-                "value": userid,
+                "value": msg_len,
                 "color": "#173177"
             },
             "keyword1": {
-                "value": username,
+                "value": msg,
                 "color": "#173177"
             },
             "keyword2": {
                 "value": time.strftime('%Y.%m.%d', time.localtime(time.time())),
+                "color": "#173177"
+            },
+            "remark": {
+                "value": remark,
                 "color": "#173177"
             }
         }

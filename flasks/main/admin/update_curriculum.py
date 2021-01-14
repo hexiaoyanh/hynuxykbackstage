@@ -21,7 +21,8 @@ class Update_curriculum:
                                                                 week=j["week"],
                                                                 class_time=j['class_time'],
                                                                 class_name=j['class_name'], teacher=j['teacher'],
-                                                                location=j['location'], class_day=j['class_day']).first()
+                                                                location=j['location'],
+                                                                class_day=j['class_day']).first()
                         if curriculum is not None: continue
                         curriculum = Curriculum(userid=userid, school_year=nowtime['xn'], week=j["week"],
                                                 class_time=j['class_time'],
@@ -60,4 +61,3 @@ class Update_curriculum:
         self.is_running = False
         self.lens = 0
         self.now_run = 0
-

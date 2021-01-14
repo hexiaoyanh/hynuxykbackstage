@@ -5,7 +5,7 @@ from flask import request, jsonify, abort
 from ..models import User, Usern, Grade
 from .. import db
 from ..verifyjw import verifyjw
-from ..wxfwh.sendnotification import send_ad_notification, send_update_notifications
+from ..wxfwh.sendnotification import send_update_notifications
 
 rank2grade = {
     "优": 95,

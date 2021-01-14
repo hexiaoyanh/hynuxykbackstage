@@ -104,8 +104,8 @@ def update_curriculum_by_userid():
     for i in user:
         curriculum = Curriculum.query.filter(Curriculum.userid == i.userid).all()
         for j in curriculum:
-            print(j)
             db.session.delete(j)
+    db.session.commit()
     thr = threading.Thread(target=update_curriculum.update_class, args=[user, ])  # 创建线程更新课表
     thr.start()
     return jsonify({

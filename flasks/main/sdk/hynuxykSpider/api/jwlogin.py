@@ -47,6 +47,8 @@ class jwlogin:
         bs = BeautifulSoup(data.text, 'html.parser')
         error = bs.find(id='errorinfo')
         if error is not None:
+            if error.text == "验证码错误!!":
+                return self.login()
             return error.text
         else:
             self.getmsg()

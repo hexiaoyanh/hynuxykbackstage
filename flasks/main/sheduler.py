@@ -8,7 +8,8 @@ from flask import current_app
 
 from .models import Curriculum, WXUser, User, Usern, Grade, Keywords
 from .verifyjw import verifyjw
-from .wxfwh.sendnotification import send_class_notification, send_exam_notification, send_ad_notification
+from .wxfwh.sendnotification import send_class_notification, send_exam_notification, \
+    send_over_notification
 from . import nowdates
 
 
@@ -16,7 +17,7 @@ def get_next_half_an_hours():
     gtime = (datetime.datetime.now() + datetime.timedelta(minutes=30)).strftime("%H:%M")
     return gtime
 
-
+'''
 @scheduler.task('interval', minutes=30, id='send_class_notification', start_date='2020-6-19 14:30:00')
 def send_class_notificate():
     with scheduler.app.app_context():
@@ -27,8 +28,10 @@ def send_class_notificate():
         users = WXUser.query.filter(WXUser.server_expire >= datetime.datetime.now()).all()
         sub_text = Keywords.query.filter(Keywords.keyword == 'class_sub_text').first().reply
         not_sub_text = Keywords.query.filter(Keywords.keyword == 'class_not_sub_text').first().reply
-        res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
+        #res = requests.get("https://chp.shadiao.app/api.php?from=hynuxyk").text
+        res = "(*^▽^*)"
         next_hour = get_next_half_an_hours()
+        all_msg = 0  # 总共发送多少条信息
         for i in users:
             if not i.notification_status: continue
             if i.userid is None:continue
@@ -43,11 +46,14 @@ def send_class_notificate():
             else:
                 send_class_notification(i.openid, data.class_name, data.location, data.teacher, data.class_time,
                                         remark=sub_text, first=res)
+            all_msg += 1
+        if all_msg != 0:
+            send_over_notification("本次共发送" + str(all_msg) + "信息", res, sub_text)
 
         print("----------------------上课提醒结束")
-
 '''
-@scheduler.task('interval', days=10, id='send_exam_notification_scheduler', start_date='2020-6-19 20:56:00')
+
+@scheduler.task('interval', minutes=30, id='send_exam_notification_scheduler', start_date='2020-6-19 20:56:00')
 def send_exam_notification_scheduler():
     with scheduler.app.app_context():
         print("----------------------考试成绩开始")
@@ -57,7 +63,7 @@ def send_exam_notification_scheduler():
             if i.userid is None or i.userid == "":
                 continue
             try:
-                exam = verifyjw.get_exam("token", i.userid,"2019-2020-2")
+                exam = verifyjw.get_exam("token", i.userid,"2020-2021-1")
             except requests.exceptions.ConnectTimeout:
                 continue
             user = Usern.query.get(i.userid) if i.userid[0] == 'N' else User.query.get(i.userid)
@@ -65,7 +71,7 @@ def send_exam_notification_scheduler():
                 continue
             for j in exam:
                 if j is None: continue
-                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == "2019-2020-2",
+                grade = Grade.query.filter(Grade.userid == i.userid, Grade.xqmc == "2020-2021-1",
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
                     print(i.userid, j['kcmc'])
@@ -86,12 +92,12 @@ def update_all_exam_score():
         users = User.query.all()
         for i in users:
             try:
-                exam = verifyjw.get_exam("", i.xh, "2019-2020-2")
+                exam = verifyjw.get_exam("", i.xh, "2020-2021-1")
             except requests.exceptions.ConnectTimeout:
                 continue
             for j in exam:
                 if j is None: continue
-                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2019-2020-2",
+                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2020-2021-1",
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
                     grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
@@ -102,12 +108,12 @@ def update_all_exam_score():
         users = Usern.query.all()
         for i in users:
             try:
-                exam = verifyjw.get_exam("token", i.xh, "2019-2050-2")
+                exam = verifyjw.get_exam("token", i.xh, "2020-2021-1")
             except requests.exceptions.ConnectTimeout:
                 continue
             for j in exam:
                 if j is None: continue
-                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2019-2020-2",
+                grade = Grade.query.filter(Grade.userid == i.xh, Grade.xqmc == "2020-2021-1",
                                            Grade.ksxzmc == j['ksxzmc'], Grade.kcmc == j['kcmc']).first()
                 if grade is None:
                     grade = Grade(userid=i.xh, bz=j['bz'], cjbsmc=j['cjbsmc'], kclbmc=j['kclbmc'], zcj=j['zcj'],
@@ -116,7 +122,6 @@ def update_all_exam_score():
                     db.session.add(grade)
                     db.session.commit()
         print("----------------------所有成绩结束")
-'''
 # # 查询数据
 # def select_data(mycursor, userid, xn, ksxzmc, kcmc):
 #     sql = "select ifnull((select id  from grade_{} where userid=(:userid) and xqmc=(:xn) and ksxzmc=(:ksxzmc) and ksxzmc=(:ksxzmc) and kcmc=(:kcmc) limit 1 ), 0)".format(

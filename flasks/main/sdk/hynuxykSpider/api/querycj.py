@@ -22,10 +22,9 @@ class querycj():
         if self.nanyue is True:
             url = "http://59.51.24.41/xszqcjglAction.do?method=queryxscj"
         else:
-            url = "http://59.51.24.46/hysf/xszqcjglAction.do?method=queryxscj"
+            url = "http://59.51.24.46/hysf/dzqz.do?method=queryxscj"
         data = requests.post(url=url, cookies=self.cookie, data=payload)
         soup = BeautifulSoup(data.text, 'html.parser')
-
         many = int(soup.find(id='PageNavigation').font.text)
         many = math.ceil(many / 10)
         return {
@@ -138,7 +137,7 @@ class querycj():
                     'name': td[2].text,  # 姓名
                     'beginDate': td[3].text,  # 开始日期
                     'className': td[4].text,  # 课程名
-                    'grade': td[5].a.text,  # 成绩
+                    'grade': grade,  # 成绩
                     'gradeDetail': td[5].a['onclick'],  # 成绩详情地址td[5].a['onclick']
                     'gradeFlag': td[6].text,  # 成绩标志
                     'courseNature': td[7].text,  # 课程性质

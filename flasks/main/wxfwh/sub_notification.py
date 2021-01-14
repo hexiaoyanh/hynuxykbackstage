@@ -43,7 +43,7 @@ def createsubpay():
     data_dict = trans_xml_to_dict(response.content)['xml']  # 将请求返回的数据转为字典
     params = {}
     params['appId'] = APP_ID
-    params['timeStamp'] = int(time.time())
+    params['timeStamp'] = str(time.time())
     params['nonceStr'] = random_str(16)
     params['package'] = 'prepay_id=' + data_dict['prepay_id']
     params['signType'] = 'MD5'
@@ -63,7 +63,7 @@ def createsubpay():
 def get_total_fee():
     return jsonify({
         "code": 1,
-        "total_fee": wechatsettings.get_total_fee()
+        "total_fee": 500
     })
 
 
